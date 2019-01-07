@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu, Segment } from 'semantic-ui-react'
+import { Button, Menu, Segment } from 'semantic-ui-react'
 import PropertySearch from './PropertySearch'
 
 class NavigationBar extends Component {
@@ -11,8 +11,7 @@ class NavigationBar extends Component {
     const activeItem = this.state.activeItem;
 
     return (
-      <Segment inverted>
-        <Menu inverted pointing secondary>
+        <Menu inverted pointing secondary size='large'>
           <Menu.Item
             name='Home'
             active={activeItem === "Home"}
@@ -31,17 +30,22 @@ class NavigationBar extends Component {
             onClick={this.handleItemClick}
           />
           <Menu.Item
-            name='Helps'
-            active={activeItem === "Helps"}
+            name='Help'
+            active={activeItem === "Help"}
             onClick={this.handleItemClick}
           />
-          <Menu.Item
-            name='Log out'
-            active={activeItem === "Log out"}
-            onClick={this.handleItemClick}
-          />
+          <Button
+            as='a'
+            onClick={this.handleItemClick}>
+            Log in
+          </Button>
+          <Button
+            as='a'
+            style={{ marginLeft: '0.5em' }}
+            onClick={this.handleItemClick}>
+            Sign Up
+          </Button>
         </Menu>
-      </Segment>
     )
   }
 }
