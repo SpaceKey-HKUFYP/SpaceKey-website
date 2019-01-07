@@ -101,15 +101,20 @@ class Price_Modal extends React.Component {
   }
 
   render() {
-    $("#price-slider").slider({});
+
+    $("#price-slider").slider({
+    });
     return (
       <div className="modal" id={this.props.data.id} tabIndex="-1" role="dialog" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-body">
-            $10 <input id="price-slider" type="text" className="span2" data-slider-min="0" data-slider-max="10000" data-slider-step="1" data-slider-value="[250,450]"/> $3000
+            $10 <input id="price-slider" type="text" className="span2" data-slider-min="0" data-slider-max="10000" data-slider-step="1" data-slider-value="[250,450]"/>
+            $3000
             <div>
-                Price: <span id="price" />
+                Price:
+                <span id="price">
+                </span>
             </div>
             </div>
             <div className="modal-footer">
@@ -172,7 +177,7 @@ class WantedObject extends React.Component {
                             </div>
                             <div className="col distance-option hidden">
                                 <select className="form-control" id={dist}>
-                                  <option select value="0">Distance</option>
+                                  <option select="true" value="0">Distance</option>
                                   <option value="1">Close (0-500m)</option>
                                   <option value="2">Medium (500-1000m)</option>
                                   <option value="3">Far (1-3km)</option>
