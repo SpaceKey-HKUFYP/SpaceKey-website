@@ -101,20 +101,15 @@ class Price_Modal extends React.Component {
   }
 
   render() {
-
-    $("#price-slider").slider({
-    });
+    $("#price-slider").slider({});
     return (
       <div className="modal" id={this.props.data.id} tabIndex="-1" role="dialog" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-body">
-            $10 <input id="price-slider" type="text" className="span2" data-slider-min="0" data-slider-max="10000" data-slider-step="1" data-slider-value="[250,450]"/>
-            $3000
+            $10 <input id="price-slider" type="text" className="span2" data-slider-min="0" data-slider-max="10000" data-slider-step="1" data-slider-value="[250,450]"/> $3000
             <div>
-                Price:
-                <span id="price">
-                </span>
+                Price: <span id="price" />
             </div>
             </div>
             <div className="modal-footer">
