@@ -75,23 +75,21 @@ class FilterBar extends Component {
 		const { open, size } = this.state
         return (
     		<Fragment>
-				<Container>
-                    <Button onClick={this.show('mini')}>Dates</Button>
-                    <Button onClick={this.show('mini')}>Prices</Button>
-                    <Button onClick={this.show('mini')}>Home type</Button>
-                    <Button onClick={this.show('mini')}>More filters</Button>
+                <Button onClick={this.show('mini')}>Dates</Button>
+                <Button onClick={this.show('mini')}>Prices</Button>
+                <Button onClick={this.show('mini')}>Home type</Button>
+                <Button onClick={this.show('mini')}>More filters</Button>
 
-					<Modal size={size} open={open} onClose={this.close}>
-			          <Modal.Header>Delete Your Account</Modal.Header>
-			          <Modal.Content>
-			            <p>Are you sure you want to delete your account</p>
-			          </Modal.Content>
-			          <Modal.Actions>
-			            <Button negative>No</Button>
-			            <Button positive icon='checkmark' labelPosition='right' content='Yes' />
-			          </Modal.Actions>
-			        </Modal>
-				</Container>
+				<Modal size={size} open={open} onClose={this.close}>
+		          <Modal.Header>Delete Your Account</Modal.Header>
+		          <Modal.Content>
+		            <p>Are you sure you want to delete your account</p>
+		          </Modal.Content>
+		          <Modal.Actions>
+		            <Button negative>No</Button>
+		            <Button positive icon='checkmark' labelPosition='right' content='Yes' />
+		          </Modal.Actions>
+		        </Modal>
     		</Fragment>
 
         );

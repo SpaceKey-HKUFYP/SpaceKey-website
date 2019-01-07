@@ -1,16 +1,21 @@
-import React from 'react';
-import { render, ReactDOM } from 'react-dom';
-import { Container, Divider, Header, Message } from "semantic-ui-react";
+import React from "react";
+
+
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import '../index.css';
+import Home from "./Home";
+import Search from "./Search";
 import NavigationBar from './NavigationBar';
-import FilterBar from './FilterBar';
 
-const App = props => (
+const App = () => (
     <div>
-        <NavigationBar />
-        <FilterBar />
+         <NavigationBar />
+         <Router>
+            <div>
+                <Route exact path="/" component={Home} />
+                <Route path="/topics" component={Search} />
+            </div>
+         </Router>
     </div>
 );
 
