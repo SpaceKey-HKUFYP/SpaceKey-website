@@ -13,7 +13,7 @@ const App = () => (
          <Router>
             <div>
                 <Route exact path="/" component={Home} />
-                <Route path="/topics" component={Search} />
+                <Route path="/search" component={Search} />
             </div>
          </Router>
     </div>

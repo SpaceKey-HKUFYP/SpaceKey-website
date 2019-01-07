@@ -3,36 +3,41 @@ import { Menu, Segment } from 'semantic-ui-react'
 import PropertySearch from './PropertySearch'
 
 class NavigationBar extends Component {
-  state = { activeItem: 'home' }
+  state = { activeItem: 'Home' }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   render() {
+    const activeItem = this.state.activeItem;
 
     return (
       <Segment inverted>
         <Menu inverted pointing secondary>
-          <Menu.Item name='Home' active={false} onClick={this.handleItemClick} />
+          <Menu.Item
+            name='Home'
+            active={activeItem === "Home"}
+            onClick={this.handleItemClick}
+          />
           <PropertySearch/>
           <Menu.Item
             name='Saved'
-            active={false}
+            active={activeItem === "Saved"}
             onClick={this.handleItemClick}
             className="right floated"
           />
           <Menu.Item
             name='Messages'
-            active={false}
+            active={activeItem === "Messages"}
             onClick={this.handleItemClick}
           />
           <Menu.Item
             name='Helps'
-            active={false}
+            active={activeItem === "Helps"}
             onClick={this.handleItemClick}
           />
           <Menu.Item
             name='Log out'
-            active={false}
+            active={activeItem === "Log out"}
             onClick={this.handleItemClick}
           />
         </Menu>
