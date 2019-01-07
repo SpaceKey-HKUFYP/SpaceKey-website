@@ -10,7 +10,8 @@ class App extends Component {
     return(
       <Container textAlign='center'>
         <MainForm />
-      </Container>     )
+      </Container>
+    )
   }
 }
 
