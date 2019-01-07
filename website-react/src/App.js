@@ -4,13 +4,15 @@ import { Container, Divider, Header, Message } from "semantic-ui-react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import './index.css';
-import App from './components/App';
-import FilterBar from './components/FilterBar';
 import * as serviceWorker from './serviceWorker';
+import App from './components/App';
+import NavigationBar from './components/NavigationBar';
+import FilterBar from './components/FilterBar';
 
 //ReactDOM.render(<App />, document.getElementById('root'));
 
 render(
+  <NavigationBar />
   <FilterBar />,
   document.getElementById("root")
 );
