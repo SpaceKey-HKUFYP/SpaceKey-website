@@ -1,46 +1,37 @@
-import React, { Component, Fragment } from 'react';
-import { Input } from 'semantic-ui-react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Button, Container, Modal } from 'semantic-ui-react';
+import React from 'react';
+import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import {Button, Container, Input, Modal} from 'semantic-ui-react';
+import {HomeTypeModal} from './AppModal';
 
-//import { Dates_Modal, Price_Modal, HomeType_Modal, MoreFilters_Modal } from "./Modal"
-
-
-class FilterBar extends Component {
+class FilterBar extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
-			buttonStatus :[
-				{buttonMessage: "Dates", isFiltered: false, id: "dates"},
-				{buttonMessage: "Price", isFiltered: false, id: "price"},
-				{buttonMessage: "Home type", isFiltered: false, id: "homeType"},
-				{buttonMessage: "More filters", isFiltered: false, id: "moreFilter"},
-			],
-			price: {
-				minPrice:0,
-				maxPrice:100000,
+			buttons: {
+				dates: {open: false, size: 'mini', isFiltered: false},
+				prices: {open: false, size: 'mini', isFiltered: false},
+				homeType: {open: false, size: 'tiny', isFiltered: false},
+				moreFilters: {open: false, size: 'mini', isFiltered: false},
 			},
-			homeType:{
-				entirePlace: {isChecked: false, id:"entirePlace", name: "Entire place", description: "Have a place to yourself"},
-				privateRoom: {isChecked: false, id:"privateRoom", name: "Private room", description: "Have your own room and share some common spaces"},
-				sharedRoom: {isChecked: false, id:"sharedRoom", name: "Shared room", description: "Stay in a shared space, like a common room"}
-			},
-			moreFilter:{
-				wantedObjects: ["school","cafe"],
+			homeType: {
+				entirePlace: {checked: false},
+				privateRoom: {checked: false},
+				sharedRoom: {checked: false},
 			}
 		};
-		this.homeType_handler = type => {
-			let newState = {...this.state}
-			newState.homeType[type].isChecked = !newState.homeType[type].isChecked;
-			this.setState(newState);
-		}
-		this.moreFilter_handler = {
-			addWantedObject: name => {
-				let newState = {...this.state}
-				newState.moreFilter.wantedObjects.push(name);
-				this.setState(newState);
-			}
-		}
+		// this.homeType_handler = type => {
+		// 	let newState = {...this.state}
+		// 	newState.homeType[type].isChecked = !newState.homeType[type].isChecked;
+		// 	this.setState(newState);
+		// }
+		// this.moreFilter_handler = {
+		// 	addWantedObject: name => {
+		// 		let newState = {...this.state}
+		// 		newState.moreFilter.wantedObjects.push(name);
+		// 		this.setState(newState);
+		// 	}
+		// }
 	}
 
 	handleDates() {
@@ -54,15 +45,15 @@ class FilterBar extends Component {
 		});
 	}
 
-	state = { open: false }
-	show = size => () => this.setState({ size, open: true })
-	close = () => this.setState({ open: false })
+	// state = { open: false }
+	// show = size => () => this.setState({ size, open: true })
+	// close = () => this.setState({ open: false })
 	render() {
-        const listOfFilter = this.state.buttonStatus.map((val) => {
-    		return (
-				<Button> {val} </Button>
-    		);
-        });
+        // const listOfFilter = this.state.buttonStatus.map((val) => {
+    	// 	return (
+		// 		<Button> {val} </Button>
+    	// 	);
+        // });
 
         // const listOfModal = (
     	// 	<Fragment>
@@ -72,25 +63,35 @@ class FilterBar extends Component {
 		// 		<MoreFilters_Modal data={this.state.buttonStatus[3]} body={this.state.moreFilter} addWantedObject={this.moreFilter_handler.addWantedObject} wantedObjects={this.state.moreFilter.wantedObjects}/>
     	// 	</Fragment>
         // );
-		const { open, size } = this.state
-        return (
-    		<Fragment>
-                <Button onClick={this.show('mini')}>Dates</Button>
-                <Button onClick={this.show('mini')}>Prices</Button>
-                <Button onClick={this.show('mini')}>Home type</Button>
-                <Button onClick={this.show('mini')}>More filters</Button>
 
-				<Modal size={size} open={open} onClose={this.close}>
-		          <Modal.Header>Delete Your Account</Modal.Header>
-		          <Modal.Content>
-		            <p>Are you sure you want to delete your account</p>
-		          </Modal.Content>
-		          <Modal.Actions>
-		            <Button negative>No</Button>
-		            <Button positive icon='checkmark' labelPosition='right' content='Yes' />
-		          </Modal.Actions>
-		        </Modal>
-    		</Fragment>
+		const my = this;
+		const state = this.state;
+
+		const buttonHandler = (typeButton, isOpen) => {
+			let newState = my.state;
+			newState.buttons[typeButton].open = isOpen;
+			my.setState(newState);
+		}
+
+		const homeTypeHandler = (homeType) => {
+			let newState = my.state;
+			newState.homeType[homeType].check = !newState.homeType[homeType].check;
+			my.setState(newState);
+		}
+
+        return (
+    		<React.Fragment>
+				<React.Fragment>
+	                <Button onClick={() => buttonHandler("dates",true)}>Dates</Button>
+	                <Button onClick={() => buttonHandler("prices",true)}>Prices</Button>
+	                <Button onClick={() => buttonHandler("homeType",true)}>Home type</Button>
+	                <Button onClick={() => buttonHandler("moreFilters",true)}>More filters</Button>
+				</React.Fragment>
+
+				<React.Fragment>
+					<HomeTypeModal onChecked={homeTypeHandler} data={state.homeType} size={state.buttons.homeType.size} open={state.buttons.homeType.open} onClose={() => buttonHandler("homeType",false)}/>
+				</React.Fragment>
+    		</React.Fragment>
 
         );
 	}

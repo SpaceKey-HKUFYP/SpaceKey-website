@@ -1,5 +1,8 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Button, Container, Input, Modal, Checkbox } from 'semantic-ui-react';
 
-class FilterButton extends Component {
+class FilterButton extends React.Component {
 	render() {
 		let className = "btn-sm btn-light border mr-3" + (this.props.data.isFiltered ? " filtered" : "");
 		return (
@@ -11,7 +14,7 @@ class FilterButton extends Component {
 }
 
 
-class Dates_Modal extends Component {
+class Dates_Modal extends React.Component {
 	constructor(props) {
 		super(props);
 	}
@@ -36,7 +39,7 @@ class Dates_Modal extends Component {
 }
 
 
-class Price_Modal extends Component {
+class Price_Modal extends React.Component {
 	constructor(props) {
 			super(props);
 	}
@@ -65,28 +68,24 @@ class Price_Modal extends Component {
 }
 
 
-class HomeType_Modal extends Component {
+class HomeTypeModal extends React.Component {
 		constructor(props) {
 				super(props);
 		}
 
 		render() {
 				return (
-						<div className="modal" id={this.props.data.id} tabIndex="-1" role="dialog" aria-hidden="true">
-								<div className="modal-dialog" role="document">
-										<div className="modal-content">
-												<div className="modal-body">
-														<FormCheck data={this.props.body.entirePlace} onChange={this.props.onChange}/>
-														<FormCheck data={this.props.body.privateRoom} onChange={this.props.onChange}/>
-														<FormCheck data={this.props.body.sharedRoom} onChange={this.props.onChange}/>
-												</div>
-												<div className="modal-footer">
-														<button type="button" className="btn btn-secondary">Clear</button>
-														<button type="button" className="btn btn-primary"  data-dismiss="dates_modal">Apply</button>
-												</div>
-										</div>
-								</div>
-						</div>
+						<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
+				          <Modal.Content>
+				            <Checkbox toggle onChange={() => this.props.onChecked("entirePlace")} checked={this.props.data.entirePlace.checked} label="Entire place - Have a place to yourself"/>
+							<Checkbox toggle onChange={() => this.props.onChecked("privateRoom")} checked={this.props.data.privateRoom.checked} label="Private room - Have your own room and share some common spaces"/>
+							<Checkbox toggle onChange={() => this.props.onChecked("sharedRoom")} checked={this.props.data.sharedRoom.checked} label="Shared room - Stay in a shared space, like a common room"/>
+				          </Modal.Content>
+				          <Modal.Actions>
+				            <Button negative content='Clear' />
+				            <Button positive icon='checkmark' labelPosition='right' content='Yes' />
+				          </Modal.Actions>
+				        </Modal>
 				);
 		}
 }
@@ -233,5 +232,5 @@ class WantedObject extends React.Component {
 	}
 }
 
-export default AppModal;
+export {HomeTypeModal};
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };
