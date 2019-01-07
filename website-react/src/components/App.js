@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Home from "./Home";
 import Search from "./Search";
 import NavigationBar from './NavigationBar';
+import LoginForm from './LoginForm';
 
 const App = () => (
     <div>
@@ -13,6 +14,7 @@ const App = () => (
             <div>
                 <Route exact path="/" component={Home} />
                 <Route path="/search" component={Search} />
+                <Route path="/login" component={LoginForm} />
             </div>
          </Router>
     </div>

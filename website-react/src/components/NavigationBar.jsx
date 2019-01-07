@@ -31,16 +31,16 @@ class NavigationBar extends Component {
           />
           <Menu.Item
             name='Help'
-            active={activeItem === "Helps"}
+            active={activeItem === "Help"}
             onClick={this.handleItemClick}
           />
           <Button
-            as='a' inverted
+            as='a'
             onClick={this.handleItemClick}>
             Log in
           </Button>
           <Button
-            as='a' inverted
+            as='a'
             style={{ marginLeft: '0.5em' }}
             onClick={this.handleItemClick}>
             Sign Up
