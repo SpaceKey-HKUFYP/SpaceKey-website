@@ -77,9 +77,9 @@ class HomeTypeModal extends React.Component {
 				return (
 						<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
 				          <Modal.Content>
-				            <Checkbox toggle onChange={() => this.props.onChecked("entirePlace")} checked={this.props.data.entirePlace.checked} label="Entire place - Have a place to yourself"/>
-							<Checkbox toggle onChange={() => this.props.onChecked("privateRoom")} checked={this.props.data.privateRoom.checked} label="Private room - Have your own room and share some common spaces"/>
-							<Checkbox toggle onChange={() => this.props.onChecked("sharedRoom")} checked={this.props.data.sharedRoom.checked} label="Shared room - Stay in a shared space, like a common room"/>
+				            <Checkbox fitted toggle onChange={() => this.props.onChecked("entirePlace")} checked={this.props.data.entirePlace.checked} label="Entire place - Have a place to yourself"/>
+							<Checkbox fitted toggle onChange={() => this.props.onChecked("privateRoom")} checked={this.props.data.privateRoom.checked} label="Private room - Have your own room and share some common spaces"/>
+							<Checkbox fitted toggle onChange={() => this.props.onChecked("sharedRoom")} checked={this.props.data.sharedRoom.checked} label="Shared room - Stay in a shared space, like a common room"/>
 				          </Modal.Content>
 				          <Modal.Actions>
 				            <Button negative content='Clear' />

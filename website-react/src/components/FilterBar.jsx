@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import {Button, Container, Input, Modal} from 'semantic-ui-react';
 import {HomeTypeModal} from './AppModal';
+import NavigationBar from './NavigationBar';
 
 class FilterBar extends React.Component {
 	constructor(props) {
@@ -45,25 +46,7 @@ class FilterBar extends React.Component {
 		});
 	}
 
-	// state = { open: false }
-	// show = size => () => this.setState({ size, open: true })
-	// close = () => this.setState({ open: false })
 	render() {
-        // const listOfFilter = this.state.buttonStatus.map((val) => {
-    	// 	return (
-		// 		<Button> {val} </Button>
-    	// 	);
-        // });
-
-        // const listOfModal = (
-    	// 	<Fragment>
-		// 		<Dates_Modal data={this.state.buttonStatus[0]} body={this.state.homeType} onChange={this.homeType_handler}/>
-		// 		<Price_Modal data={this.state.buttonStatus[1]} body={this.state.homeType} onChange={this.homeType_handler}/>
-		// 		<HomeType_Modal data={this.state.buttonStatus[2]} body={this.state.homeType} onChange={this.homeType_handler}/>
-		// 		<MoreFilters_Modal data={this.state.buttonStatus[3]} body={this.state.moreFilter} addWantedObject={this.moreFilter_handler.addWantedObject} wantedObjects={this.state.moreFilter.wantedObjects}/>
-    	// 	</Fragment>
-        // );
-
 		const my = this;
 		const state = this.state;
 
@@ -75,7 +58,7 @@ class FilterBar extends React.Component {
 
 		const homeTypeHandler = (homeType) => {
 			let newState = my.state;
-			newState.homeType[homeType].check = !newState.homeType[homeType].check;
+			newState.homeType[homeType].checked = !newState.homeType[homeType].checked;
 			my.setState(newState);
 		}
 
