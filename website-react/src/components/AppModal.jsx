@@ -233,5 +233,5 @@ class WantedObject extends React.Component {
 	}
 }
 
-export default Dates_Modal;
+export default AppModal;
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };
