@@ -9,7 +9,6 @@ import NavigationBar from './NavigationBar';
 
 const App = () => (
     <div>
-         <NavigationBar />
          <Router>
             <div>
                 <Route exact path="/" component={Home} />
