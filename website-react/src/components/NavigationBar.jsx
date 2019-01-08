@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Menu, Segment } from 'semantic-ui-react'
+import { Button, Menu } from 'semantic-ui-react'
 import PropertySearch from './PropertySearch'
 
 class NavigationBar extends Component {

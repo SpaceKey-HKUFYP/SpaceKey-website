@@ -1,10 +1,8 @@
-import React from 'react';
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
-import {Button, Container, Input, Modal} from 'semantic-ui-react';
-import {HomeTypeModal} from './AppModal';
-import NavigationBar from './NavigationBar';
+import React, {Component, Fragment} from 'react';
+import {Button} from 'semantic-ui-react';
+import {HomeTypeModal, PricesModal} from './AppModal';
 
-class FilterBar extends React.Component {
+class FilterBar extends Component {
 	constructor(props) {
 		super(props);
 
@@ -19,7 +17,15 @@ class FilterBar extends React.Component {
 				entirePlace: {checked: false},
 				privateRoom: {checked: false},
 				sharedRoom: {checked: false},
-			}
+			},
+			prices: {
+				minValue: 0,
+				maxValue: 50000000,
+				value: {
+						min: 0,
+						max: 50000000,
+				},
+			},
 		};
 		// this.homeType_handler = type => {
 		// 	let newState = {...this.state}
@@ -62,19 +68,26 @@ class FilterBar extends React.Component {
 			my.setState(newState);
 		}
 
+		const pricesHandler = (value) => {
+			let newState = my.state;
+			newState.prices.value = value;
+			my.setState(newState);
+		}
+
         return (
-    		<React.Fragment>
-				<React.Fragment>
+    		<Fragment>
+				<Fragment>
 	                <Button onClick={() => buttonHandler("dates",true)}>Dates</Button>
 	                <Button onClick={() => buttonHandler("prices",true)}>Prices</Button>
 	                <Button onClick={() => buttonHandler("homeType",true)}>Home type</Button>
 	                <Button onClick={() => buttonHandler("moreFilters",true)}>More filters</Button>
-				</React.Fragment>
+				</Fragment>
 
-				<React.Fragment>
+				<Fragment>
 					<HomeTypeModal onChecked={homeTypeHandler} data={state.homeType} size={state.buttons.homeType.size} open={state.buttons.homeType.open} onClose={() => buttonHandler("homeType",false)}/>
-				</React.Fragment>
-    		</React.Fragment>
+					<PricesModal data={state.prices} onChange={pricesHandler} size={state.buttons.prices.size} open={state.buttons.prices.open} onClose={() => buttonHandler("prices",false)}/>
+				</Fragment>
+    		</Fragment>
 
         );
 	}

@@ -1,24 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Button, Container, Input, Modal, Checkbox } from 'semantic-ui-react';
+import React, {Component} from 'react';
+import { Button, Modal, Checkbox } from 'semantic-ui-react';
+import InputRange from 'react-input-range';
 
-class FilterButton extends React.Component {
-	render() {
-		let className = "btn-sm btn-light border mr-3" + (this.props.data.isFiltered ? " filtered" : "");
-		return (
-			<button type="button" className={className} data-toggle="modal" data-target={"#" + this.props.data.id }>
-				{this.props.data.buttonMessage}
-			</button>
-		);
-	}
-}
-
-
-class Dates_Modal extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
+class DatesModal extends Component {
 	render() {
     	return (
     		<div className="modal" id={this.props.data.id} tabIndex="-1" role="dialog" aria-hidden="true">
@@ -39,51 +23,44 @@ class Dates_Modal extends React.Component {
 }
 
 
-class Price_Modal extends React.Component {
-	constructor(props) {
-			super(props);
-	}
-
+class PricesModal extends Component {
 	render() {
-		//$("#price-slider").slider({});
 		return (
-			<div className="modal" id={this.props.data.id} tabIndex="-1" role="dialog" aria-hidden="true">
-					<div className="modal-dialog" role="document">
-							<div className="modal-content">
-									<div className="modal-body">
-											$10 <input id="price-slider" type="text" className="span2" data-slider-min="0" data-slider-max="10000" data-slider-step="1" data-slider-value="[250,450]"/> $3000
-									<div>
-											Price: <span id="price" />
-									</div>
-									</div>
-									<div className="modal-footer">
-											<button type="button" className="btn btn-secondary">Clear</button>
-											<button type="button" className="btn btn-primary"  data-dismiss="dates_modal">Apply</button>
-									</div>
-							</div>
-					</div>
-			</div>
+			<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
+			  <Modal.Content>
+			  <InputRange
+				  maxValue={20}
+				  minValue={0}
+				  value={this.state.value}
+				  onChange={value => this.setState({ value })} />
+			  		<InputRange maxValue={this.props.data.maxValue}
+					minValue={this.props.data.minValue}
+					value={this.props.data.value}
+					onChange={value => this.props.onChange(value)}
+					/>
+			  </Modal.Content>
+			  <Modal.Actions>
+				<Button negative content='Clear' />
+				<Button positive icon='checkmark' labelPosition='right' content='Apply' />
+			  </Modal.Actions>
+			</Modal>
 		);
 	}
 }
 
 
-class HomeTypeModal extends React.Component {
-		constructor(props) {
-				super(props);
-		}
-
+class HomeTypeModal extends Component {
 		render() {
 				return (
 						<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
 				          <Modal.Content>
-				            <Checkbox fitted toggle onChange={() => this.props.onChecked("entirePlace")} checked={this.props.data.entirePlace.checked} label="Entire place - Have a place to yourself"/>
+				            <Checkbox fitted toggle onChange={() => this.props.onChecked("entirePlace")} checked={this.props.data.entirePlace.checked} label="Entire place"/>
 							<Checkbox fitted toggle onChange={() => this.props.onChecked("privateRoom")} checked={this.props.data.privateRoom.checked} label="Private room - Have your own room and share some common spaces"/>
 							<Checkbox fitted toggle onChange={() => this.props.onChecked("sharedRoom")} checked={this.props.data.sharedRoom.checked} label="Shared room - Stay in a shared space, like a common room"/>
 				          </Modal.Content>
 				          <Modal.Actions>
 				            <Button negative content='Clear' />
-				            <Button positive icon='checkmark' labelPosition='right' content='Yes' />
+				            <Button positive icon='checkmark' labelPosition='right' content='Apply' />
 				          </Modal.Actions>
 				        </Modal>
 				);
@@ -91,11 +68,7 @@ class HomeTypeModal extends React.Component {
 }
 
 
-class MoreFilters_Modal extends React.Component {
-	constructor(props) {
-			super(props);
-	}
-
+class MoreFiltersModal extends Component {
 	render() {
 
 		const listOfWantedObjects = this.props.wantedObjects.map((val) => {
@@ -157,36 +130,7 @@ class MoreFilters_Modal extends React.Component {
 }
 
 
-class FormCheck extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
-	render() {
-		const html = this.props.data.id+"_checkbox";
-		const {data, onChange} = this.props;
-		return (
-			<div className="form-check">
-				<input className="form-check-input" type="checkbox" checked={this.props.data.isChecked} id={html} onChange={() => onChange(data.id)} />
-				<label className="form-check-label" htmlFor={html}>
-					{this.props.data.name}
-				</label>
-				<div>
-					<label className="form-check-label" htmlFor={html}>
-							{this.props.data.description}
-					</label>
-				</div>
-			</div>
-		);
-	}
-}
-
-
-class WantedObject extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
+class WantedObject extends Component {
 	render() {
 		const name = this.props.name;
 		const row = "row-" + name;
@@ -232,5 +176,5 @@ class WantedObject extends React.Component {
 	}
 }
 
-export {HomeTypeModal};
+export {DatesModal, PricesModal, HomeTypeModal, MoreFiltersModal};
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };

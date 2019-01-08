@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react';
-import { render, ReactDOM } from 'react-dom';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {
   Button,
   Container,
@@ -78,10 +76,10 @@ class DesktopContainer extends Component {
         >
 
         <Segment
-          inverted
           textAlign='center'
           style={{ minHeight: 700, padding: '1em 0em' }}
           vertical
+          inverted
         >
         <NavigationBar />
         <HomepageHeading />
