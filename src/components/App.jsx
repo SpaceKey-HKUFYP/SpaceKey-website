@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Home from "./Home";
 import Search from "./Search";
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
+import FootBar from './FootBar'
 
 import axios from 'axios';
 
@@ -24,7 +25,7 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <Fragment>
                  <Router>
                     <div>
                         <Route exact path="/" component={Home} />
@@ -33,7 +34,8 @@ class App extends Component {
                         <Route path="/signup" component={SignupForm} />
                     </div>
                  </Router>
-            </div>
+                 <FootBar />
+            </Fragment>
         );
     }
 }

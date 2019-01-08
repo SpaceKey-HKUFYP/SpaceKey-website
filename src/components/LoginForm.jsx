@@ -9,13 +9,13 @@ const LoginForm = () => (
       You can do same with CSS, the main idea is that all the elements up to the `Grid`
       below must have a height of 100%.
     */}
-    <style>{`
-      body > div,
-      body > div > div,
-      body > div > div > div.login-form {
-        height: 100%;
-      }
-    `}</style>
+    // <style>{`
+    //   body > div,
+    //   body > div > div,
+    //   body > div > div > div.login-form {
+    //     height: 100%;
+    //   }
+    // `}</style>
     <Segment
         textAlign='center'
         style={{ padding: '1em 0em' }}
@@ -26,6 +26,7 @@ const LoginForm = () => (
     <Divider hidden />
     <Divider hidden />
     <Divider hidden />
+
     <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as='h2' color='teal' textAlign='center'>
@@ -52,6 +53,9 @@ const LoginForm = () => (
         </Message>
       </Grid.Column>
     </Grid>
+    <Divider hidden />
+    <Divider hidden />
+    <Divider hidden />
   </div>
 )
 
