@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Menu } from 'semantic-ui-react'
+import { Button, Menu, Image } from 'semantic-ui-react'
 import PropertySearch from './PropertySearch'
 
 class NavigationBar extends Component {
@@ -12,39 +12,21 @@ class NavigationBar extends Component {
 
     return (
         <Menu inverted pointing secondary size='large'>
-          <Menu.Item
-            name='Home'
-            active={activeItem === "Home"}
-            onClick={this.handleItemClick}
-          />
-          <PropertySearch/>
-          <Menu.Item
-            name='Saved'
-            active={activeItem === "Saved"}
-            onClick={this.handleItemClick}
-            className="right floated"
-          />
-          <Menu.Item
-            name='Messages'
-            active={activeItem === "Messages"}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name='Help'
-            active={activeItem === "Help"}
-            onClick={this.handleItemClick}
-          />
-          <Button
-            as='a'
-            onClick={this.handleItemClick}>
-            Log in
-          </Button>
-          <Button
-            as='a'
-            style={{ marginLeft: '0.5em' }}
-            onClick={this.handleItemClick}>
-            Sign Up
-          </Button>
+            <Menu.Item
+                as='a' header
+                name='SpaceKey'
+                onClick={this.handleItemClick}>
+              <Image size='mini' src='/images/logo.png' style={{ marginRight: '1.5em' }} />
+              SpaceKey
+            </Menu.Item>
+            <Menu.Item position='right'>
+              <Button as='a' inverted onClick={this.handleItemClick}>
+                Log in
+              </Button>
+              <Button as='a' inverted onClick={this.handleItemClick} style={{ marginLeft: '0.5em' }}>
+                Sign Up
+              </Button>
+            </Menu.Item>
         </Menu>
     )
   }
