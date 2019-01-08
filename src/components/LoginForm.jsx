@@ -9,13 +9,6 @@ const LoginForm = () => (
       You can do same with CSS, the main idea is that all the elements up to the `Grid`
       below must have a height of 100%.
     */}
-    // <style>{`
-    //   body > div,
-    //   body > div > div,
-    //   body > div > div > div.login-form {
-    //     height: 100%;
-    //   }
-    // `}</style>
     <Segment
         textAlign='center'
         style={{ padding: '1em 0em' }}
