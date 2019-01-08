@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./Home";
 import Search from "./Search";
 import LoginForm from './LoginForm';
+import SignupForm from './SignupForm';
 
 import axios from 'axios';
 
@@ -29,6 +30,7 @@ class App extends Component {
                         <Route exact path="/" component={Home} />
                         <Route path="/search" component={Search} />
                         <Route path="/login" component={LoginForm} />
+                        <Route path="/signup" component={SignupForm} />
                     </div>
                  </Router>
             </div>

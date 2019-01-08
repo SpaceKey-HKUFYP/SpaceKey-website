@@ -29,7 +29,7 @@ const LoginForm = () => (
     <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as='h2' color='teal' textAlign='center'>
-          <Image src='/images/logo.png' /> Log-in to your account
+          <Image src='/images/logo.png' /> Sign up
         </Header>
         <Form size='large'>
           <Segment stacked>
@@ -41,14 +41,21 @@ const LoginForm = () => (
               placeholder='Password'
               type='password'
             />
+            <Form.Input
+              fluid
+              icon='lock'
+              iconPosition='left'
+              placeholder='Re-enter password'
+              type='password'
+            />
 
             <Button color='teal' fluid size='large'>
-              Login
+              Sign Up
             </Button>
           </Segment>
         </Form>
         <Message>
-          New to us? <a href='#'>Sign Up</a>
+          Have an account? <a href='#'>Log in</a>
         </Message>
       </Grid.Column>
     </Grid>
