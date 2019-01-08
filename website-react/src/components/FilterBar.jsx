@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Button} from 'semantic-ui-react';
-import {DatesModal, PricesModal, HomeTypeModal} from './AppModal';
+import {DatesModal, PricesModal, HomeTypeModal, MoreFiltersModal} from './AppModal';
 
 class FilterBar extends Component {
 	constructor(props) {
@@ -31,7 +31,9 @@ class FilterBar extends Component {
 				privateRoom: {checked: false},
 				sharedRoom: {checked: false},
 			},
-
+			moreFilters: {
+				wantedObjects: []
+			}
 		};
 		// this.homeType_handler = type => {
 		// 	let newState = {...this.state}
@@ -107,6 +109,7 @@ class FilterBar extends Component {
 					<DatesModal data={state.dates} onDatesChange={datesHandler.onDatesChange} onFocusChange={datesHandler.onFocusChange} size={state.buttons.prices.size} open={state.buttons.dates.open} onClose={() => buttonHandler("dates", false)}/>
 					<PricesModal data={state.prices} onChange={pricesHandler} size={state.buttons.prices.size} open={state.buttons.prices.open} onClose={() => buttonHandler("prices",false)}/>
 					<HomeTypeModal onChecked={homeTypeHandler} data={state.homeType} size={state.buttons.homeType.size} open={state.buttons.homeType.open} onClose={() => buttonHandler("homeType",false)}/>
+					<MoreFiltersModal data={state.moreFilters} size={state.buttons.moreFilters.size} open={state.buttons.moreFilters.open} onClose={() => buttonHandler("moreFilters",false)}/>
 				</Fragment>
     		</Fragment>
 

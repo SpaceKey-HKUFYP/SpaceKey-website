@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import { Button, Modal, Checkbox } from 'semantic-ui-react';
+import { Button, Modal, Checkbox, Segment } from 'semantic-ui-react';
 import InputRange from 'react-input-range';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-
 import { DateRangePicker } from 'react-dates';
 
 class DatesModal extends Component {
@@ -77,60 +76,57 @@ class HomeTypeModal extends Component {
 class MoreFiltersModal extends Component {
 	render() {
 
-		const listOfWantedObjects = this.props.wantedObjects.map((val) => {
+		const listOfWantedObjects = this.props.data.wantedObjects.map((val) => {
 				return (
 						<WantedObject name={val} key={val}/>
 				);
 		});
 
 		return (
-			<div className="modal" id={this.props.data.id} tabIndex="-1" role="dialog" aria-hidden="true">
-				<div className="modal-dialog" role="document">
-					<div className="modal-content">
-						<div className="modal-body">
-							<ul className="nav nav-tabs" id="myTab" role="tablist">
-								<li className="nav-item">
-									<a className="nav-link active" id="moreFilters_simple-tab" data-toggle="tab" href="#simple-tab" role="tab" aria-controls="simple-tab" aria-selected="true">Simple</a>
-								</li>
-								<li className="nav-item">
-									<a className="nav-link" id="moreFilters_advanced-tab" data-toggle="tab" href="#advanced-tab" role="tab" aria-controls="advanced-tab" aria-selected="false">Advanced</a>
-								</li>
-							</ul>
-							<div className="tab-content" id="myTabContent">
-								<div className="tab-pane fade container show active" id="simple-tab" role="tabpanel" aria-labelledby="simple-tab">
-									<div className="row">
-									</div>
-									<div className="row border-top">
-											<div className="col border-right">
-													<div id="wantedObject" className="container">
-														{listOfWantedObjects}
-													</div>
-											</div>
-											<div className="col container">
-													<input className="form-control mt-3" id="moreFilters_simple-tab_search" type="text" placeholder="Point" aria-label="Search" />
-													<ul className="mt-2 list-inline" id="moreFilters_simple-tab_list">
-															<li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="school">school</li>
-															<li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="mtr-station">mtr-station</li>
-															<li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="university">university</li>
-															<li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="park">park</li>
-															<li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="airport">airport</li>
-															<li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="cafe">cafe</li>
-													</ul>
-											</div>
-									</div>
-								</div>
-								<div className="tab-pane fade" id="advanced-tab" role="tabpanel" aria-labelledby="advanced-tab">
-									This is advanced page!!
-								</div>
-							</div>
-						</div>
-						<div className="modal-footer">
-							<button type="button" className="btn btn-secondary">Clear</button>
-							<button type="button" className="btn btn-primary"  data-dismiss="dates_modal">Apply</button>
-						</div>
-					</div>
-				</div>
-			</div>
+
+			<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
+			  <Modal.Content>
+			  <ul className="nav nav-tabs" id="myTab" role="tablist">
+				  <li className="nav-item">
+					  <a className="nav-link active" id="moreFilters_simple-tab" data-toggle="tab" href="#simple-tab" role="tab" aria-controls="simple-tab" aria-selected="true">Simple</a>
+				  </li>
+				  <li className="nav-item">
+					  <a className="nav-link" id="moreFilters_advanced-tab" data-toggle="tab" href="#advanced-tab" role="tab" aria-controls="advanced-tab" aria-selected="false">Advanced</a>
+				  </li>
+			  </ul>
+			  <div className="tab-content" id="myTabContent">
+				  <div className="tab-pane fade container show active" id="simple-tab" role="tabpanel" aria-labelledby="simple-tab">
+					  <div className="row">
+					  </div>
+					  <div className="row border-top">
+							  <div className="col border-right">
+									  <div id="wantedObject" className="container">
+										  {listOfWantedObjects}
+									  </div>
+							  </div>
+							  <div className="col container">
+									  <input className="form-control mt-3" id="moreFilters_simple-tab_search" type="text" placeholder="Point" aria-label="Search" />
+									  <ul className="mt-2 list-inline" id="moreFilters_simple-tab_list">
+											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="school">school</li>
+											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="mtr-station">mtr-station</li>
+											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="university">university</li>
+											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="park">park</li>
+											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="airport">airport</li>
+											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="cafe">cafe</li>
+									  </ul>
+							  </div>
+					  </div>
+				  </div>
+				  <div className="tab-pane fade" id="advanced-tab" role="tabpanel" aria-labelledby="advanced-tab">
+					  This is advanced page!!
+				  </div>
+				  </div>
+			  </Modal.Content>
+			  <Modal.Actions>
+				<Button negative content='Clear' />
+				<Button positive icon='checkmark' labelPosition='right' content='Apply' />
+			  </Modal.Actions>
+			</Modal>
 		);
 	}
 }
