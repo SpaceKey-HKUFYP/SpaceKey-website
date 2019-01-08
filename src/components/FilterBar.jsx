@@ -6,12 +6,22 @@ class FilterBar extends Component {
 	constructor(props) {
 		super(props);
 
+		const poiOptions = [
+				{key: 'school', value: 'school', text: 'school'},
+				{key: 'mtr-station', value: 'mtr-station', text: 'mtr-station'},
+				{key: 'university', value: 'university', text: 'university'},
+				{key: 'park', value: 'park', text: 'park'},
+				{key: 'airport', value: 'airport', text: 'airport'},
+				{key: 'cafe', value: 'cafe', text: 'cafe'},
+		]
+
+
 		this.state = {
 			buttons: {
 				dates: {open: false, size: 'tiny', isFiltered: false},
 				prices: {open: false, size: 'tiny', isFiltered: false},
 				homeType: {open: false, size: 'tiny', isFiltered: false},
-				moreFilters: {open: false, size: 'tiny', isFiltered: false},
+				moreFilters: {open: false, size: 'large', isFiltered: false},
 			},
 			prices: {
 				minValue: 0,
@@ -32,8 +42,12 @@ class FilterBar extends Component {
 				sharedRoom: {checked: false},
 			},
 			moreFilters: {
-				wantedObjects: []
-			}
+				poi:{
+					value: [],
+					options: poiOptions
+				},
+				wantedObjects: [],
+			},
 		};
 		// this.homeType_handler = type => {
 		// 	let newState = {...this.state}
@@ -96,6 +110,44 @@ class FilterBar extends Component {
 			my.setState(newState);
 		}
 
+		Array.prototype.diff = function(a) {
+			return this.filter(function(i) {return a.indexOf(i) < 0;});
+		};
+
+		const moreFiltersHandler = {
+				handleChange: (e, {value}) => {
+					const oldValue = my.state.moreFilters.poi.value;
+					let newState = {...my.state};
+
+					if(oldValue.length<value.length) {
+						const diffValue = value.diff(oldValue)[0];
+						newState.moreFilters.wantedObjects.push({id: diffValue, dir: 'any', dist: 'any' });
+					} else {
+						const diffValue = oldValue.diff(value)[0] ;
+						newState.moreFilters.wantedObjects = newState.moreFilters.wantedObjects.filter(function(obj) {
+							return obj.id !== diffValue;
+						});
+					}
+
+					newState.moreFilters.poi.value = value;
+
+					my.setState(newState);
+				},
+
+				wantedObjectChange: (id, distOrDir, value) => {
+					let newState = {...my.state};
+
+					console.log(newState.moreFilters.wantedObjects);
+					my.state.moreFilters.wantedObjects.forEach(function(wantedObject) {
+						if (wantedObject.id === id) {
+							wantedObject[distOrDir]=value;
+						}
+					});
+
+					my.setState(newState);
+				},
+		};
+
         return (
     		<Fragment>
 				<Fragment>
@@ -109,7 +161,7 @@ class FilterBar extends Component {
 					<DatesModal data={state.dates} onDatesChange={datesHandler.onDatesChange} onFocusChange={datesHandler.onFocusChange} size={state.buttons.prices.size} open={state.buttons.dates.open} onClose={() => buttonHandler("dates", false)}/>
 					<PricesModal data={state.prices} onChange={pricesHandler} size={state.buttons.prices.size} open={state.buttons.prices.open} onClose={() => buttonHandler("prices",false)}/>
 					<HomeTypeModal onChecked={homeTypeHandler} data={state.homeType} size={state.buttons.homeType.size} open={state.buttons.homeType.open} onClose={() => buttonHandler("homeType",false)}/>
-					<MoreFiltersModal data={state.moreFilters} size={state.buttons.moreFilters.size} open={state.buttons.moreFilters.open} onClose={() => buttonHandler("moreFilters",false)}/>
+					<MoreFiltersModal data={state.moreFilters} handler={moreFiltersHandler} size={state.buttons.moreFilters.size} open={state.buttons.moreFilters.open} onClose={() => buttonHandler("moreFilters",false)}/>
 				</Fragment>
     		</Fragment>
 

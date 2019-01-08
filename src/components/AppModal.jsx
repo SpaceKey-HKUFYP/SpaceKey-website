@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Modal, Checkbox, Segment } from 'semantic-ui-react';
+import { Button, Modal, Checkbox, Tab, Grid, Label, Dropdown, Form } from 'semantic-ui-react';
 import InputRange from 'react-input-range';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -76,51 +76,47 @@ class HomeTypeModal extends Component {
 class MoreFiltersModal extends Component {
 	render() {
 
-		const listOfWantedObjects = this.props.data.wantedObjects.map((val) => {
-				return (
-						<WantedObject name={val} key={val}/>
-				);
+		const {poi, wantedObjects} = this.props.data;
+		const handler = this.props.handler;
+		const listOfWantedObjects = wantedObjects.map((val) => {
+			return (
+					<WantedObject val={val.id} key={val.id} dir={val.dir} dist={val.dist}
+					onDistanceChange= {(event)=>handler.wantedObjectChange(val.id, 'dist', event.target.value)}
+					onDirectionChange= {(event)=>handler.wantedObjectChange(val.id, 'dir', event.target.value)}/>
+			);
 		});
 
+		const SimplePanel = () => (
+			<Grid columns='equal' divided padded fluid='true'>
+				<Grid.Row>
+					<Grid.Column>
+						<Dropdown fluid selection multiple={true} search={true}
+						options={poi.options}
+						value={poi.value}
+						placeholder="Add point of interest"
+						onChange={handler.handleChange}
+						/>
+					</Grid.Column>
+				</Grid.Row>
+				{listOfWantedObjects}
+			</Grid>
+		)
+
+		const AdvancedPanel = () => (
+			<div>
+				this is advanced
+			</div>
+		)
+
+		const panes = [
+		  { menuItem: 'Simple', render: () => <Tab.Pane attached={false}> <SimplePanel /> </Tab.Pane> },
+		  { menuItem: 'Advanced', render: () => <Tab.Pane attached={false}> <AdvancedPanel /> </Tab.Pane> },
+		]
 		return (
 
 			<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
 			  <Modal.Content>
-			  <ul className="nav nav-tabs" id="myTab" role="tablist">
-				  <li className="nav-item">
-					  <a className="nav-link active" id="moreFilters_simple-tab" data-toggle="tab" href="#simple-tab" role="tab" aria-controls="simple-tab" aria-selected="true">Simple</a>
-				  </li>
-				  <li className="nav-item">
-					  <a className="nav-link" id="moreFilters_advanced-tab" data-toggle="tab" href="#advanced-tab" role="tab" aria-controls="advanced-tab" aria-selected="false">Advanced</a>
-				  </li>
-			  </ul>
-			  <div className="tab-content" id="myTabContent">
-				  <div className="tab-pane fade container show active" id="simple-tab" role="tabpanel" aria-labelledby="simple-tab">
-					  <div className="row">
-					  </div>
-					  <div className="row border-top">
-							  <div className="col border-right">
-									  <div id="wantedObject" className="container">
-										  {listOfWantedObjects}
-									  </div>
-							  </div>
-							  <div className="col container">
-									  <input className="form-control mt-3" id="moreFilters_simple-tab_search" type="text" placeholder="Point" aria-label="Search" />
-									  <ul className="mt-2 list-inline" id="moreFilters_simple-tab_list">
-											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="school">school</li>
-											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="mtr-station">mtr-station</li>
-											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="university">university</li>
-											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="park">park</li>
-											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="airport">airport</li>
-											  <li className="btn btn-outline-secondary my-1 mx-auto moreFilters_simple-tab_element" value="cafe">cafe</li>
-									  </ul>
-							  </div>
-					  </div>
-				  </div>
-				  <div className="tab-pane fade" id="advanced-tab" role="tabpanel" aria-labelledby="advanced-tab">
-					  This is advanced page!!
-				  </div>
-				  </div>
+			  	<Tab menu= {{secondary:true, pointing:true}} panes={panes} />
 			  </Modal.Content>
 			  <Modal.Actions>
 				<Button negative content='Clear' />
@@ -134,46 +130,41 @@ class MoreFiltersModal extends Component {
 
 class WantedObject extends Component {
 	render() {
-		const name = this.props.name;
-		const row = "row-" + name;
-		const dist = "dist-" + name;
-		const dir = "dir-" + name;
-		const close = "close-" + name;
 		return (
-								<div className="row" id={row}>
-										<form className="mt-2 list-inline">
-												<div className="form-row">
-														<div className="col border">
-																<span> {name} </span>
-																<button type="button" className="close" aria-label="Close" id={close}>
-																	<span aria-hidden="true">&times;</span>
-																</button>
-														</div>
-														<div className="col distance-option hidden">
-																<select className="form-control" id={dist}>
-																	<option select value="0">Distance</option>
-																	<option value="1">Close (0-500m)</option>
-																	<option value="2">Medium (500-1000m)</option>
-																	<option value="3">Far (1-3km)</option>
-																	<option value="4">Custom ... Need to add input</option>
-																</select>
-														</div>
-														<div className="col direction-option hidden">
-																<select className="form-control" id={dir}>
-																	<option select value="0">Direction</option>
-																	<option value="1">East</option>
-																	<option value="2">South East</option>
-																	<option value="3">South</option>
-																	<option value="4">South West</option>
-																	<option value="5">West</option>
-																	<option value="6">North West</option>
-																	<option value="7">North</option>
-																	<option value="8">North East</option>
-																</select>
-														</div>
-												</div>
-										</form>
-								</div>
+			<Grid.Row>
+				<Grid.Column>
+					<Grid columns='equal' divided fluid='true'>
+						<Grid.Row>
+							<Grid.Column>
+								<Label>
+									{this.props.val}
+								</Label>
+							</Grid.Column>
+							<Grid.Column>
+							<Form>
+								<Form.Field control='select' value={this.props.dir} onChange={this.props.onDirectionChange}>
+									<option value='any'>any direction</option>
+									<option value='north'>north</option>
+									<option value='east'>east</option>
+									<option value='south'>south</option>
+									<option value='west'>west</option>
+								</Form.Field>
+							</Form>
+							</Grid.Column>
+							<Grid.Column>
+								<Form>
+									<Form.Field control='select' value={this.props.dist} onChange={this.props.onDistanceChange}>
+										<option value='any'>any distance</option>
+										<option value='close'>close (0-500m)</option>
+										<option value='medium'>medium (500-1000m)</option>
+										<option value='far'>far (1000-1500m)</option>
+									</Form.Field>
+								</Form>
+							</Grid.Column>
+						</Grid.Row>
+					</Grid>
+				</Grid.Column>
+			</Grid.Row>
 		);
 	}
 }
