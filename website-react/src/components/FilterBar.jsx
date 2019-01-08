@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Button} from 'semantic-ui-react';
-import {HomeTypeModal, PricesModal} from './AppModal';
+import {DatesModal, PricesModal, HomeTypeModal} from './AppModal';
 
 class FilterBar extends Component {
 	constructor(props) {
@@ -8,15 +8,10 @@ class FilterBar extends Component {
 
 		this.state = {
 			buttons: {
-				dates: {open: false, size: 'mini', isFiltered: false},
-				prices: {open: false, size: 'mini', isFiltered: false},
+				dates: {open: false, size: 'tiny', isFiltered: false},
+				prices: {open: false, size: 'tiny', isFiltered: false},
 				homeType: {open: false, size: 'tiny', isFiltered: false},
-				moreFilters: {open: false, size: 'mini', isFiltered: false},
-			},
-			homeType: {
-				entirePlace: {checked: false},
-				privateRoom: {checked: false},
-				sharedRoom: {checked: false},
+				moreFilters: {open: false, size: 'tiny', isFiltered: false},
 			},
 			prices: {
 				minValue: 0,
@@ -26,6 +21,17 @@ class FilterBar extends Component {
 						max: 50000000,
 				},
 			},
+			dates: {
+				  startDate: null,
+				  endDate: null,
+				  focusedInput: null,
+			},
+			homeType: {
+				entirePlace: {checked: false},
+				privateRoom: {checked: false},
+				sharedRoom: {checked: false},
+			},
+
 		};
 		// this.homeType_handler = type => {
 		// 	let newState = {...this.state}
@@ -62,15 +68,29 @@ class FilterBar extends Component {
 			my.setState(newState);
 		}
 
-		const homeTypeHandler = (homeType) => {
-			let newState = my.state;
-			newState.homeType[homeType].checked = !newState.homeType[homeType].checked;
-			my.setState(newState);
+		const datesHandler = {
+			onDatesChange: ({startDate, endDate}) => {
+				let newState = my.state;
+				newState.dates.startDate = startDate;
+				newState.dates.endDate = endDate;
+				my.setState(newState);
+			},
+			onFocusChange: (focusedInput) => {
+				let newState = my.state;
+				newState.dates.focusedInput = focusedInput;
+				my.setState(newState);
+			},
 		}
 
 		const pricesHandler = (value) => {
 			let newState = my.state;
 			newState.prices.value = value;
+			my.setState(newState);
+		}
+
+		const homeTypeHandler = (homeType) => {
+			let newState = my.state;
+			newState.homeType[homeType].checked = !newState.homeType[homeType].checked;
 			my.setState(newState);
 		}
 
@@ -84,8 +104,9 @@ class FilterBar extends Component {
 				</Fragment>
 
 				<Fragment>
-					<HomeTypeModal onChecked={homeTypeHandler} data={state.homeType} size={state.buttons.homeType.size} open={state.buttons.homeType.open} onClose={() => buttonHandler("homeType",false)}/>
+					<DatesModal data={state.dates} onDatesChange={datesHandler.onDatesChange} onFocusChange={datesHandler.onFocusChange} size={state.buttons.prices.size} open={state.buttons.dates.open} onClose={() => buttonHandler("dates", false)}/>
 					<PricesModal data={state.prices} onChange={pricesHandler} size={state.buttons.prices.size} open={state.buttons.prices.open} onClose={() => buttonHandler("prices",false)}/>
+					<HomeTypeModal onChecked={homeTypeHandler} data={state.homeType} size={state.buttons.homeType.size} open={state.buttons.homeType.open} onClose={() => buttonHandler("homeType",false)}/>
 				</Fragment>
     		</Fragment>
 

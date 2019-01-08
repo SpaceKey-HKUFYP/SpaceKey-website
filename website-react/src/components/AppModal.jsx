@@ -1,44 +1,50 @@
 import React, {Component} from 'react';
 import { Button, Modal, Checkbox } from 'semantic-ui-react';
 import InputRange from 'react-input-range';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+
+import { DateRangePicker } from 'react-dates';
 
 class DatesModal extends Component {
 	render() {
     	return (
-    		<div className="modal" id={this.props.data.id} tabIndex="-1" role="dialog" aria-hidden="true">
-				<div className="modal-dialog" role="document">
-					<div className="modal-content">
-						<div className="modal-body">
-							body
-						</div>
-						<div className="modal-footer">
-							<button type="button" className="btn btn-secondary">Clear</button>
-							<button type="button" className="btn btn-primary"  data-dismiss="dates_modal">Apply</button>
-						</div>
-					</div>
-				</div>
-    		</div>
+			<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
+			    <Modal.Content>
+				<DateRangePicker
+					  startDateId="startDate"
+					  endDateId="endDate"
+					  startDate={this.props.data.startDate}
+					  endDate={this.props.data.endDate}
+					  onDatesChange={this.props.onDatesChange}
+					  focusedInput={this.props.data.focusedInput}
+					  onFocusChange={this.props.onFocusChange}
+				/>
+			    </Modal.Content>
+			  <Modal.Actions>
+				<Button negative content='Clear' />
+				<Button positive icon='checkmark' labelPosition='right' content='Apply' />
+			  </Modal.Actions>
+			</Modal>
     	);
 	}
 }
-
 
 class PricesModal extends Component {
 	render() {
 		return (
 			<Modal size={this.props.size} open={this.props.open} onClose={this.props.onClose} centered={false}>
-			  <Modal.Content>
-			  <InputRange
-				  maxValue={20}
-				  minValue={0}
-				  value={this.state.value}
-				  onChange={value => this.setState({ value })} />
+			    <Modal.Content>
 			  		<InputRange maxValue={this.props.data.maxValue}
 					minValue={this.props.data.minValue}
 					value={this.props.data.value}
-					onChange={value => this.props.onChange(value)}
+					onChange={this.props.onChange}
+					formatLabel = {value => `${value} HKD`}
 					/>
-			  </Modal.Content>
+					<div>
+						{this.props.data.value.min} - {this.props.data.value.max}
+					</div>
+			    </Modal.Content>
 			  <Modal.Actions>
 				<Button negative content='Clear' />
 				<Button positive icon='checkmark' labelPosition='right' content='Apply' />
