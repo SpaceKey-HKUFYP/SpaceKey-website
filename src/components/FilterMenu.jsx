@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
   Button,
   Modal,
@@ -14,122 +14,7 @@ import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { DateRangePicker } from "react-dates";
 
-class DatesModal extends Component {
-  render() {
-    return (
-      <Modal
-        size={this.props.size}
-        open={this.props.open}
-        onClose={this.props.onClose}
-        centered={false}
-      >
-        <Modal.Content>
-          <DateRangePicker
-            startDateId="startDate"
-            endDateId="endDate"
-            startDate={this.props.data.startDate}
-            endDate={this.props.data.endDate}
-            onDatesChange={this.props.onDatesChange}
-            focusedInput={this.props.data.focusedInput}
-            onFocusChange={this.props.onFocusChange}
-          />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button negative content="Clear" />
-          <Button
-            positive
-            icon="checkmark"
-            labelPosition="right"
-            content="Apply"
-          />
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-}
-
-class PricesModal extends Component {
-  render() {
-    return (
-      <Modal
-        size={this.props.size}
-        open={this.props.open}
-        onClose={this.props.onClose}
-        centered={false}
-      >
-        <Modal.Content>
-          <InputRange
-            maxValue={this.props.data.maxValue}
-            minValue={this.props.data.minValue}
-            value={this.props.data.value}
-            onChange={this.props.onChange}
-            formatLabel={value => `${value} HKD`}
-          />
-          <div>
-            {this.props.data.value.min} - {this.props.data.value.max}
-          </div>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button negative content="Clear" />
-          <Button
-            positive
-            icon="checkmark"
-            labelPosition="right"
-            content="Apply"
-          />
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-}
-
-class HomeTypeModal extends Component {
-  render() {
-    return (
-      <Modal
-        size={this.props.size}
-        open={this.props.open}
-        onClose={this.props.onClose}
-        centered={false}
-      >
-        <Modal.Content>
-          <Checkbox
-            fitted
-            toggle
-            onChange={() => this.props.onChecked("entirePlace")}
-            checked={this.props.data.entirePlace.checked}
-            label="Entire place"
-          />
-          <Checkbox
-            fitted
-            toggle
-            onChange={() => this.props.onChecked("privateRoom")}
-            checked={this.props.data.privateRoom.checked}
-            label="Private room - Have your own room and share some common spaces"
-          />
-          <Checkbox
-            fitted
-            toggle
-            onChange={() => this.props.onChecked("sharedRoom")}
-            checked={this.props.data.sharedRoom.checked}
-            label="Shared room - Stay in a shared space, like a common room"
-          />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button negative content="Clear" />
-          <Button
-            positive
-            icon="checkmark"
-            labelPosition="right"
-            content="Apply"
-          />
-        </Modal.Actions>
-      </Modal>
-    );
-  }
-}
-
-class MoreFiltersModal extends Component {
+class SpmFilter extends Component {
   render() {
     const { poi, wantedObjects } = this.props.data;
     const handler = this.props.handler;
@@ -196,7 +81,7 @@ class MoreFiltersModal extends Component {
       <Modal
         size={this.props.size}
         open={this.props.open}
-        onClose={this.props.onClose}
+        onClose={handler.onClose}
         centered={false}
       >
         <Modal.Content>
@@ -263,5 +148,5 @@ class WantedObject extends Component {
   }
 }
 
-export { DatesModal, PricesModal, HomeTypeModal, MoreFiltersModal };
+export { SpmFilter };
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };

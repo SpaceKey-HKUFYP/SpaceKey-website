@@ -12,7 +12,6 @@ const Search = props => (
             <NavigationBar/>
         </Segment>
         <SearchBar />
-        <FilterBar />
     </Fragment>
 );
 

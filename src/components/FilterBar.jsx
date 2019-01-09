@@ -17,7 +17,7 @@ class FilterBar extends Component {
       { key: "university", value: "university", text: "university" },
       { key: "park", value: "park", text: "park" },
       { key: "airport", value: "airport", text: "airport" },
-      { key: "cafe", value: "cafe", text: "cafe" },
+      { key: "cafe", value: "cafe", text: "cafe" }
     ];
 
     this.state = {
