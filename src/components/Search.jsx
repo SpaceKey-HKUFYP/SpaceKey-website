@@ -4,12 +4,14 @@ import {Segment} from "semantic-ui-react";
 
 import '../index.css';
 import FilterBar from './FilterBar';
+import SearchBar from './SearchBar';
 
 const Search = props => (
     <Fragment>
         <Segment inverted>
             <NavigationBar/>
         </Segment>
+        <SearchBar />
         <FilterBar />
     </Fragment>
 );

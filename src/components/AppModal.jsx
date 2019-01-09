@@ -130,7 +130,7 @@ class MoreFiltersModal extends Component {
 
 class WantedObject extends Component {
 	render() {
-		return (
+	    return (
 			<Grid.Row>
 				<Grid.Column>
 					<Grid columns='equal' divided fluid='true'>
