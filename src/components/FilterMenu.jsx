@@ -14,6 +14,49 @@ import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { DateRangePicker } from "react-dates";
 
+import { Range } from "rc-slider";
+
+import "../margin.css";
+import "rc-slider/assets/index.css";
+
+class ScrollFilter extends Component {
+  render() {
+    const { data, status } = this.props;
+    const handler = this.props.handler;
+
+    const info = data.value[0] + data.unit + " - " + data.value[1] + data.unit;
+    return (
+      <Dropdown
+        text={this.props.text}
+        floating
+        labeled
+        className="mr-3"
+        open={status.open}
+        onClick={handler.openDropdown}
+        onBlur={handler.closeDropdown}
+      >
+        <Dropdown.Menu>
+          <Dropdown.Header content={this.props.text} />
+          <Dropdown.Divider />
+          <Dropdown.Header>{info}</Dropdown.Header>
+          <Dropdown.Header>
+            <Range
+              value={data.value}
+              default={data.default}
+              onChange={handler.rangeValueUpdate}
+              step={data.step}
+              marks={data.marks}
+              min={data.min}
+              max={data.max}
+              style={{ width: "500px" }}
+            />
+          </Dropdown.Header>
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
+}
+
 class SpmFilter extends Component {
   render() {
     const { poi, wantedObjects } = this.props.data;
@@ -80,8 +123,8 @@ class SpmFilter extends Component {
     return (
       <Modal
         size={this.props.size}
-        open={this.props.open}
-        onClose={handler.onClose}
+        open={this.props.status.open}
+        onClose={handler.closeModal}
         centered={false}
       >
         <Modal.Content>
@@ -148,5 +191,5 @@ class WantedObject extends Component {
   }
 }
 
-export { SpmFilter };
+export { ScrollFilter, SpmFilter };
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };

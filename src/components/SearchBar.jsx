@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Segment, Menu, Button, Dropdown, Grid, Form } from "semantic-ui-react";
-import { SpmFilter } from "./FilterMenu";
+import { SpmFilter, ScrollFilter } from "./FilterMenu";
+import { Range } from "rc-slider";
 
 import "../margin.css";
+import "rc-slider/assets/index.css";
 
 class SearchBar extends Component {
   constructor(props) {
@@ -32,13 +34,26 @@ class SearchBar extends Component {
     ];
 
     const my = this;
+    this.ft2 = "ft2";
+    // const ft2 = () => {
+    //   return (
+    //     <span>
+    //       ft<sup>2</sup>
+    //     </span>
+    //   );
+    // };
 
     this.state = {
       general: {
         handler: {
-          modalHandler: (typeButton, isOpen) => {
+          openHandler: (typeButton, isOpen) => {
             let newState = my.state;
-            newState[typeButton].open = isOpen;
+            newState[typeButton].status.open = isOpen;
+            my.setState(newState);
+          },
+          rangeValueUpdate: (typeButton, value) => {
+            let newState = my.state;
+            newState[typeButton].data.value = value;
             my.setState(newState);
           }
         }
@@ -51,42 +66,93 @@ class SearchBar extends Component {
         handler: {
           handleChange: (e, { value }) => {
             let newState = { ...my.state };
-            newState.data.value = value;
+            newState.search.data.value = value;
             my.setState(newState);
           }
         }
       },
       bedrooms: {
-        open: false,
-        isFiltered: false,
+        status: {
+          open: false,
+          isFiltered: false
+        },
         data: {},
         handler: {}
       },
       saleableArea: {
-        isFiltered: false,
-        data: {},
-        handler: {}
+        status: {
+          open: false,
+          isFiltered: false
+        },
+        data: {
+          min: 0,
+          max: 5000,
+          marks: { 0: "0", 5000: "5000" },
+          step: 100,
+          default: [0, 5000],
+          value: [0, 5000],
+          unit: this.ft2
+        },
+        handler: {
+          openDropdown: () =>
+            this.state.general.handler.openHandler("saleableArea", true),
+          closeDropdown: () =>
+            this.state.general.handler.openHandler("saleableArea", false),
+          rangeValueUpdate: value =>
+            this.state.general.handler.rangeValueUpdate("saleableArea", value)
+        }
       },
       grossArea: {
-        isFiltered: false,
-        data: {},
-        handler: {}
+        status: {
+          open: false,
+          isFiltered: false
+        },
+        data: {
+          min: 0,
+          max: 5000,
+          marks: { 0: "0", 5000: "5000" },
+          step: 100,
+          default: [0, 5000],
+          value: [0, 5000],
+          unit: this.ft2
+        },
+        handler: {
+          openDropdown: () =>
+            this.state.general.handler.openHandler("grossArea", true),
+          closeDropdown: () =>
+            this.state.general.handler.openHandler("grossArea", false),
+          rangeValueUpdate: value =>
+            this.state.general.handler.rangeValueUpdate("grossArea", value)
+        }
       },
       price: {
-        isFiltered: false,
-        data: {
-          minValue: 0,
-          maxValue: 50000000,
-          value: {
-            min: 0,
-            max: 50000000
-          }
+        status: {
+          open: false,
+          isFiltered: false
         },
-        handler: {}
+        data: {
+          min: 0,
+          max: 100000,
+          marks: { 0: "0", 100000: "100000" },
+          step: 1000,
+          default: [0, 100000],
+          value: [0, 100000],
+          unit: "HKD"
+        },
+        handler: {
+          openDropdown: () =>
+            this.state.general.handler.openHandler("price", true),
+          closeDropdown: () =>
+            this.state.general.handler.openHandler("price", false),
+          rangeValueUpdate: value =>
+            this.state.general.handler.rangeValueUpdate("price", value)
+        }
       },
       spm: {
-        isFiltered: false,
-        open: false,
+        status: {
+          open: false,
+          isFiltered: false
+        },
         data: {
           poi: {
             value: [],
@@ -129,7 +195,7 @@ class SearchBar extends Component {
 
             my.setState(newState);
           },
-          onClose: () => this.state.general.handler.modalHandler("spm", false)
+          closeModal: () => this.state.general.handler.openHandler("spm", false)
         }
       }
     };
@@ -145,8 +211,8 @@ class SearchBar extends Component {
       price,
       spm
     } = this.state;
-    let where;
 
+    let where;
     if (search.data.value === null) {
       where = "Hong Kong";
     } else {
@@ -183,9 +249,9 @@ class SearchBar extends Component {
                 floating
                 labeled
                 className="mr-3"
-                open={bedrooms.open}
-                onClick={() => general.handler.modalHandler("bedrooms", true)}
-                onBlur={() => general.handler.modalHandler("bedrooms", false)}
+                open={bedrooms.status.open}
+                onClick={() => general.handler.openHandler("bedrooms", true)}
+                onBlur={() => general.handler.openHandler("bedrooms", false)}
               >
                 <Dropdown.Menu>
                   <Dropdown.Header content="number of bedrooms" />
@@ -195,73 +261,68 @@ class SearchBar extends Component {
                   </Dropdown.Header>
                 </Dropdown.Menu>
               </Dropdown>
-              <Dropdown
-                text="Saleable area"
-                floating
-                labeled
-                className="mr-3"
-                open={saleableArea.open}
-                onClick={() =>
-                  general.handler.modalHandler("saleableArea", true)
-                }
-                onBlur={() =>
-                  general.handler.modalHandler("saleableArea", false)
-                }
-              >
-                <Dropdown.Menu>
-                  <Dropdown.Header content="Saleable area" />
-                  <Dropdown.Divider />
-                  <Dropdown.Header>
-                    Add button to change the saleable area
-                  </Dropdown.Header>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown
-                text="Gross area"
-                floating
-                labeled
-                className="mr-3"
-                open={grossArea.open}
-                onClick={() => general.handler.modalHandler("grossArea", true)}
-                onBlur={() => general.handler.modalHandler("grossArea", false)}
-              >
-                <Dropdown.Menu>
-                  <Dropdown.Header content="Gross area" />
-                  <Dropdown.Divider />
-                  <Dropdown.Header>
-                    Add button to change the gross area
-                  </Dropdown.Header>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown
-                text="Price"
-                floating
-                labeled
-                className="mr-3"
-                open={price.open}
-                onClick={() => general.handler.modalHandler("price", true)}
-                onBlur={() => general.handler.modalHandler("price", false)}
-              >
-                <Dropdown.Menu>
-                  <Dropdown.Header content="Price" />
-                  <Dropdown.Divider />
-                  <Dropdown.Header>
-                    Add button to change the price
-                  </Dropdown.Header>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Button onClick={() => general.handler.modalHandler("spm", true)}>
+
+              <ScrollFilter
+                text={"Saleable Area (" + this.ft2 + ")"}
+                handler={saleableArea.handler}
+                data={saleableArea.data}
+                status={saleableArea.status}
+              />
+
+              <ScrollFilter
+                text={"Gross Area (" + this.ft2 + ")"}
+                handler={grossArea.handler}
+                data={grossArea.data}
+                status={grossArea.status}
+              />
+
+              <ScrollFilter
+                text="Price (HKD)"
+                handler={price.handler}
+                data={price.data}
+                status={price.status}
+              />
+
+              <Button onClick={() => general.handler.openHandler("spm", true)}>
                 SPM
               </Button>
               <SpmFilter
                 data={spm.data}
                 handler={spm.handler}
-                open={spm.open}
+                status={spm.status}
                 size="small"
               />
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <VolumeSlider />
+      </Fragment>
+    );
+  }
+}
+
+class VolumeSlider extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      value: [0, 100],
+      def: [0, 100]
+    };
+  }
+
+  render() {
+    const my = this;
+    const handleOnChange = value => {
+      console.log(value);
+      my.setState({
+        value: value
+      });
+    };
+    let { value, def } = this.state;
+    return (
+      <Fragment>
+        <Range value={value} default={def} onChange={handleOnChange} />
+        <Fragment>{JSON.stringify(this.state)}</Fragment>
       </Fragment>
     );
   }
