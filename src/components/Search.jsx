@@ -19,37 +19,31 @@ import "rc-slider/assets/index.css";
 
 const houseData = [
   {
-    id: "house1",
-    img: "img/house1.jpg",
-    typeOfHouse: "PRIVATE ROOM IN APARTMENT",
-    postTitle:
-      "Private room in apartment\
-                            New Cozy Suite *5 mins walk to North Point MTR",
-    price: 332,
-    features: ["2 guests", "Studio", "1 bed", "1 private bath"]
+    address: "No.2 Tai Pak Terrace, Kennedy Town",
+    img: "images/house1.jpg",
+    grossArea: 300,
+    saleableArea: 240,
+    bedrooms: 1,
+    price: 14000,
+    url: "#"
   },
   {
-    id: "house2",
-    img: "img/house2.jpg",
-    typeOfHouse: "SHARED ROOM IN APARTMENT",
-    postTitle: "Comfort Homey Quiet Stay",
-    price: 310,
-    features: [
-      "2 guests",
-      "1 bedroom",
-      "1 bed",
-      "2 shared baths",
-      "Wifi",
-      "Kitchen"
-    ]
+    address: "Pokfulam Road",
+    img: "images/house2.jpg",
+    grossArea: 600,
+    saleableArea: 500,
+    bedrooms: 3,
+    price: 24000,
+    url: "#"
   },
   {
-    id: "house3",
-    img: "img/house3.jpg",
-    typeOfHouse: "PRIVATE ROOM IN APARTMENT",
-    postTitle: "Stanley. Heaven at 40min of Causeway Bay",
-    price: 450,
-    features: ["2 guests", "1 bedroom", "1 private bath", "Wifi", "Kitchen"]
+    address: "Des Voeux Road West 432",
+    img: "images/house1.jpg",
+    grossArea: 1200,
+    saleableArea: 1000,
+    bedrooms: 4,
+    price: 45000,
+    url: "#"
   }
 ];
 
@@ -81,7 +75,7 @@ class Search extends Component {
     ];
 
     const my = this;
-    this.ft2 = "ft2";
+    this.ft2 = "sq.ft.";
     // const ft2 = () => {
     //   return (
     //     <span>
@@ -92,6 +86,9 @@ class Search extends Component {
 
     this.state = {
       general: {
+        data: {
+          queries: houseData
+        },
         handler: {
           openHandler: (typeButton, isOpen) => {
             let newState = my.state;
@@ -307,6 +304,12 @@ class Search extends Component {
       where = search.data.value;
     }
 
+    const filterHouse = data => {
+      return data;
+    };
+
+    const filteredHouse = filterHouse(general.data.queries);
+
     return (
       <Fragment>
         <Segment inverted attached>
@@ -406,6 +409,7 @@ class Search extends Component {
                   />
                 </div>
               </Segment>
+              <HouseList data={filteredHouse} />
             </Grid.Column>
           </Grid>
         </Container>

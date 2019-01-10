@@ -110,18 +110,23 @@
   margin-left: auto;
 }
 
-.w-400 {
-  width: 400px;
+.hidden {
+  display: none;
 }
 
-.w-800 {
-  width: 800px;
+.house-result {
+  height: 150px;
 }
 
-.w-1200 {
-  width: 1200px;
+.img-result {
+  width: 100%;
+  height: auto;
 }
 
-.w-1600 {
-  width: 1600px;
+.leftFloat {
+  float: left;
+}
+
+.rightFloat {
+  float: right;
 }
