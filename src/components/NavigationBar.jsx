@@ -1,35 +1,33 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Button, Menu, Image } from 'semantic-ui-react'
+import { Button, Menu, Image } from "semantic-ui-react";
 
 class NavigationBar extends Component {
   render() {
-
     return (
-        <Menu inverted pointing secondary size='large'>
-            <Link to="/">
-                <Menu.Item
-                    header
-                    name='SpaceKey'
-                >
-                  <Image size='mini' src='/images/logo.png' style={{ marginRight: '1.5em' }} />
-                  SpaceKey
-                </Menu.Item>
-             </Link>
-            <Menu.Item position='right'>
-                <Link to="/login">
-                    <Button  inverted>
-                    Log in
-                    </Button>
-                </Link>
-                <Link to="/signup">
-                    <Button inverted style={{ marginLeft: '0.5em' }}>
-                    Sign Up
-                    </Button>
-                </Link>
-            </Menu.Item>
-        </Menu>
-    )
+      <Menu inverted pointing secondary size="large" attached>
+        <Link to="/">
+          <Menu.Item header name="SpaceKey">
+            <Image
+              size="mini"
+              src="/images/logo.png"
+              style={{ marginRight: "1.5em" }}
+            />
+            SpaceKey
+          </Menu.Item>
+        </Link>
+        <Menu.Item position="right">
+          <Link to="/login">
+            <Button inverted>Log in</Button>
+          </Link>
+          <Link to="/signup">
+            <Button inverted style={{ marginLeft: "0.5em" }}>
+              Sign Up
+            </Button>
+          </Link>
+        </Menu.Item>
+      </Menu>
+    );
   }
 }
 

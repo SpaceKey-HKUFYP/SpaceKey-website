@@ -7,7 +7,8 @@ import {
   Grid,
   Label,
   Dropdown,
-  Form
+  Form,
+  Header
 } from "semantic-ui-react";
 import InputRange from "react-input-range";
 import "react-dates/initialize";
@@ -16,7 +17,7 @@ import { DateRangePicker } from "react-dates";
 
 import { Range } from "rc-slider";
 
-import "../margin.css";
+import "../layout.css";
 import "rc-slider/assets/index.css";
 
 class ScrollFilter extends Component {
@@ -24,10 +25,16 @@ class ScrollFilter extends Component {
     const { data, status } = this.props;
     const handler = this.props.handler;
 
-    const info = data.value[0] + data.unit + " - " + data.value[1] + data.unit;
+    const info =
+      data.value[0] +
+      data.unit +
+      " - " +
+      data.value[1] +
+      data.unit +
+      (data.value[1] === data.max ? "+" : "");
     return (
       <Dropdown
-        text={this.props.text}
+        text={status.text}
         floating
         labeled
         className="mr-3"
@@ -36,9 +43,13 @@ class ScrollFilter extends Component {
         onBlur={handler.closeDropdown}
       >
         <Dropdown.Menu>
-          <Dropdown.Header content={this.props.text} />
+          <Dropdown.Header>
+            <Header as="h4">{status.defaultText}</Header>
+          </Dropdown.Header>
           <Dropdown.Divider />
-          <Dropdown.Header>{info}</Dropdown.Header>
+          <Dropdown.Header>
+            <Header as="h5">{info}</Header>
+          </Dropdown.Header>
           <Dropdown.Header>
             <Range
               value={data.value}
@@ -48,7 +59,8 @@ class ScrollFilter extends Component {
               marks={data.marks}
               min={data.min}
               max={data.max}
-              style={{ width: "500px" }}
+              style={{ width: "360px" }}
+              onAfterChange={handler.onAfterValueUpdated}
             />
           </Dropdown.Header>
         </Dropdown.Menu>
