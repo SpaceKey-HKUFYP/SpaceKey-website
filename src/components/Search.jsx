@@ -19,37 +19,31 @@ import "rc-slider/assets/index.css";
 
 const houseData = [
   {
-    id: "house1",
-    img: "img/house1.jpg",
-    typeOfHouse: "PRIVATE ROOM IN APARTMENT",
-    postTitle:
-      "Private room in apartment\
-                            New Cozy Suite *5 mins walk to North Point MTR",
-    price: 332,
-    features: ["2 guests", "Studio", "1 bed", "1 private bath"]
+    address: "No.2 Tai Pak Terrace, Kennedy Town",
+    img: "images/house1.jpg",
+    grossArea: 300,
+    saleableArea: 240,
+    bedrooms: 1,
+    price: 14000,
+    url: "#"
   },
   {
-    id: "house2",
-    img: "img/house2.jpg",
-    typeOfHouse: "SHARED ROOM IN APARTMENT",
-    postTitle: "Comfort Homey Quiet Stay",
-    price: 310,
-    features: [
-      "2 guests",
-      "1 bedroom",
-      "1 bed",
-      "2 shared baths",
-      "Wifi",
-      "Kitchen"
-    ]
+    address: "Pokfulam Road",
+    img: "images/house2.jpg",
+    grossArea: 600,
+    saleableArea: 500,
+    bedrooms: 3,
+    price: 24000,
+    url: "#"
   },
   {
-    id: "house3",
-    img: "img/house3.jpg",
-    typeOfHouse: "PRIVATE ROOM IN APARTMENT",
-    postTitle: "Stanley. Heaven at 40min of Causeway Bay",
-    price: 450,
-    features: ["2 guests", "1 bedroom", "1 private bath", "Wifi", "Kitchen"]
+    address: "Des Voeux Road West 432",
+    img: "images/house1.jpg",
+    grossArea: 1200,
+    saleableArea: 1000,
+    bedrooms: 4,
+    price: 45000,
+    url: "#"
   }
 ];
 
@@ -80,18 +74,66 @@ class Search extends Component {
       { key: "cafe", value: "cafe", text: "cafe" }
     ];
 
+    const filterBasedOnBedrooms = data => {
+      if (!this.state.bedrooms.status.isFiltered) return data;
+      return data.filter(house => {
+        return house.bedrooms >= this.state.bedrooms.data.value;
+      });
+    };
+
+    const filterBasedOnSaleableArea = data => {
+      if (!this.state.saleableArea.status.isFiltered) return data;
+      return data.filter(house => {
+        return (
+          house.saleableArea >= this.state.saleableArea.data.value[0] &&
+          (this.state.saleableArea.data.value[1] ===
+          this.state.saleableArea.data.max
+            ? true
+            : house.saleableArea <= this.state.saleableArea.data.value[1])
+        );
+      });
+    };
+
+    const filterBasedOnGrossArea = data => {
+      if (!this.state.grossArea.status.isFiltered) return data;
+      console.log("grossArea");
+      return data.filter(house => {
+        return (
+          house.grossArea >= this.state.grossArea.data.value[0] &&
+          (this.state.grossArea.data.value[1] === this.state.grossArea.data.max
+            ? true
+            : house.grossArea <= this.state.grossArea.data.value[1])
+        );
+      });
+    };
+
+    const filterBasedOnPrice = data => {
+      if (!this.state.price.status.isFiltered) return data;
+      return data.filter(house => {
+        return (
+          house.price >= this.state.price.data.value[0] &&
+          (this.state.price.data.value[1] === this.state.price.data.max
+            ? true
+            : house.price <= this.state.price.data.value[1])
+        );
+      });
+    };
+
+    const filterHouse = data => {
+      return filterBasedOnSaleableArea(
+        filterBasedOnGrossArea(filterBasedOnPrice(filterBasedOnBedrooms(data)))
+      );
+    };
+
     const my = this;
-    this.ft2 = "ft2";
-    // const ft2 = () => {
-    //   return (
-    //     <span>
-    //       ft<sup>2</sup>
-    //     </span>
-    //   );
-    // };
+    this.ft2 = "sq.ft.";
 
     this.state = {
       general: {
+        data: {
+          queries: houseData,
+          filteredHouse: houseData
+        },
         handler: {
           openHandler: (typeButton, isOpen) => {
             let newState = my.state;
@@ -112,7 +154,7 @@ class Search extends Component {
               status.isFiltered = false;
               status.text = status.defaultText;
             } else {
-              status.isFiltered = false;
+              status.isFiltered = true;
               status.text =
                 data.value[0] +
                 data.unit +
@@ -121,6 +163,10 @@ class Search extends Component {
                 data.unit +
                 (data.value[1] === data.max ? "+" : "");
             }
+
+            newState.general.data.filteredHouse = filterHouse(
+              newState.general.data.queries
+            );
 
             my.setState(newState);
           }
@@ -152,7 +198,7 @@ class Search extends Component {
           open: false,
           isFiltered: false
         },
-        data: {},
+        data: { value: 0 },
         handler: {}
       },
       saleableArea: {
@@ -406,6 +452,7 @@ class Search extends Component {
                   />
                 </div>
               </Segment>
+              <HouseList data={general.data.filteredHouse} />
             </Grid.Column>
           </Grid>
         </Container>

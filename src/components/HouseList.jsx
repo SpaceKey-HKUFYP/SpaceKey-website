@@ -1,43 +1,59 @@
 import React, { Component } from "react";
-import { Segment } from "semantic-ui-react";
+import {
+  Segment,
+  Grid,
+  Image,
+  Button,
+  Sticky,
+  Header
+} from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import "../layout.css";
 
-class HouseList extends React.Component {
+class HouseList extends Component {
   render() {
-    const listOfHouse = this.props.data.house.map(val => {
-      var id = "result-" + val.id;
-      var features = val.features.map(feature => {
-        return <span key={feature}>- {feature} -</span>;
-      });
-
-      var price = "$" + val.price + " HKD per night";
+    const listOfHouse = this.props.data.map(result => {
       return (
-        <div className="row border mb-3 house-result" key={id} id={id}>
-          <div className="col-3 border-right h-100">
-            <img src={val.img} />
-          </div>
-          <div className="col-7 border-right h-100 ">
-            <p className="font-weight-bold mb-1"> {val.typeOfHouse} </p>
-            <p className="mb-1"> {val.postTitle} </p>
-            <p className="font-weight-light h6">{features}</p>
-          </div>
-          <div className="col-2 h-100">
-            <p>{price}</p>
-          </div>
-        </div>
+        <Segment
+          padded={false}
+          key={result.address + result.url}
+          raised
+          secondary
+        >
+          <Image src={result.img} className="img-result" />
+
+          <Header as="h3"> {result.address} </Header>
+          <Header as="h4">Rent: {result.price} HKD</Header>
+          <Header as="h4">
+            {" "}
+            {"Gross area:" +
+              result.grossArea +
+              "sq.ft. | Saleable area:" +
+              result.saleableArea +
+              "sq.ft."}
+          </Header>
+
+          <Grid>
+            <Grid.Column width={10}>
+              <Header as="h4">{result.bedrooms + " bedrooms"}</Header>
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <Link to={result.url}>
+                <Button>View details</Button>
+              </Link>
+            </Grid.Column>
+          </Grid>
+        </Segment>
       );
     });
 
     return (
-      <div className="container-fluid h-100" id="main">
-        <div className="row h-100">
-          <div className="col-7 border-right" id="result">
-            <div className="container-fluid p-3">{listOfHouse}</div>
-          </div>
-          <div className="col-5" id="mapContainer">
-            This is the map
-          </div>
-        </div>
-      </div>
+      <Grid columns="equal" divided={false} padded={false} fluid="true">
+        <Grid.Column>{listOfHouse}</Grid.Column>
+        <Grid.Column>
+          <Segment style={{ height: "500px" }}>this is map</Segment>
+        </Grid.Column>
+      </Grid>
     );
   }
 }

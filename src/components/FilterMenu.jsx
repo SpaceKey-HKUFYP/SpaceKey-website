@@ -91,7 +91,7 @@ class SpmFilter extends Component {
     });
 
     const SimplePanel = () => (
-      <Grid columns="equal" divided padded fluid="true">
+      <Grid columns="equal" divided={false} padded fluid="true">
         <Grid.Row>
           <Grid.Column>
             <Dropdown
@@ -161,7 +161,7 @@ class WantedObject extends Component {
     return (
       <Grid.Row>
         <Grid.Column>
-          <Grid columns="equal" divided fluid="true">
+          <Grid columns="equal" divided={false} fluid="true">
             <Grid.Row>
               <Grid.Column>
                 <Label>{this.props.val}</Label>
