@@ -74,20 +74,65 @@ class Search extends Component {
       { key: "cafe", value: "cafe", text: "cafe" }
     ];
 
+    const filterBasedOnBedrooms = data => {
+      if (!this.state.bedrooms.status.isFiltered) return data;
+      return data.filter(house => {
+        return house.bedrooms >= this.state.bedrooms.data.value;
+      });
+    };
+
+    const filterBasedOnSaleableArea = data => {
+      if (!this.state.saleableArea.status.isFiltered) return data;
+      return data.filter(house => {
+        return (
+          house.saleableArea >= this.state.saleableArea.data.value[0] &&
+          (this.state.saleableArea.data.value[1] ===
+          this.state.saleableArea.data.max
+            ? true
+            : house.saleableArea <= this.state.saleableArea.data.value[1])
+        );
+      });
+    };
+
+    const filterBasedOnGrossArea = data => {
+      if (!this.state.grossArea.status.isFiltered) return data;
+      console.log("grossArea");
+      return data.filter(house => {
+        return (
+          house.grossArea >= this.state.grossArea.data.value[0] &&
+          (this.state.grossArea.data.value[1] === this.state.grossArea.data.max
+            ? true
+            : house.grossArea <= this.state.grossArea.data.value[1])
+        );
+      });
+    };
+
+    const filterBasedOnPrice = data => {
+      if (!this.state.price.status.isFiltered) return data;
+      return data.filter(house => {
+        return (
+          house.price >= this.state.price.data.value[0] &&
+          (this.state.price.data.value[1] === this.state.price.data.max
+            ? true
+            : house.price <= this.state.price.data.value[1])
+        );
+      });
+    };
+
+    const filterHouse = data => {
+      return filterBasedOnSaleableArea(
+        filterBasedOnGrossArea(filterBasedOnPrice(filterBasedOnBedrooms(data)))
+      );
+    };
+
     const my = this;
     this.ft2 = "sq.ft.";
-    // const ft2 = () => {
-    //   return (
-    //     <span>
-    //       ft<sup>2</sup>
-    //     </span>
-    //   );
-    // };
 
     this.state = {
       general: {
         data: {
-          queries: houseData
+          queries: houseData,
+          filteredHouse: houseData
         },
         handler: {
           openHandler: (typeButton, isOpen) => {
@@ -109,7 +154,7 @@ class Search extends Component {
               status.isFiltered = false;
               status.text = status.defaultText;
             } else {
-              status.isFiltered = false;
+              status.isFiltered = true;
               status.text =
                 data.value[0] +
                 data.unit +
@@ -118,6 +163,10 @@ class Search extends Component {
                 data.unit +
                 (data.value[1] === data.max ? "+" : "");
             }
+
+            newState.general.data.filteredHouse = filterHouse(
+              newState.general.data.queries
+            );
 
             my.setState(newState);
           }
@@ -149,7 +198,7 @@ class Search extends Component {
           open: false,
           isFiltered: false
         },
-        data: {},
+        data: { value: 0 },
         handler: {}
       },
       saleableArea: {
@@ -304,12 +353,6 @@ class Search extends Component {
       where = search.data.value;
     }
 
-    const filterHouse = data => {
-      return data;
-    };
-
-    const filteredHouse = filterHouse(general.data.queries);
-
     return (
       <Fragment>
         <Segment inverted attached>
@@ -409,7 +452,7 @@ class Search extends Component {
                   />
                 </div>
               </Segment>
-              <HouseList data={filteredHouse} />
+              <HouseList data={general.data.filteredHouse} />
             </Grid.Column>
           </Grid>
         </Container>

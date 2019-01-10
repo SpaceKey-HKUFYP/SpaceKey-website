@@ -123,10 +123,10 @@
   height: auto;
 }
 
-.leftFloat {
+.floatLeft {
   float: left;
 }
 
-.rightFloat {
+.floatRight {
   float: right;
 }
