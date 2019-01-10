@@ -3,25 +3,32 @@ import time
 import _thread
 import datetime
 
-# prevent loading image and set up disk cache
+# ----------------- Configuration
+headless = False
+
+timeDelay = 5
+timeMiniDelay = 0.1
+nullValue = "None"
+maxAttempt = 100 # maxmimum attempt to locate element
+
 chromeOptions = webdriver.ChromeOptions()
-chromeOptions.add_argument('--disable-gpu')
-chromeOptions.add_argument('--headless')
+if headless == True:
+	chromeOptions.add_argument('--disable-gpu')
+	chromeOptions.add_argument('--headless')
 #prefs = { 'disk-cache-size':4096}
 #chromeOptions.add_experimental_option('prefs', prefs)
 
 
+# ---------------- End of Configuration
 
+list_of_start_points = []
 # The search start point is HKU
 startPoint = "@22.2860628,114.1292237,15z"
 InitialURL = "https://www.google.com.hk/maps"
 TargetURL = InitialURL + "/" + startPoint + "?hl=en"
 
 
-timeDelay = 5
-timeMiniDelay = 0.1
-nullValue = "None"
-maxAttempt = 100 # maxmimum attempt to locate element
+
 
 propertyURL_buy = "https://www.28hse.com/en/buy"
 propertyURL_rent = "https://www.28hse.com/en/rent"
