@@ -26,6 +26,17 @@ import "../layout.css";
 class HouseList extends Component {
   render() {
     const listOfHouse = this.props.data.map(result => {
+      let bedroomsInfo;
+
+      if (result.bedrooms === 0) {
+        bedroomsInfo = "Studio";
+      } else if (result.bedrooms === 1) {
+        bedroomsInfo = "1 bedroom";
+      } else if (result.bedrooms === 6) {
+        bedroomsInfo = "5+ bedrooms";
+      } else {
+        bedroomsInfo = result.bedrooms + " bedrooms";
+      }
       return (
         <Segment
           padded={false}
@@ -58,7 +69,7 @@ class HouseList extends Component {
             </Header.Subheader>
           </Header>
           <Header as="h4" floated="left">
-            {result.bedrooms + " bedrooms"}
+            {bedroomsInfo}
           </Header>
           <Header as="h4" floated="right">
             <Link to={result.pageURL}>

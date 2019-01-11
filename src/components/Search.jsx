@@ -49,7 +49,7 @@ const houseData = [
     imageURL: "images/house1.jpg",
     grossArea: 300,
     saleableArea: 240,
-    bedrooms: 1,
+    bedrooms: 0,
     price: 14000,
     pageURL: "#",
     lat: 111.11,
@@ -112,7 +112,12 @@ class Search extends Component {
     const filterBasedOnBedrooms = data => {
       if (!this.state.bedrooms.status.isFiltered) return data;
       return data.filter(house => {
-        return house.bedrooms >= this.state.bedrooms.data.value;
+        return (
+          house.bedrooms >= this.state.bedrooms.data.value[0] &&
+          (this.state.bedrooms.data.value[1] === this.state.bedrooms.data.max
+            ? true
+            : house.bedrooms <= this.state.bedrooms.data.value[1])
+        );
       });
     };
 
@@ -270,10 +275,29 @@ class Search extends Component {
       bedrooms: {
         status: {
           open: false,
-          isFiltered: false
+          isFiltered: false,
+          text: "Bedrooms",
+          defaultText: "Bedrooms"
         },
-        data: { value: 0 },
-        handler: {}
+        data: {
+          min: 0,
+          max: 5,
+          marks: { 0: "0", 5: "5" },
+          step: 1,
+          default: [0, 5],
+          value: [0, 5],
+          unit: ""
+        },
+        handler: {
+          openDropdown: () =>
+            this.state.general.handler.openHandler("bedrooms", true),
+          closeDropdown: () =>
+            this.state.general.handler.openHandler("bedrooms", false),
+          rangeValueUpdate: value =>
+            this.state.general.handler.rangeValueUpdate("bedrooms", value),
+          onAfterValueUpdated: () =>
+            this.state.general.handler.onAfterValueUpdated("bedrooms")
+        }
       },
       saleableArea: {
         status: {
@@ -474,27 +498,11 @@ class Search extends Component {
               <Segment>
                 <Header as="h3">Property for rent in {where}</Header>
                 <div>
-                  <Dropdown
-                    text="Bedrooms"
-                    floating
-                    labeled
-                    className="mr-3"
-                    open={bedrooms.status.open}
-                    onClick={() =>
-                      general.handler.openHandler("bedrooms", true)
-                    }
-                    onBlur={() =>
-                      general.handler.openHandler("bedrooms", false)
-                    }
-                  >
-                    <Dropdown.Menu>
-                      <Dropdown.Header content="number of bedrooms" />
-                      <Dropdown.Divider />
-                      <Dropdown.Header>
-                        Add button to change the number of bedroom
-                      </Dropdown.Header>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  <ScrollFilter
+                    handler={bedrooms.handler}
+                    data={bedrooms.data}
+                    status={bedrooms.status}
+                  />
 
                   <ScrollFilter
                     handler={saleableArea.handler}
