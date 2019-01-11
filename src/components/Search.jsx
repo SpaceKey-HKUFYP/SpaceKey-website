@@ -189,7 +189,7 @@ class Search extends Component {
           },
           handleRequestQuery: () => {
             axios
-              .get(global.projectConstant.apiURL, {
+              .get(global.projectConstant.apiURL + "/data/property/get", {
                 params: {
                   type: this.state.search.status.activeItem,
                   region: this.state.search.data.value
