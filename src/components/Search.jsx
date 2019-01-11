@@ -16,6 +16,7 @@ import HouseList from "./HouseList";
 
 import "../layout.css";
 import "rc-slider/assets/index.css";
+import "../constant";
 
 const houseData = [
   {
@@ -57,13 +58,15 @@ class Search extends Component {
       });
     };
 
-    const placeOptions = [
-      { key: "Causeway Bay", value: "Causeway Bay", text: "Causeway Bay" },
-      { key: "Kennedy Town", value: "Kennedy Town", text: "Kennedy Town" },
-      { key: "HKU", value: "HKU", text: "HKU" },
-      { key: "Sheung Wan", value: "Sheung Wan", text: "Sheung Wan" },
-      { key: "Sai Ying Pun", value: "Sai Ying Pun", text: "Sai Ying Pun" }
-    ];
+    //   [
+    //     { key: "Causeway Bay", value: "Causeway Bay", text: "Causeway Bay" },
+    //     { key: "Kennedy Town", value: "Kennedy Town", text: "Kennedy Town" },
+    //     { key: "HKU", value: "HKU", text: "HKU" },
+    //     { key: "Sheung Wan", value: "Sheung Wan", text: "Sheung Wan" },
+    //     { key: "Sai Ying Pun", value: "Sai Ying Pun", text: "Sai Ying Pun" }
+    // ];
+
+    const placeOptions = global.regionName;
 
     const poiOptions = [
       { key: "school", value: "school", text: "school" },
@@ -96,7 +99,6 @@ class Search extends Component {
 
     const filterBasedOnGrossArea = data => {
       if (!this.state.grossArea.status.isFiltered) return data;
-      console.log("grossArea");
       return data.filter(house => {
         return (
           house.grossArea >= this.state.grossArea.data.value[0] &&

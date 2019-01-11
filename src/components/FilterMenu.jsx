@@ -51,17 +51,19 @@ class ScrollFilter extends Component {
             <Header as="h5">{info}</Header>
           </Dropdown.Header>
           <Dropdown.Header>
-            <Range
-              value={data.value}
-              default={data.default}
-              onChange={handler.rangeValueUpdate}
-              step={data.step}
-              marks={data.marks}
-              min={data.min}
-              max={data.max}
-              style={{ width: "360px" }}
-              onAfterChange={handler.onAfterValueUpdated}
-            />
+            <div className="scrollFilter-range-wrapper">
+              <Range
+                value={data.value}
+                default={data.default}
+                onChange={handler.rangeValueUpdate}
+                step={data.step}
+                marks={data.marks}
+                min={data.min}
+                max={data.max}
+                style={{ width: "360px" }}
+                onAfterChange={handler.onAfterValueUpdated}
+              />
+            </div>
           </Dropdown.Header>
         </Dropdown.Menu>
       </Dropdown>

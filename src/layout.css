@@ -130,3 +130,8 @@
 .floatRight {
   float: right;
 }
+
+.scrollFilter-range-wrapper {
+  height: 34px;
+  padding: 0px 15px;
+}
