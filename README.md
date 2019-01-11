@@ -6,9 +6,9 @@
 - Think of something new to the algorithm
 - Develop the front-back end communication
 
-## On search page
+## Urgent
 
-- Need to implement bedrooms filter
+- MAP
+- set router for searching -> example search/sell/Aberdeen
+- Only show (let's say 10) properties per page
 - Need to implement SPM filter
-- Need to implement search bar (using AJAX)
-- Need to implement goto page from home to search page
