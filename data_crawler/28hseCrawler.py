@@ -2,6 +2,7 @@ from selenium import webdriver
 import mySQLsupport
 # table entry headings, for selling
 table_price = "Price"
+table_rent = "Rent"
 table_net_area = "Net floor area(sq feet)"
 table_gross_area = "Gross area(sq feet)"
 table_floor = "Floor"
@@ -94,7 +95,7 @@ def start(MainURL, driver):
 	max_result = driver.find_element_by_xpath("//div[@class='search_total_result']/em").text
 	print("max number of result",max_result)
 	total_page_num = int(max_result)/15.0
-	current_page = 1
+	current_page = 416
 	while current_page <= total_page_num:
 		combined_url = propertyURL_buy + "/" + list_prefix + str(current_page)
 		get_result(MainDriver, combined_url,current_page)
@@ -217,12 +218,16 @@ def handle_row(row, key,val, table):
 	if key not in table_content:
 		#print("key not in table, ",key)
 		return
-	if key == table_price:
+	if key == table_price or key == table_rent:
+		# HK$ 16.80M / $7,500
 		price = val.split('\n')[0].split(' ')[1]
-		if "M" in price:
+		if "M" in price:#rent
 			price_num = price[0:len(price)-2] # millions of HKD
 			p = float(price_num) * 1000000
 			table[table_price] = p
+		else:#rent
+			p = price.replace(',','').replace('$','')
+			table[table_rent] = p
 	elif key == table_address:
 		# https://www.28hse.com/utf8/detail2_map.php?y=22.2781050&x=114.1757340
 		try:

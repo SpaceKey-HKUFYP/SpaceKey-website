@@ -2,7 +2,8 @@ from selenium import webdriver
 import time
 import _thread
 import datetime
-
+import mySQLsupport
+import random
 # ----------------- Configuration
 headless = False
 
@@ -24,18 +25,14 @@ if headless == True:
 list_of_start_points = []
 # The search start point is HKU
 startPoint = "@22.2860628,114.1292237,15z"
+longitude_min = 114.1116922
+longitude_max = 114.1442555
+latitude_min =22.2414201
+latitude_max =22.3975458
+zoom = 15
+
 InitialURL = "https://www.google.com.hk/maps"
 TargetURL = InitialURL + "/" + startPoint + "?hl=en"
-
-
-
-
-propertyURL_buy = "https://www.28hse.com/en/buy"
-propertyURL_rent = "https://www.28hse.com/en/rent"
-
-set_keywords = ["school","hospital","bank","restaurant","bar","coffee","parking lot","post office", "supermarket", "park", "garden", "beach", "store","bus terminal","sport center","University","McDonald","Theater","Mall","FireStation","Police office","ATM","Gas station","Temple"]
-start_index = 0
-current_key_word = ""
 
 main_driver = webdriver.Chrome(chrome_options=chromeOptions)
 main_driver.get(TargetURL)
@@ -44,11 +41,34 @@ main_driver.get(TargetURL)
 translation_driver = webdriver.Chrome(chrome_options=chromeOptions)
 translation_driver.get(TargetURL)
 #translation_driver.implicitly_wait(timeDelay)
+def pick_start_point():
+	temp_str = ""
+	latitude = random.uniform(latitude_min,latitude_max)
+	longitude = random.uniform(longitude_min,longitude_max)
+	temp_str += '@' + str(latitude) + ',' + str(longitude) + ','+ str(zoom) +'z'
+	startPoint = temp_str
+	TargetURL = InitialURL + "/" + startPoint + "?hl=en"
+	main_driver.get(TargetURL)
 
+
+
+pick_start_point()
+
+#propertyURL_buy = "https://www.28hse.com/en/buy"
+#propertyURL_rent = "https://www.28hse.com/en/rent"
+
+set_keywords = ["school","hospital","bank","restaurant","bar","coffee","parking lot","post office", "supermarket", "park", "garden", "beach", "store","bus terminal","sport center","University","McDonald","Theater","Mall","FireStation","Police office","ATM","Gas station","Temple"]
+start_index = 0
+current_k = set_keywords[start_index]
+
+def set_current_key(key):
+	current_k = key
+def get_current_key():
+	return current_k
 # file to write
 fileName = str(time.ctime()) + ".txt"
 fileName = fileName.replace(":", "-")
-outputFile = open(fileName,"a", encoding='utf-8')
+#outputFile = open(fileName,"a", encoding='utf-8')
 def appendToFile(content):
 	outputFile.write(content)
 
@@ -145,11 +165,24 @@ def store_info(place_name, rating, review_num, keyword, addr, location):
 		  		"address: ", addr, "\n",
 		  		"Location: ", location, "\n"])
 	print(info.encode('utf-8').decode('utf-8'))
-	coordinate = nullValue
+	coordinate = None
 	if location != "11AA+A1":
 		coordinate = translate_plusCode(location)
-	info_to_store = place_name + "@" + str(review_num).split(' ')[0] + "@" + current_key_word + "@" + keyword + "@" + addr + "@" + coordinate + "\n"
-	appendToFile(info_to_store)
+	if ',' in coordinate:
+		latitude = coordinate.split(',')[0]
+		longitude = coordinate.split(',')[1]
+	else:
+		return
+	#info_to_store = place_name + "@" + str(review_num).split(' ')[0] + "@" + current_key_word + "@" + keyword + "@" + addr + "@" + coordinate + "\n"
+	#appendToFile(info_to_store)
+	review_num_int = int(str(review_num).split(' ')[0])
+	#print('current key word before store', get_current_key())
+	#print('set_keywords',set_keywords)
+	list = [place_name, review_num_int, get_current_key(), keyword, addr, latitude, longitude]
+	#tuple = tuple(list)
+	#print("storing info :",tuple)
+	mySQLsupport.db_add_place(tuple(list))
+
 	#_thread.start_new_thread(thread_store_info_to_file,(info_to_store, location))
 
 
@@ -157,6 +190,7 @@ def thread_store_info_to_file(info, location_plusCode):
 	coordinate = trans-late_plusCode(location_plusCode)
 	result = info+"@"+coordinate
 	appendToFile(result)
+
 
 def turn_page(driver):
 	button_class = "n7lv7yjyC35__button-next-icon"
@@ -213,7 +247,7 @@ def find_element_by_xpath_until_found(driver, xpath, isText):
 			#print("locating element stuck when finding", xpath, " with count ", count)
 			if count >= maxAttempt and isText:
 				print("locate element failure when finding ", xpath, ", returning default value")
-				return nullValue
+				return None
 			time.sleep(timeMiniDelay)
 			pass
 
@@ -222,14 +256,17 @@ def find_element_by_xpath_until_found(driver, xpath, isText):
 
 def start(driver):
 	for k in range(start_index,len(set_keywords)):
-		current_key_word = set_keywords[k]
-		init_search(driver, current_key_word)
+		set_current_key(set_keywords[k]+"")
+		temp_key = set_keywords[k]+''
+		print("current key word",current_k)
+		init_search(driver, temp_key)
 		while True:
 			time.sleep(timeDelay)
 			get_result_div(driver)
 			if turn_page(driver) == False:
 				break
-
-start(main_driver)
+while True:
+	pick_start_point()
+	start(main_driver)
 #turn_page(main_driver)
 #translate_plusCode("74PP+2V Hong Kong")

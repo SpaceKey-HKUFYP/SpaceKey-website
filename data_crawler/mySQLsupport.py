@@ -91,6 +91,7 @@ def db_add_place(tuple):
         options = ' ON DUPLICATE KEY UPDATE name=name'
         command = prefix + place_para + options
         DBcursor.execute(command, tuple)
+        database.commit()
     except Exception as error:
         print('record insert with error:',error)
         print('tuple value', tuple)
