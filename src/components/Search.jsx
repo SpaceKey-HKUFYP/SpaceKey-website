@@ -26,7 +26,8 @@ const houseData = [
     saleableArea: 240,
     bedrooms: 1,
     price: 14000,
-    url: "#"
+    url: "#",
+    regionName: "Kennedy Town"
   },
   {
     address: "Pokfulam Road",
@@ -35,7 +36,8 @@ const houseData = [
     saleableArea: 500,
     bedrooms: 3,
     price: 24000,
-    url: "#"
+    url: "#",
+    regionName: "Sai Ying Pun"
   },
   {
     address: "Des Voeux Road West 432",
@@ -44,7 +46,8 @@ const houseData = [
     saleableArea: 1000,
     bedrooms: 4,
     price: 45000,
-    url: "#"
+    url: "#",
+    regionName: "Sai Ying Pun"
   }
 ];
 
@@ -66,7 +69,7 @@ class Search extends Component {
     //     { key: "Sai Ying Pun", value: "Sai Ying Pun", text: "Sai Ying Pun" }
     // ];
 
-    const placeOptions = global.regionName;
+    const placeOptions = global.projectConstant.regionName;
 
     const poiOptions = [
       { key: "school", value: "school", text: "school" },
