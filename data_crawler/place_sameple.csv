@@ -1,33 +1,4 @@
 "name";"reviewNum";"searchKey";"givenKey";"address";"latitude";"longitude";"id"
-"Ho Shun Primary School";16;"";"School";"Lei Muk Shue";22.379813;114.134188;178
-"S.K.H. Chu Oi Primary School";27;"";"School";"45 Tung Chi St, Kwai Chung";22.370813;114.139812;179
-"Shek Lei Catholic Secondary School";17;"";"Middle school";"23-31 On Chit St, Kwai Chung";22.371563;114.140437;180
-"C.C.C. Chuen Yuen College";27;"";"Middle school";"Kwai Chung, Sheung Kok St, 15號葵涌邨";22.368813;114.128063;181
-"Salvation Army Lei Muk Shue Nursery School";0;"";"Nursery school";"Lei Muk Shue, Wo Yi Hop Rd, B及C翼地下 Lei Muk Shue Estate Yeung Shue House";22.377438;114.135438;182
-"Ju Ching Chu Secondary School (Kwai Chung)";18;"";"Middle school";"1-11 On Chit St, Kwai Chung";22.370437;114.140813;183
-"English Excel School (Lai Chi Kok)";1;"";"School";"Lai Chi Kok, 深盛路9號宇晴匯商場2樓32和35號";22.334438;114.149813;213
-"Lung Kong World Federation School Limited Lau Wong Fat Secondary School";24;"";"Middle school";"66 Sycamore St, Tai Kok Tsui";22.325812;114.162562;236
-"Sharon Lutheran School";25;"";"Primary school";"18 Cherry St, Tai Kok Tsui";22.318938;114.164938;237
-"Saint Louis School (Primary Section)";12;"";"Primary school";"179 Third St, Sai Wan";22.286188;114.138063;238
-"英華女學校 Ying Wa Girl' s School";3;"";"School";"101 Castle Peak Rd, Sham Shui Po";22.333563;114.162438;240
-"English Excel School (Olympic)";0;"";"School";"Tai Kok Tsui, 西九匯, 1/F, 101舖";22.318438;114.161688;242
-"St. Francis Xavier's College";42;"";"Middle school";"45 Sycamore St, Tai Kok Tsui";22.325563;114.163187;243
-"Po Leung Kuk Camões Tan Siu Lin Primary School";69;"";"Primary school";"6 Hoi Ting Rd, Mong Kok";22.315063;114.165438;244
-"California School";3;"";"Private school";"Yau Ma Tei, 550 Nathan Road, Lung Ma Building, Yau Ma Tei, Kowloon, Hong Kong";22.314188;114.170688;245
-"Hong Kong Christian Services Central Nursery School";4;"";"Nursery school";"557 Shanghai St, Mong Kok";22.318688;114.167938;246
-"The ELCHK Faith Lutheran School";15;"";"Primary school";"Pak Tin, 培德街8號";22.335437;114.165313;247
-"Salvation Army Hoi Fu Nursery School";0;"";"Nursery school";"Mong Kok, 九龍旺角西海富苑海寧閣B及C翼地下";22.316313;114.164313;248
-"Yew Chung Kindergarten";8;"";"International school";"Yew Chung International Children's House, Waterloo Rd, Kowloon Tong";22.338813;114.178812;250
-"Yaumati Kaifong Association School";13;"";"Primary school";"80 Public Square St, Yau Ma Tei";22.310187;114.171687;251
-"Hong Kong Effective Careers Institute";0;"";"School";"Elaine Court, 1 Tung Choi St, Prince Edward";22.325188;114.168313;254
-"Beacon Hill School 畢架山小學";0;"";"International school";"23 Ede Rd, Kowloon Tong";22.342187;114.177938;255
-"Hong Kong Christian Services Shek Kip Mei Nursery School";3;"";"Nursery school";"Shek Kip Mei";22.333563;114.165313;258
-"Salvation Army Lai Chi Kok Nursery School";0;"";"Nursery school";"168 Lai Chi Kok Rd, Prince Edward";22.325687;114.164688;260
-"Maryknoll Fathers' School Secondary Section";23;"";"High school";"Tai Hang Tung, 2 To Yuen St, Kowloon Tong";22.334188;114.173313;261
-"Saviour Lutheran School";0;"";"Special education school";"288 Tai Po Rd, Pak Tin";22.334687;114.163312;262
-"St. Francis of Assisi's English Primary School";75;"";"Primary school";"58 Shek Kip Mei St, Sham Shui Po";22.330938;114.166563;264
-"Parkview International Pre-School (Kowloon)";0;"";"Kindergarten";"1 Austin Rd W, West Kowloon";22.305313;114.162063;265
-"Carmel Alison Lam Foundation Secondary School";27;"";"School";"4 Wah King Hill Rd, Kwai Chung";22.350688;114.133688;270
 "奇力学校";0;"school";"School";"Pok Fu Lam Rd, Pok Fu Lam";22.267812;114.131688;280
 "Ebenezer New Hope School";1;"school";"Special education school";"Pok Fu Lam, 薄扶林道131號";22.266688;114.131937;286
 "香港大學數碼港學院";0;"school";"School";"Telegraph Bay, 數碼港道100號數碼港一座";22.262562;114.130187;287
@@ -1110,3 +1081,77 @@
 "大隴街路旁咪錶泊車位 2";2;"school";"Parking Lot";"Kwai Loong Building, 53 Tai Loong St, Kwai Chung";22.365187;114.137563;1604
 "Chinachem Century Tower Car Park";0;"school";"Parking Lot";"Wan Chai, 告士打道178";22.279938;114.178438;1605
 "Peak Galleria Car Park";9;"school";"Parking Lot";"The Peak";22.270313;114.149563;1606
+"Yuen Chau Kok Road metered parking spaces";14;"school";"Parking Lot";"Sha Tin, Yuen Chau Kok Rd, 19號號 Clp Power Hong Kong Limited Siu Tan Substation";22.380563;114.199937;1607
+"Container Port Road South Car Park";5;"school";"Parking Lot";"Container Port Rd S, Kwai Chung";22.332813;114.133438;1608
+"Kennedy Town Carpark";10;"school";"Parking Lot";"12 Rock Hill St, Sai Wan";22.282063;114.129062;1609
+"Shui On Centre";1;"school";"Parking Lot";"6-8 Harbour Road, Wan Chai";22.280313;114.171687;1610
+"Zhongyuan Dasha Parking";1;"school";"Parking Lot";"Sheung Wan, Queen's Road Central, 181號103-106";22.285813;114.152938;1611
+"Goldway Parking Texaco Road Parking Lot";0;"school";"Parking Lot";"231 Texaco Rd, Tsuen Wan";22.364688;114.115313;1612
+"Tin Hau Car Park";0;"school";"Parking Lot";"1 Lau Sin St, Causeway Bay";22.282562;114.191688;1613
+"Laford Centre Car Park";5;"school";"Parking Lot";"號, 20 Cheung Shun St, Cheung Sha Wan";22.336187;114.146563;1614
+"Airport Express Hong Kong Station Car Park";128;"school";"Parking Lot";"Central, Harbour View St, HK 香港島 One International Finance Centre";22.285313;114.157438;1615
+"Hollywood Terrace";1;"school";"Parking Lot";"123 Hollywood Rd, Tai Ping Shan";22.284187;114.150938;1617
+"Olympian City One Car Park";46;"school";"Parking Lot";"Tai Kok Tsui";22.319812;114.157688;1618
+"Nam Cheong Estate Car Park";4;"school";"Parking Lot";"3 Cheong San Ln, Sham Shui Po";22.326188;114.157563;1619
+"Lai Kok Estate Car Park";6;"school";"Parking Lot";"Sham Shui Po, 麗閣邨麗萱樓第1層5及6號舖位";22.332562;114.156438;1620
+"Wilson Car Parking 3 floors";0;"school";"Parking Lot";"Wealth Court, 28 Tsat Tsz Mui Rd, North Point";22.290563;114.201438;1621
+"Elements South Carpark";11;"school";"Parking Lot";"1 Austin Rd, Tsim Sha Tsui";22.303938;114.160187;1622
+"Rumsey Street Multi Storey Car Park";154;"school";"Parking Lot";"2 Rumsey St, Sheung Wan";22.287438;114.153313;1623
+"Pier 3 Car Park, Harbour City";22;"school";"Parking Lot";"Tsim Sha Tsui";22.297188;114.167188;1624
+"路旁停車位";1;"school";"Parking Lot";"Tung Fong St, Mong Kok";22.313438;114.171062;1625
+"1 Chak On Rd Garage";0;"school";"Parking Lot";"1 Chak On Rd, Tai Woh Ping";22.340813;114.164063;1626
+"The Sun Arcade Car Park";6;"school";"Parking Lot";"Tsim Sha Tsui";22.296687;114.169937;1627
+"Hoi Fu Car Park";1;"school";"Parking Lot";"2 Hoi Ting Rd, Mong Kok";22.316187;114.165313;1628
+"Three Pacific Place Car Park";1;"school";"Parking Lot";"Monmouth Path, Wan Chai";22.277188;114.167938;1629
+"171 Prince Edward Rd W Garage";1;"school";"Parking Lot";"13 Nullah Rd, Mong Kok";22.323813;114.169312;1630
+"Langham Place Car Park";179;"school";"Parking Lot";"31-33號 Shantung Street, Mong Kok";22.317313;114.168688;1631
+"Avenue carpark 囍匯停車塲";2;"school";"Parking Lot";"Spring Garden Mansion, 21-29 Spring Garden Ln, Wan Chai";22.275813;114.172812;1632
+"Bank Of East Asia Harbour View Centre Car Park";9;"school";"Parking Lot";"Wan Chai, 告士打道56號";22.278937;114.171187;1633
+"Yaumatei Car Park Building";124;"school";"Parking Lot";"Yau Ma Tei, 上海街號250號";22.309312;114.170688;1634
+"160 Lockhart Road Garage";0;"school";"Parking Lot";"160 Lockhart Rd, Wan Chai";22.278063;114.173813;1635
+"Langham Place Shopping Mall Car Park";13;"school";"Parking Lot";"Mong Kok, Shantung Street, 31號35";22.317313;114.168688;1636
+"The Hong Kong Polytechnic University Car Park";6;"school";"Parking Lot";"Hung Hom Bay";22.303688;114.179313;1637
+"On-street Parking Lot";1;"school";"Parking Lot";"Kwai Ying Building, 2 Shek Ying Path, Kwai Chung";22.364813;114.136187;1638
+"Hong Kong Convention and Exhibition Centre New Wing Car Park";7;"school";"Parking Lot";"Wan Chai";22.283063;114.173063;1640
+"Luen Wan Street Car Park";8;"school";"Parking Lot";"Mong Kok";22.320313;114.172438;1642
+"Sunlight Tower Car Park";1;"school";"Parking Lot";"62 Tai Yuen St, Wan Chai";22.274688;114.173437;1643
+"LHN Parking HK - Carnarvon Plaza";0;"school";"Parking Lot";"B2, Carnarvon Plaza, No. 20 Carnarvon Road, Tsim Sha Tsui";22.299188;114.173188;1644
+"CC Wu Building Car Park Entrance";2;"school";"Parking Lot";"號, 212 Wan Chai Rd, Wan Chai";22.277563;114.177938;1645
+"26-28 Tat Chee Rd Garage";0;"school";"Parking Lot";"26-28 Tat Chee Rd, Yau Yat Chuen";22.331438;114.175563;1646
+"disabled parking";0;"school";"Parking Lot";"Tsim Sha Tsui East";22.298187;114.176188;1647
+"Lung Cheung Road Lookout Car Park";6;"school";"Parking Lot";"Lung Cheung Rd, Kowloon Tong";22.343063;114.171313;1648
+"Admiralty Car Park";2;"school";"Parking Lot";"Rodney St, Central";22.278438;114.166187;1649
+"Zhuo Neng Guangchang Parking";0;"school";"Parking Lot";"Wan Chai, Hennessy Rd, 250號號";22.277688;114.175812;1650
+"C C Wu Building Car Park";50;"school";"Parking Lot";"Wan Chai, 軒尼詩道302～308號";22.277688;114.177938;1651
+"Kwan Chart Tower Car Park";0;"school";"Parking Lot";"Wan Chai";22.279313;114.178063;1652
+"Convention Plaza (Expo Drive Central Road) Carpark";18;"school";"Parking Lot";"Expo Dr, Wan Chai";22.283688;114.173188;1653
+"Concordia Plaza Car Park";35;"school";"Parking Lot";"1號 Science Museum Rd, Tsim Sha Tsui";22.302188;114.178688;1654
+"Sino Parking Services Ltd.";0;"school";"Parking Lot";"Tsim Sha Tsui East, 尖沙咀中心";22.297813;114.177813;1655
+"Great Smart Tower Car Park";4;"school";"Parking Lot";"Wan Chai, 灣仔道230";22.278063;114.178937;1656
+"Stanley Car Park";1;"school";"Parking Lot";"29 Stanley Beach Rd, Stanley";22.219813;114.213438;1657
+"Causeway Bay Plaza II Car Park";3;"school";"Parking Lot";"Causeway Bay, Lockhart Rd, 463號464 號";22.280437;114.181812;1658
+"Kowloon Hospital Car Park";9;"school";"Parking Lot";"Mong Kok, 九龍醫院";22.324813;114.179688;1659
+"Hysan Place Car Park";4;"school";"Parking Lot";"Lee Garden Rd, Causeway Bay";22.279813;114.183313;1660
+"No. 13-19 WIng Lung Street Garage";1;"school";"Parking Lot";"No. 13-19 WIng Lung Street, So Uk";22.339438;114.156687;1661
+"Harbourview Horizon Parking";3;"school";"Parking Lot";"Hung Lok Rd, Hung Hom";22.302687;114.185313;1662
+"South China Athletic Association Car Park";18;"school";"Parking Lot";"Caroline Hill";22.275938;114.186687;1663
+"The Park Lane";1;"school";"Parking Lot";"25 Great George St, Causeway Bay";22.281187;114.186313;1664
+"5-55 Fu Ning St Garage";0;"school";"Parking Lot";"51 Fu Ning St, Ma Tau Wai";22.325188;114.187438;1665
+"Motorcycle Parking Space";1;"school";"Parking Lot for Motorcycles";"Mount Austin Rd, The Peak";22.274188;114.143563;1666
+"Kowloon Park,CP Parking Limited";0;"school";"Parking Lot";"Austin Rd, Tsim Sha Tsui";22.303313;114.172563;1667
+"Yue Xiu Apt Parking Limited";3;"school";"Parking Lot";"Causeway Bay";22.286563;114.192062;1669
+"Monthly Parking";0;"school";"Tsukigime Parking Lot";"Wah Lung Path, Kellet Bay";22.249688;114.138813;1670
+"Hung Hom Road Parking";0;"school";"Parking Lot";"Hung Hom Rd, Hung Hom";22.311938;114.190188;1671
+"On-Street Motorcycle Parking Spaces - Tai Pin Shan Street";0;"school";"Parking Lot for Motorcycles";"40 Tai Ping Shan St, Tai Ping Shan";22.285188;114.147562;1674
+"Lions Rise Mall Car Park";1;"school";"Parking Lot";"號, 5 Chun Yan St, Chuk Un";22.340063;114.197063;1675
+"Lee Garden One Car Park";0;"school";"Parking Lot";"1-27 Lan Fong Rd, Causeway Bay";22.278563;114.184312;1676
+"K. Wah Centre Car Park";6;"school";"Parking Lot";"Tsat Tsz Mui, 渣華道191";22.293438;114.204563;1677
+"On-Street Motorcycle Parking Spaces - Tamar Street";0;"school";"Parking Lot for Motorcycles";"Tamar St, Admiralty";22.279438;114.164313;1678
+"Tung Chau Street Parking Lot";4;"school";"Parking";"Sham Shui Po";22.328563;114.157438;1679
+"Parking Lot For Motorcycles";0;"school";"Parking Lot for Motorcycles";"Cheung Sha Wan";22.337938;114.145312;1681
+"15 Kai Lok Street Parking";0;"school";"Parking Lot";"15 Kai Lok St, Kowloon Bay";22.326688;114.210687;1682
+"motorbike parking lot";0;"school";"Parking Lot for Motorcycles";"Luard Rd, Wan Chai";22.277813;114.171687;1683
+"20 Wang Hoi Road Garage";1;"school";"Parking Lot";"20 Wang Hoi Rd, Kowloon Bay";22.323813;114.211063;1684
+"On-Street Motorcycle Parking Spaces - Soy St near Kam Fong St";0;"school";"Parking Lot for Motorcycles";"Mong Kok, Soy St, 1-3";22.316062;114.167063;1685
+"Sun Yat Sen Memorial Park Sports Centre Car Park";15;"school";"Parking Lot";"18 Eastern St N, Sai Wan";22.289813;114.143437;1687
+"On-Street Motorcycle Parking Spaces - Reclamation St";0;"school";"Parking Lot for Motorcycles";"Mong Kok, Reclamation St, 329號279";22.315312;114.168438;1689
