@@ -13,41 +13,78 @@ import { SpmFilter, ScrollFilter } from "./FilterMenu";
 import { Range } from "rc-slider";
 import NavigationBar from "./NavigationBar";
 import HouseList from "./HouseList";
+import axios from "axios";
 
 import "../layout.css";
 import "rc-slider/assets/index.css";
 import "../constant";
 
+// public class Property {
+// 	public int id;
+// 	public String type;
+// 	public int price;
+// 	public int rent;
+// 	public String roomNum;
+// 	public int grossArea;
+// 	public int netFloorArea;
+// 	public String floor;
+// 	public String address;
+// 	public String postDate;
+// 	public double lat;
+// 	public double lng;
+// 	public String title;
+// 	public String region;
+// 	public String propertyName;
+// 	public String description;
+// 	public String contact;
+// 	public String phoneNum;
+// 	public String imageURL;
+// 	public String pageURL;
+// 	public String agentName;
+// }
+
 const houseData = [
   {
     address: "No.2 Tai Pak Terrace, Kennedy Town",
-    img: "images/house1.jpg",
+    imageURL: "images/house1.jpg",
     grossArea: 300,
     saleableArea: 240,
     bedrooms: 1,
     price: 14000,
-    url: "#",
-    regionName: "Kennedy Town"
+    pageURL: "#",
+    lat: 111.11,
+    lng: 111.11,
+    title: "this is title",
+    propertyName: "propertyName",
+    agentName: "agentName"
   },
   {
     address: "Pokfulam Road",
-    img: "images/house2.jpg",
+    imageURL: "images/house2.jpg",
     grossArea: 600,
     saleableArea: 500,
     bedrooms: 3,
     price: 24000,
-    url: "#",
-    regionName: "Sai Ying Pun"
+    pageURL: "#",
+    lat: 111.11,
+    lng: 111.11,
+    title: "this is title",
+    propertyName: "propertyName",
+    agentName: "agentName"
   },
   {
     address: "Des Voeux Road West 432",
-    img: "images/house1.jpg",
+    imageURL: "images/house1.jpg",
     grossArea: 1200,
     saleableArea: 1000,
     bedrooms: 4,
     price: 45000,
-    url: "#",
-    regionName: "Sai Ying Pun"
+    pageURL: "#",
+    lat: 111.11,
+    lng: 111.11,
+    title: "this is title",
+    propertyName: "propertyName",
+    agentName: "agentName"
   }
 ];
 
@@ -61,15 +98,7 @@ class Search extends Component {
       });
     };
 
-    //   [
-    //     { key: "Causeway Bay", value: "Causeway Bay", text: "Causeway Bay" },
-    //     { key: "Kennedy Town", value: "Kennedy Town", text: "Kennedy Town" },
-    //     { key: "HKU", value: "HKU", text: "HKU" },
-    //     { key: "Sheung Wan", value: "Sheung Wan", text: "Sheung Wan" },
-    //     { key: "Sai Ying Pun", value: "Sai Ying Pun", text: "Sai Ying Pun" }
-    // ];
-
-    const placeOptions = global.projectConstant.regionName;
+    const regionOptions = global.projectConstant.regionName;
 
     const poiOptions = [
       { key: "school", value: "school", text: "school" },
@@ -182,7 +211,7 @@ class Search extends Component {
           activeItem: "rent"
         },
         data: {
-          options: placeOptions,
+          options: regionOptions,
           value: null
         },
         handler: {
@@ -190,11 +219,51 @@ class Search extends Component {
             let newState = { ...my.state };
             newState.search.data.value = value;
             my.setState(newState);
+
+            // const params = encodeURIComponent(
+            //   "?type=" +
+            //     this.state.search.status.activeItem +
+            //     "&region=" +
+            //     this.state.search.data.value
+            // );
+            //
+            // client({
+            //   method: "GET",
+            //   path: global.projectConstant.apiURL + params
+            // }).done(response => {
+            //   let newState = { ...my.state };
+            //   console.log(response);
+            //
+            //   newState.general.data.queries = response.entity.houseData;
+            //   newState.general.data.filteredHouse = filterHouse(
+            //     newState.general.data.queries
+            //   );
+            //   my.setState(newState);
+            // });
+
+            this.state.search.handler.handleRequestQuery();
           },
           handleRentOrSell: (e, { name }) => {
             let newState = { ...my.state };
             newState.search.status.activeItem = name;
             my.setState(newState);
+          },
+          handleRequestQuery: () => {
+            axios
+              .get(global.projectConstant.apiURL, {
+                params: {
+                  type: this.state.search.status.activeItem,
+                  region: this.state.search.data.value
+                }
+              })
+              .then(res => {
+                let newState = { ...my.state };
+                newState.general.data.queries = res.data.houseData;
+                newState.general.data.filteredHouse = filterHouse(
+                  newState.general.data.queries
+                );
+                my.setState(newState);
+              });
           }
         }
       },
@@ -373,6 +442,7 @@ class Search extends Component {
             placeholder="Select Area"
             value={search.data.value}
             onChange={search.handler.handleChange}
+            clearable
           />
           <Menu.Item
             position="right"

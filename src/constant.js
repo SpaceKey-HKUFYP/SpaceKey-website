@@ -1,4 +1,5 @@
 global.projectConstant = {
+  apiURL: "localhost:8080",
   regionName: [
     { key: "Aberdeen", value: "Aberdeen", text: "Aberdeen" },
     { key: "Ap Lei Chau", value: "Ap Lei Chau", text: "Ap Lei Chau" },

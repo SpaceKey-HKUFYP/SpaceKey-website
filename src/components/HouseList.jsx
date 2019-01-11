@@ -10,6 +10,19 @@ import {
 import { Link } from "react-router-dom";
 import "../layout.css";
 
+// address: "No.2 Tai Pak Terrace, Kennedy Town",
+// imageURL: "images/house1.jpg",
+// grossArea: 300,
+// saleableArea: 240,
+// bedrooms: 1,
+// price: 14000,
+// pageURL: "#",
+// lat: 111.11,
+// lng: 111.11,
+// title: "this is title",
+// propertyName: "propertyName",
+// agentName: "agentName",
+
 class HouseList extends Component {
   render() {
     const listOfHouse = this.props.data.map(result => {
@@ -19,30 +32,39 @@ class HouseList extends Component {
           key={result.address + result.url}
           raised
           secondary
+          clearing
         >
-          <Image src={result.img} className="img-result" />
+          <Link to={result.pageURL}>
+            <Image src={result.imageURL} className="img-result" />
+          </Link>
 
-          <Header as="h3"> {result.address} </Header>
-          <Header as="h4">Rent: {result.price} HKD</Header>
           <Header as="h4">
-            {" "}
-            {"Gross area:" +
-              result.grossArea +
-              "sq.ft. | Saleable area:" +
-              result.saleableArea +
-              "sq.ft."}
+            {result.title}
+            <Header.Subheader>{result.propertyName}</Header.Subheader>
+            <Header.Subheader>{result.address}</Header.Subheader>
+            <Header.Subheader>{result.agentName}</Header.Subheader>
           </Header>
 
-          <Grid>
-            <Grid.Column width={10}>
-              <Header as="h4">{result.bedrooms + " bedrooms"}</Header>
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Link to={result.url}>
-                <Button>View details</Button>
-              </Link>
-            </Grid.Column>
-          </Grid>
+          <Header as="h4">
+            {" "}
+            Rent: {result.price} HKD
+            <Header.Subheader>
+              {" "}
+              {"Gross area:" +
+                result.grossArea +
+                "sq.ft. | Saleable area:" +
+                result.saleableArea +
+                "sq.ft."}
+            </Header.Subheader>
+          </Header>
+          <Header as="h4" floated="left">
+            {result.bedrooms + " bedrooms"}
+          </Header>
+          <Header as="h4" floated="right">
+            <Link to={result.pageURL}>
+              <Button>View details</Button>
+            </Link>
+          </Header>
         </Segment>
       );
     });
