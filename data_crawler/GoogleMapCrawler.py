@@ -58,7 +58,7 @@ pick_start_point()
 #propertyURL_rent = "https://www.28hse.com/en/rent"
 
 set_keywords = ["school","hospital","bank","restaurant","bar","coffee","parking lot","post office", "supermarket", "park", "garden", "beach", "store","bus terminal","sport center","University","McDonald","Theater","Mall","FireStation","Police office","ATM","Gas station","Temple"]
-start_index = 0
+start_index = 3
 current_k = {}
 
 def set_current_key(key):
@@ -132,7 +132,7 @@ def fetch_return(driver, div):
 				raise Exception('fetch info text failed')
 		#print("text length:",len(text), "\n")
 		#index_adjust = max(len(text) - 8, 0)
-		plus_code_location = "11AA+A1"
+		plus_code_location = None
 		for t in text:
 			splited = t.split(' ')
 			if len(splited) != 3:
@@ -172,6 +172,7 @@ def store_info(place_name, rating, review_num, keyword, addr, location):
 		latitude = coordinate.split(',')[0]
 		longitude = coordinate.split(',')[1]
 	else:
+		# discard POI without latitude and longitude
 		return
 	#info_to_store = place_name + "@" + str(review_num).split(' ')[0] + "@" + current_key_word + "@" + keyword + "@" + addr + "@" + coordinate + "\n"
 	#appendToFile(info_to_store)

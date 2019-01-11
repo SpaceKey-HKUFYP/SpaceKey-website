@@ -25,7 +25,7 @@
 * `type CHAR(4)`  =  rent | sell
 * `price INT`   // sell price
 * `rent  INT`   // rent price
-* `roomNum VARCHAR(20)`    // e.g. "open style" , 1, 2, 3
+* `bedroom INT`    // open style -> 0,    5+ -> 6
 * `grossArea DEC(10)`   
 * `netFloorArea DEC(10)`  
 * `floor VARCHAR(100)`   e.g. low / high

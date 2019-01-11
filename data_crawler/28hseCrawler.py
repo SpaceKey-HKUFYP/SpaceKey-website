@@ -244,7 +244,14 @@ def handle_row(row, key,val, table):
 	elif key == table_net_area or key == table_gross_area:
 		table[key] = val.split(' ')[0]
 		table[key] = table[key].replace(',','')
-	else :
+	elif key == table_room_num:
+		if not val.isdigit():
+			if val == '5 +':
+				val = '6'
+			elif val == 'open style':
+				val = '0'
+		table[key] = val
+	else:
 		table[key] = val
 
 
