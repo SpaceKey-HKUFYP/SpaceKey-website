@@ -71,7 +71,7 @@ def store_table_to_dic(table):
 	store_kv("price",get_value(table_price, table))#table[table_price]
 	store_kv("address",get_value(table_address, table))#table[table_address])
 	store_kv("floor",get_value(table_floor, table))#table[table_floor])
-	store_kv("roomNum",get_value(table_room_num, table))#table[table_room_num])
+	store_kv("bedroom",get_value(table_room_num, table))#table[table_room_num])
 	store_kv("postDate", get_value(table_post_date, table))#table[table_post_date])
 	store_kv("grossArea",get_value(table_gross_area, table))#table[table_gross_area])
 	store_kv("netFloorArea",get_value(table_net_area, table))#table[table_net_area])
@@ -95,7 +95,7 @@ def start(MainURL, driver):
 	max_result = driver.find_element_by_xpath("//div[@class='search_total_result']/em").text
 	print("max number of result",max_result)
 	total_page_num = int(max_result)/15.0
-	current_page = 416
+	current_page = 0
 	while current_page <= total_page_num:
 		combined_url = propertyURL_buy + "/" + list_prefix + str(current_page)
 		get_result(MainDriver, combined_url,current_page)

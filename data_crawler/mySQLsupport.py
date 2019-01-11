@@ -3,7 +3,7 @@ database_name = "spacekey"
 
 
 database = mysql.connector.connect(
-  host="localhost",
+  host="spacekey.cthmasw2nisj.ap-southeast-1.rds.amazonaws.com",
   user="FYP",
   passwd="FYP123456",
   database=database_name
@@ -34,7 +34,7 @@ property_table_define = ('property('
                             'type CHAR(4),'
                             'price INT,'
                             'rent INT,'
-                            'bedrooms INT,'
+                            'bedroom INT,'
                             'grossArea DEC(10),'
                             'netFloorArea DEC(10),'
                             'floor VARCHAR(100),'
@@ -80,8 +80,8 @@ property_para = ('property (type,'
 # create table if not exist
 def create_table(table_define):
     prefix = "CREATE TABLE IF NOT EXISTS "
-    #option = " CHARACTER SET = utf8"
-    command = prefix + table_define #+ option
+    option = " CHARACTER SET = utf8"
+    command = prefix + table_define + option
     executeSQL(command)
 
 def db_add_place(tuple):
