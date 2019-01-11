@@ -1,6 +1,6 @@
 # Table Define
 
-* if conflict with `mySQLsupport.py`, plz refer to `mySQLsupport.py`
+* plz refer to `mySQLsupport.py` if conflicted 
 
 ### Tables
 
@@ -11,8 +11,8 @@
 * `search_key VARCHAR(100)`  key to initiate search
 * `given_key VARCHAR(100)` key given by google map
 * `address VARCHAR(1000)`  
-* `latitude DEC(10)`
-* `longitude DEC(10)`
+* `latitude DOUBLE`
+* `longitude DOUBLE`
 
 
 
@@ -33,12 +33,12 @@
 * `postDate  DATE`
 * `latitude DOUBLE`
 * `longitude DOUBLE`
-* `title VARCHAR(200)`  property post title 
+* `title VARCHAR(200)`  property post title , **this could be duplicated !**
 * `region VARCHAR(100)` e.g.  Kennedy Town
 * `propertyName VARCHAR(100)`  e.g.  Greenfield Garden / Village / ...
 * `description VARCHAR(4000)`  description of the property, given by the landlord/agent
 * `contact VARCHAR(100)`    name of landlord / agent
 * `phoneNum VARCHAR(100)`    
 * `imageURL VARCHAR(200)`   URL to the main image
-* `pageURL VARCHAR(200)`   URL to  the property info page
+* `pageURL VARCHAR(200) UNIQUE`   URL to  the property info page
 * `agentName VARCHAR(100)` // agent name / By owner 

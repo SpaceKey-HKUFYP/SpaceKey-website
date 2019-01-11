@@ -1,6 +1,6 @@
 from selenium import webdriver
-
-# table entry headings
+import mySQLsupport
+# table entry headings, for selling
 table_price = "Price"
 table_net_area = "Net floor area(sq feet)"
 table_gross_area = "Gross area(sq feet)"
@@ -11,8 +11,11 @@ table_room_num = "Room"
 table_content = [table_price, table_net_area, table_gross_area, table_floor, table_address, table_post_date, table_room_num]
 # end of table entry headings
 # result dictionary, addtional to the table entries
-
-
+property_col = ['type','price','rent','roomNum','grossArea',
+				'netFloorArea','floor','address','postDate',
+				'latitude','longitude','title','region',
+				'propertyName','description','contact','phoneNum',
+				'imageURL','pageURL','agentName']
 
 
 
@@ -21,10 +24,11 @@ table_content = [table_price, table_net_area, table_gross_area, table_floor, tab
 
 propertyURL_buy = "https://www.28hse.com/en/buy"
 propertyURL_rent = "https://www.28hse.com/en/rent"
-headless = False
+headless = True
 
 chromeOptions = webdriver.ChromeOptions()
-chromeOptions.add_argument("--incognito");
+# sometimes has problem in DNS config in incognito mode
+#chromeOptions.add_argument("--incognito");
 if headless:
 	chromeOptions.add_argument('--disable-gpu')
 	chromeOptions.add_argument('--headless')
@@ -50,14 +54,43 @@ def store_kv(key, value):
 def init_store():
 	result_dic = {}
 
+def construct_tuple():
+	temp_list = []
+	for entry in property_col:
+		temp_list.append(get_value(entry,result_dic))
+	return tuple(temp_list)
+
 def store_current_result_to_db():
+	#print('RESULT DIC : ',result_dic)
+	result_tuple = construct_tuple()
+	mySQLsupport.db_add_property(result_tuple)
 	init_store()
 
+def store_table_to_dic(table):
+	store_kv("price",get_value(table_price, table))#table[table_price]
+	store_kv("address",get_value(table_address, table))#table[table_address])
+	store_kv("floor",get_value(table_floor, table))#table[table_floor])
+	store_kv("roomNum",get_value(table_room_num, table))#table[table_room_num])
+	store_kv("postDate", get_value(table_post_date, table))#table[table_post_date])
+	store_kv("grossArea",get_value(table_gross_area, table))#table[table_gross_area])
+	store_kv("netFloorArea",get_value(table_net_area, table))#table[table_net_area])
+	store_kv("longitude", get_value("longitude",table))
+	store_kv("latitude", get_value("latitude", table))
 
-
+def get_value(key, dic):
+	if key in dic:
+		return dic[key]
+	else:
+		return None
 #---------------------------
 def start(MainURL, driver):
 	driver.get(MainURL)
+	if MainURL == propertyURL_buy:
+		store_kv('type','sell')
+		store_kv('rent',None)
+	else:
+		store_kv('type','rent')
+		store_kv('price',None)
 	max_result = driver.find_element_by_xpath("//div[@class='search_total_result']/em").text
 	print("max number of result",max_result)
 	total_page_num = int(max_result)/15.0
@@ -67,6 +100,7 @@ def start(MainURL, driver):
 		get_result(MainDriver, combined_url,current_page)
 		#break
 		current_page += 1
+		print("current page : ", current_page)
 
 
 
@@ -76,9 +110,9 @@ def get_result(driver, url, current_page):
 		driver.get(url)
 	result_ul = driver.find_elements_by_class_name('agentad_ul')
 	#result_p = driver.find_elements_by_class_name(result_p_class)
-	result_agent = driver.find_elements_by_class_name("landlord_2")
-	result_img = driver.find_elements_by_class_name("img_a")
-	result_region_info = driver.find_elements_by_class_name("catname")
+	#result_agent = driver.find_elements_by_class_name("landlord_2")
+	#result_img = driver.find_elements_by_class_name("img_a")
+	#result_region_info = driver.find_elements_by_class_name("catname")
 	result_feature_info = driver.find_elements_by_class_name('other_info')
 	while len(result_ul) == 0:
 		result_ul = driver.find_elements_by_class_name('agentad_ul')
@@ -100,16 +134,23 @@ def get_result(driver, url, current_page):
 		agent_name = result_ul[i].find_element_by_xpath(".//div[@class='landlord_2']").text
 
 		#all_href_list.append(href)
-		print('title', title," index ", i, "href", page_link)
-		print('agent', agent_name)
-		print('img', img_src)
-		print('region',region, 'propertyName', propertyName)
-		extract_info(ResultFetchingDriver, page_link, result_dic)
+		#print('title', title," index ", i, "href", page_link)
+		store_kv('title',title)
+		store_kv('pageURL',page_link)
+		store_kv('agentName', agent_name)
+		store_kv('imageURL', img_src)
+		store_kv('region', region)
+		store_kv('propertyName', propertyName)
+		#print('agent', agent_name)
+		#print('img', img_src)
+		#print('region',region, 'propertyName', propertyName)
+		temp_dic = {}
+		extract_info(ResultFetchingDriver, page_link, temp_dic)
 
 
 
 # access the website from another socket/port
-def extract_info(driver ,link, result_dic):
+def extract_info(driver ,link, temp_dic):
 	driver.get(link)
 	table = driver.find_element_by_xpath("//table[@class='de_box_table']")
 	table_rows = table.find_elements_by_tag_name('tr')
@@ -119,11 +160,13 @@ def extract_info(driver ,link, result_dic):
 	for row in table_rows:
 		key = row.find_element_by_tag_name('th').text
 		val = row.find_element_by_tag_name('td').text
-		handle_row(row, key, val, result_dic)
+		handle_row(row, key, val, temp_dic)
 		#print(" key|", key, "|val|", val,"|")
 		#table_d[key] = val
 		#print(1)
-	print(result_dic)
+	#print(result_dic)
+	store_table_to_dic(temp_dic)
+	store_current_result_to_db()
 
 def extract_feature(driver):
 	feature_type = driver.find_element_by_class_name('ad_type_style').find_elements_by_tag_name('span')
@@ -134,23 +177,36 @@ def extract_feature(driver):
 	feature_cat = driver.find_element_by_class_name('feature_div_cat').text
 	#print("feature type,",feature_type_text,"feature_cat", feature_cat)
 	descriptions = driver.find_elements_by_class_name('description_translated')
+	des_str = ""
 	for des in descriptions:
 		content = des.find_element_by_xpath("./div").text # the first div child
-		print(content)
+		des_str += content +"\n"
+	if len(descriptions) == 0: # this is a English description / this description is not translated
+		des_str = driver.find_element_by_xpath("//div[contains(@class, 'description_separator')]").text
+		print("English description")
+	print("length of descriptions",len(des_str))
+	store_kv('description', des_str)
+
 
 def extract_contact(driver):
 	div = driver.find_element_by_xpath('//div[@class="agents_div"]')
-	name = div.find_element_by_tag_name('dd').text
+	try:
+		name = div.find_element_by_tag_name('dd').text
+	except Exception:
+		name = None
 	try:
 		contact = div.find_element_by_xpath('.//div[@class="call_me_direct"]').text
 	except Exception:
 		contact = None
-	print("contact", name, contact)
+	#print("contact", name, contact)
+	store_kv('contact',name)
+	store_kv('phoneNum',contact)
 
 
+# not used
 def extract_img(driver):
 	div = driver.find_elements_by_class_name("img_a")
-	print('div num', len(div))
+	#print('div num', len(div))
 	for d in div:
 		img = div.find_element_by_xpath(".//img")
 		img_src = img.get_attribute('src')
@@ -163,8 +219,10 @@ def handle_row(row, key,val, table):
 		return
 	if key == table_price:
 		price = val.split('\n')[0].split(' ')[1]
-		price_num = price[0:len(price)-2] # millions of HKD
-		table[table_price] = price_num
+		if "M" in price:
+			price_num = price[0:len(price)-2] # millions of HKD
+			p = float(price_num) * 1000000
+			table[table_price] = p
 	elif key == table_address:
 		# https://www.28hse.com/utf8/detail2_map.php?y=22.2781050&x=114.1757340
 		try:
@@ -180,12 +238,13 @@ def handle_row(row, key,val, table):
 			table[table_address] = None
 	elif key == table_net_area or key == table_gross_area:
 		table[key] = val.split(' ')[0]
+		table[key] = table[key].replace(',','')
 	else :
 		table[key] = val
 
 
-def store_info(type, total_price, room_num, gross_area, net_floorArea, floor, address, postDate, latitude, longitude):
-	pass
+
+
 
 #extract_info(ResultFetchingDriver, "https://www.28hse.com/en/buy-property-747402.html")
 

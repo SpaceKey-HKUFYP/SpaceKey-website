@@ -21,8 +21,8 @@ place_table_define = ('place('
                             'searchKey VARCHAR(100),'
                             'givenKey VARCHAR(100),'
                             'address VARCHAR(1000),'
-                            'latitude DEC(10),'
-                            'longitude DEC(10),'
+                            'latitude DOUBLE,'
+                            'longitude DOUBLE,'
                             'id INT AUTO_INCREMENT PRIMARY KEY'
                             ')')
 place_para = ('place (name, reviewNum, searchKey, givenKey, address, latitude, longitude) '
@@ -42,14 +42,14 @@ property_table_define = ('property('
                             'postDate DATE,'
                             'latitude DOUBLE,'
                             'longitude DOUBLE,'
-                            'title VARCHAR(200) UNIQUE,'
+                            'title VARCHAR(200),'
                             'region VARCHAR(100),'
                             'propertyName VARCHAR(100),'
                             'description VARCHAR(4000),'
                             'contact VARCHAR(100),'
                             'phoneNum VARCHAR(100),'
                             'imageURL VARCHAR(200),'
-                            'pageURL VARCHAR(200),'
+                            'pageURL VARCHAR(200) UNIQUE,'
                             'agentName VARCHAR(100)'
                             ')')
 
@@ -85,21 +85,34 @@ def create_table(table_define):
     executeSQL(command)
 
 def db_add_place(tuple):
-    prefix = 'INSERT IGNORE INTO ' # ignore when duplicated record is inserted
-    #options = ' CHARACTER SET = utf8;'
-
-    command = prefix + place_para #+ options
-    DBcursor.execute(command, tuple)
+    try:
+        prefix = 'INSERT INTO ' # insert ignore should not be used, which will ignore all error
+        #options = ' CHARACTER SET = utf8;'
+        options = ' ON DUPLICATE KEY UPDATE name=name'
+        command = prefix + place_para + options
+        DBcursor.execute(command, tuple)
+    except Exception as error:
+        print('record insert with error:',error)
+        print('tuple value', tuple)
+        return
+    print('place record inserted ')
 
 
 def db_add_property(tuple):
-    prefix = 'INSERT IGNORE INTO ' #ignore when duplicated record is inserted
-    #options = ' CHARACTER SET = utf8;'
+    try:
+        prefix = 'INSERT INTO ' # insert ignore should not be used, which will ignore all error
+        #options = ' CHARACTER SET = utf8;'
+        options = ' ON DUPLICATE KEY UPDATE postDate=postDate;'
+        command = prefix + property_para + options
+        DBcursor.execute(command, tuple)
+        database.commit()
+    except Exception as error:
+        print('record insert with error:',error)
+        print('tuple value', tuple)
+        return
+    print('property record inserted')
 
-    command = prefix + property_para #+ options
-    DBcursor.execute(command, tuple)
-    database.commit()
-    print('record inserted with tuple ', tuple)
+    #print('record inserted with tuple ', tuple)
 
 create_table(place_table_define)
 create_table(property_table_define)
