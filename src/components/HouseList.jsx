@@ -45,9 +45,9 @@ class HouseList extends Component {
           secondary
           clearing
         >
-          <Link to={result.pageURL}>
+          <a href={result.pageURL}>
             <Image src={result.imageURL} className="img-result" />
-          </Link>
+          </a>
 
           <Header as="h4">
             {result.title}
@@ -72,9 +72,9 @@ class HouseList extends Component {
             {bedroomsInfo}
           </Header>
           <Header as="h4" floated="right">
-            <Link to={result.pageURL}>
+            <a href={result.pageURL}>
               <Button>View details</Button>
-            </Link>
+            </a>
           </Header>
         </Segment>
       );

@@ -192,7 +192,7 @@ class Search extends Component {
               .get(global.projectConstant.apiURL + "/data/property/get", {
                 params: {
                   type: this.state.search.status.activeItem,
-                  region: this.state.search.data.value
+                  region: this.state.search.data.value.replace(/\+/g, "%20")
                 }
               })
               .then(res => {
