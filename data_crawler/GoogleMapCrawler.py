@@ -10,7 +10,7 @@ headless = False
 timeDelay = 5
 timeMiniDelay = 0.1
 nullValue = "None"
-maxAttempt = 100 # maxmimum attempt to locate element
+maxAttempt = 30 # maxmimum attempt to locate element
 
 chromeOptions = webdriver.ChromeOptions()
 if headless == True:
@@ -59,12 +59,12 @@ pick_start_point()
 
 set_keywords = ["school","hospital","bank","restaurant","bar","coffee","parking lot","post office", "supermarket", "park", "garden", "beach", "store","bus terminal","sport center","University","McDonald","Theater","Mall","FireStation","Police office","ATM","Gas station","Temple"]
 start_index = 0
-current_k = set_keywords[start_index]
+current_k = {}
 
 def set_current_key(key):
-	current_k = key
+	current_k['key'] = key
 def get_current_key():
-	return current_k
+	return current_k['key']
 # file to write
 fileName = str(time.ctime()) + ".txt"
 fileName = fileName.replace(":", "-")
@@ -176,8 +176,9 @@ def store_info(place_name, rating, review_num, keyword, addr, location):
 	#info_to_store = place_name + "@" + str(review_num).split(' ')[0] + "@" + current_key_word + "@" + keyword + "@" + addr + "@" + coordinate + "\n"
 	#appendToFile(info_to_store)
 	review_num_int = int(str(review_num).split(' ')[0])
-	#print('current key word before store', get_current_key())
+	print('current key word before store', get_current_key())
 	#print('set_keywords',set_keywords)
+
 	list = [place_name, review_num_int, get_current_key(), keyword, addr, latitude, longitude]
 	#tuple = tuple(list)
 	#print("storing info :",tuple)
@@ -245,7 +246,7 @@ def find_element_by_xpath_until_found(driver, xpath, isText):
 		except:
 			count += 1
 			#print("locating element stuck when finding", xpath, " with count ", count)
-			if count >= maxAttempt and isText:
+			if count >= maxAttempt:
 				print("locate element failure when finding ", xpath, ", returning default value")
 				return None
 			time.sleep(timeMiniDelay)
@@ -256,10 +257,8 @@ def find_element_by_xpath_until_found(driver, xpath, isText):
 
 def start(driver):
 	for k in range(start_index,len(set_keywords)):
-		set_current_key(set_keywords[k]+"")
-		temp_key = set_keywords[k]+''
-		print("current key word",current_k)
-		init_search(driver, temp_key)
+		set_current_key(set_keywords[k])
+		init_search(driver, set_keywords[k])
 		while True:
 			time.sleep(timeDelay)
 			get_result_div(driver)
