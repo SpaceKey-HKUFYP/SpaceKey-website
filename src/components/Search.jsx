@@ -43,51 +43,6 @@ import "../constant";
 // 	public String agentName;
 // }
 
-const houseData = [
-  {
-    address: "No.2 Tai Pak Terrace, Kennedy Town",
-    imageURL: "images/house1.jpg",
-    grossArea: 300,
-    saleableArea: 240,
-    bedrooms: 0,
-    price: 14000,
-    pageURL: "#",
-    lat: 111.11,
-    lng: 111.11,
-    title: "this is title",
-    propertyName: "propertyName",
-    agentName: "agentName"
-  },
-  {
-    address: "Pokfulam Road",
-    imageURL: "images/house2.jpg",
-    grossArea: 600,
-    saleableArea: 500,
-    bedrooms: 3,
-    price: 24000,
-    pageURL: "#",
-    lat: 111.11,
-    lng: 111.11,
-    title: "this is title",
-    propertyName: "propertyName",
-    agentName: "agentName"
-  },
-  {
-    address: "Des Voeux Road West 432",
-    imageURL: "images/house1.jpg",
-    grossArea: 1200,
-    saleableArea: 1000,
-    bedrooms: 4,
-    price: 45000,
-    pageURL: "#",
-    lat: 111.11,
-    lng: 111.11,
-    title: "this is title",
-    propertyName: "propertyName",
-    agentName: "agentName"
-  }
-];
-
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -170,8 +125,8 @@ class Search extends Component {
     this.state = {
       general: {
         data: {
-          queries: houseData,
-          filteredHouse: houseData
+          queries: [],
+          filteredHouse: []
         },
         handler: {
           openHandler: (typeButton, isOpen) => {
@@ -213,7 +168,7 @@ class Search extends Component {
       },
       search: {
         status: {
-          activeItem: "rent"
+          activeItem: "sell"
         },
         data: {
           options: regionOptions,
@@ -224,34 +179,13 @@ class Search extends Component {
             let newState = { ...my.state };
             newState.search.data.value = value;
             my.setState(newState);
-
-            // const params = encodeURIComponent(
-            //   "?type=" +
-            //     this.state.search.status.activeItem +
-            //     "&region=" +
-            //     this.state.search.data.value
-            // );
-            //
-            // client({
-            //   method: "GET",
-            //   path: global.projectConstant.apiURL + params
-            // }).done(response => {
-            //   let newState = { ...my.state };
-            //   console.log(response);
-            //
-            //   newState.general.data.queries = response.entity.houseData;
-            //   newState.general.data.filteredHouse = filterHouse(
-            //     newState.general.data.queries
-            //   );
-            //   my.setState(newState);
-            // });
-
             this.state.search.handler.handleRequestQuery();
           },
           handleRentOrSell: (e, { name }) => {
             let newState = { ...my.state };
             newState.search.status.activeItem = name;
             my.setState(newState);
+            this.state.search.handler.handleRequestQuery();
           },
           handleRequestQuery: () => {
             axios
