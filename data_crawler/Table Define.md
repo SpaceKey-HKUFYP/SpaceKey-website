@@ -33,7 +33,7 @@
 * `postDate  DATE`
 * `latitude DOUBLE`
 * `longitude DOUBLE`
-* `title VARCHAR(200)`  property post title , **this could be duplicated !**
+* `title VARCHAR(400)`  property post title , **this could be duplicated !**
 * `region VARCHAR(100)` e.g.  Kennedy Town
 * `propertyName VARCHAR(100)`  e.g.  Greenfield Garden / Village / ...
 * `description VARCHAR(4000)`  description of the property, given by the landlord/agent
