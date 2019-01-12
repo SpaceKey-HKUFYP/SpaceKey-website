@@ -43,51 +43,6 @@ import "../constant";
 // 	public String agentName;
 // }
 
-const houseData = [
-  {
-    address: "No.2 Tai Pak Terrace, Kennedy Town",
-    imageURL: "images/house1.jpg",
-    grossArea: 300,
-    saleableArea: 240,
-    bedrooms: 1,
-    price: 14000,
-    pageURL: "#",
-    lat: 111.11,
-    lng: 111.11,
-    title: "this is title",
-    propertyName: "propertyName",
-    agentName: "agentName"
-  },
-  {
-    address: "Pokfulam Road",
-    imageURL: "images/house2.jpg",
-    grossArea: 600,
-    saleableArea: 500,
-    bedrooms: 3,
-    price: 24000,
-    pageURL: "#",
-    lat: 111.11,
-    lng: 111.11,
-    title: "this is title",
-    propertyName: "propertyName",
-    agentName: "agentName"
-  },
-  {
-    address: "Des Voeux Road West 432",
-    imageURL: "images/house1.jpg",
-    grossArea: 1200,
-    saleableArea: 1000,
-    bedrooms: 4,
-    price: 45000,
-    pageURL: "#",
-    lat: 111.11,
-    lng: 111.11,
-    title: "this is title",
-    propertyName: "propertyName",
-    agentName: "agentName"
-  }
-];
-
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -112,7 +67,12 @@ class Search extends Component {
     const filterBasedOnBedrooms = data => {
       if (!this.state.bedrooms.status.isFiltered) return data;
       return data.filter(house => {
-        return house.bedrooms >= this.state.bedrooms.data.value;
+        return (
+          house.bedrooms >= this.state.bedrooms.data.value[0] &&
+          (this.state.bedrooms.data.value[1] === this.state.bedrooms.data.max
+            ? true
+            : house.bedrooms <= this.state.bedrooms.data.value[1])
+        );
       });
     };
 
@@ -165,8 +125,8 @@ class Search extends Component {
     this.state = {
       general: {
         data: {
-          queries: houseData,
-          filteredHouse: houseData
+          queries: [],
+          filteredHouse: []
         },
         handler: {
           openHandler: (typeButton, isOpen) => {
@@ -208,7 +168,7 @@ class Search extends Component {
       },
       search: {
         status: {
-          activeItem: "rent"
+          activeItem: "sell"
         },
         data: {
           options: regionOptions,
@@ -219,41 +179,20 @@ class Search extends Component {
             let newState = { ...my.state };
             newState.search.data.value = value;
             my.setState(newState);
-
-            // const params = encodeURIComponent(
-            //   "?type=" +
-            //     this.state.search.status.activeItem +
-            //     "&region=" +
-            //     this.state.search.data.value
-            // );
-            //
-            // client({
-            //   method: "GET",
-            //   path: global.projectConstant.apiURL + params
-            // }).done(response => {
-            //   let newState = { ...my.state };
-            //   console.log(response);
-            //
-            //   newState.general.data.queries = response.entity.houseData;
-            //   newState.general.data.filteredHouse = filterHouse(
-            //     newState.general.data.queries
-            //   );
-            //   my.setState(newState);
-            // });
-
             this.state.search.handler.handleRequestQuery();
           },
           handleRentOrSell: (e, { name }) => {
             let newState = { ...my.state };
             newState.search.status.activeItem = name;
             my.setState(newState);
+            this.state.search.handler.handleRequestQuery();
           },
           handleRequestQuery: () => {
             axios
-              .get(global.projectConstant.apiURL, {
+              .get(global.projectConstant.apiURL + "/data/property/get", {
                 params: {
                   type: this.state.search.status.activeItem,
-                  region: this.state.search.data.value
+                  region: this.state.search.data.value.replace(/\+/g, "%20")
                 }
               })
               .then(res => {
@@ -270,10 +209,29 @@ class Search extends Component {
       bedrooms: {
         status: {
           open: false,
-          isFiltered: false
+          isFiltered: false,
+          text: "Bedrooms",
+          defaultText: "Bedrooms"
         },
-        data: { value: 0 },
-        handler: {}
+        data: {
+          min: 0,
+          max: 5,
+          marks: { 0: "0", 5: "5" },
+          step: 1,
+          default: [0, 5],
+          value: [0, 5],
+          unit: ""
+        },
+        handler: {
+          openDropdown: () =>
+            this.state.general.handler.openHandler("bedrooms", true),
+          closeDropdown: () =>
+            this.state.general.handler.openHandler("bedrooms", false),
+          rangeValueUpdate: value =>
+            this.state.general.handler.rangeValueUpdate("bedrooms", value),
+          onAfterValueUpdated: () =>
+            this.state.general.handler.onAfterValueUpdated("bedrooms")
+        }
       },
       saleableArea: {
         status: {
@@ -474,27 +432,11 @@ class Search extends Component {
               <Segment>
                 <Header as="h3">Property for rent in {where}</Header>
                 <div>
-                  <Dropdown
-                    text="Bedrooms"
-                    floating
-                    labeled
-                    className="mr-3"
-                    open={bedrooms.status.open}
-                    onClick={() =>
-                      general.handler.openHandler("bedrooms", true)
-                    }
-                    onBlur={() =>
-                      general.handler.openHandler("bedrooms", false)
-                    }
-                  >
-                    <Dropdown.Menu>
-                      <Dropdown.Header content="number of bedrooms" />
-                      <Dropdown.Divider />
-                      <Dropdown.Header>
-                        Add button to change the number of bedroom
-                      </Dropdown.Header>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  <ScrollFilter
+                    handler={bedrooms.handler}
+                    data={bedrooms.data}
+                    status={bedrooms.status}
+                  />
 
                   <ScrollFilter
                     handler={saleableArea.handler}
