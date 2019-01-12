@@ -17,6 +17,29 @@ import MapContainer from "./MapContainer";
 // agentName: "agentName",
 
 class HouseList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      focus: null,
+      show: null
+    };
+  }
+
+  mouseEnter(id) {
+    console.log("mouseEnter");
+    this.setState({ focus: id });
+  }
+
+  mouseLeave(id) {
+    console.log("mouseLeave");
+    this.setState({ focus: null });
+  }
+
+  mouseClick(id) {
+    console.log("mouseClick");
+    this.setState({ show: id });
+  }
+
   render() {
     const listOfHouse = this.props.data.map(result => {
       let bedroomsInfo;
@@ -37,6 +60,9 @@ class HouseList extends Component {
           raised
           secondary
           clearing
+          onClick={() => this.mouseClick(result.id)}
+          onMouseEnter={() => this.mouseEnter(result.id)}
+          onMouseLeave={() => this.mouseLeave(result.id)}
         >
           <Image src={result.imageURL} className="img-result" />
 
@@ -73,10 +99,10 @@ class HouseList extends Component {
 
     return (
       <Grid divided={false} padded={false} fluid="true">
-        <Grid.Column width={4}>{listOfHouse}</Grid.Column>
-        <Grid.Column width={6}>
+        <Grid.Column width={6}>{listOfHouse}</Grid.Column>
+        <Grid.Column width={10}>
           <Segment style={{ height: "500px", padding: "0px" }}>
-            <MapContainer data={this.props.data} />
+            <MapContainer data={this.props.data} state={this.state} />
           </Segment>
         </Grid.Column>
       </Grid>
