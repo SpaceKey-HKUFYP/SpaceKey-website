@@ -3,12 +3,16 @@ import { Segment, Grid, Image, Button, Header } from "semantic-ui-react";
 import "../layout.css";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import Map from "./Map";
 >>>>>>> parent of 54b64e4... update map to mapcontainer
 =======
 import Map from "./Map";
 >>>>>>> parent of 54b64e4... update map to mapcontainer
+=======
+import MapContainer from "./MapContainer";
+>>>>>>> parent of 5e738fa... Testing sticky for search
 
 // address: "No.2 Tai Pak Terrace, Kennedy Town",
 // imageURL: "images/house1.jpg",
@@ -82,6 +86,7 @@ class HouseList extends Component {
     return (
       <Grid columns="equal" divided={false} padded={false} fluid="true">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <Grid.Column width={6}>{listOfHouse}</Grid.Column>
         <Grid.Column width={10} />
 =======
@@ -92,6 +97,14 @@ class HouseList extends Component {
           </Segment>
         </Grid.Column>
 >>>>>>> parent of 54b64e4... update map to mapcontainer
+=======
+        <Grid.Column>{listOfHouse}</Grid.Column>
+        <Grid.Column>
+          <Segment style={{ height: "500px" }}>
+            <MapContainer data={this.props.data} />
+          </Segment>
+        </Grid.Column>
+>>>>>>> parent of 5e738fa... Testing sticky for search
       </Grid>
     );
   }
