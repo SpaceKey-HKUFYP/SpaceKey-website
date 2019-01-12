@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Segment, Grid, Image, Button, Header } from "semantic-ui-react";
 import "../layout.css";
-import Map from "./Map";
+import MapContainer from "./MapContainer";
 
 // address: "No.2 Tai Pak Terrace, Kennedy Town",
 // imageURL: "images/house1.jpg",
@@ -37,7 +37,6 @@ class HouseList extends Component {
           raised
           secondary
           clearing
-          style={{ padding: "0px" }}
         >
           <Image src={result.imageURL} className="img-result" />
 
@@ -76,8 +75,8 @@ class HouseList extends Component {
       <Grid columns="equal" divided={false} padded={false} fluid="true">
         <Grid.Column>{listOfHouse}</Grid.Column>
         <Grid.Column>
-          <Segment style={{ height: "500px", padding: "0px" }}>
-            <Map data={this.props.data} />
+          <Segment style={{ height: "500px" }}>
+            <MapContainer data={this.props.data} />
           </Segment>
         </Grid.Column>
       </Grid>

@@ -10,10 +10,11 @@ import {
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
+import { fitBounds } from "google-map-react/utils";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-class Map extends Component {
+class MapContainer extends Component {
   constructor(props) {
     super(props);
     this.center = {
@@ -82,4 +83,4 @@ class Map extends Component {
   }
 }
 
-export default Map;
+export default MapContainer;
