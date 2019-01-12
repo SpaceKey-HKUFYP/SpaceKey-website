@@ -6,7 +6,7 @@
 
 ##### place
 
-* `name VARCHAR(200) UNIQUE`
+* `name VARCHAR(200)` could be duplicated , e.g. ATM(HSBC)
 * `review number INT`
 * `search_key VARCHAR(100)`  key to initiate search
 * `given_key VARCHAR(100)` key given by google map
@@ -14,9 +14,13 @@
 * `latitude DOUBLE`
 * `longitude DOUBLE`
 
-
-
 * `id INT INCREMENT PRIMARY`
+
+the uniqueness is checked by index constraint
+
+* `CONSTRAINT unique_place UNIQUE (name,latitude, longitude)`
+
+
 
 ##### property
 
