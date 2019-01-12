@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Segment, Grid, Image, Button, Header } from "semantic-ui-react";
 import "../layout.css";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import Map from "./Map";
+>>>>>>> parent of 54b64e4... update map to mapcontainer
 =======
 import Map from "./Map";
 >>>>>>> parent of 54b64e4... update map to mapcontainer
