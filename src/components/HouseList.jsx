@@ -9,6 +9,7 @@ import {
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import "../layout.css";
+import Map from "./Map"
 
 // address: "No.2 Tai Pak Terrace, Kennedy Town",
 // imageURL: "images/house1.jpg",
@@ -37,6 +38,9 @@ class HouseList extends Component {
       } else {
         bedroomsInfo = result.bedrooms + " bedrooms";
       }
+
+
+
       return (
         <Segment
           padded={false}
@@ -84,7 +88,9 @@ class HouseList extends Component {
       <Grid columns="equal" divided={false} padded={false} fluid="true">
         <Grid.Column>{listOfHouse}</Grid.Column>
         <Grid.Column>
-          <Segment style={{ height: "500px" }}>this is map</Segment>
+          <Segment style={{ height: "500px" }}>
+            <Map />
+          </Segment>
         </Grid.Column>
       </Grid>
     );

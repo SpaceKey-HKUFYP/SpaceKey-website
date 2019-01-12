@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "fake": "^0.2.2",
     "faker": "^4.1.0",
+    "google-map-react": "^1.1.2",
     "moment": "^2.23.0",
     "rc-slider": "^8.6.4",
     "react": "^16.7.0",
