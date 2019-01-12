@@ -23,7 +23,8 @@ place_table_define = ('place('
                             'address VARCHAR(1000),'
                             'latitude DOUBLE,'
                             'longitude DOUBLE,'
-                            'id INT AUTO_INCREMENT PRIMARY KEY'
+                            'id INT AUTO_INCREMENT PRIMARY KEY,'
+                            'CONSTRAINT unique_place UNIQUE (name, latitude, longitude)'
                             ')')
 place_para = ('place (name, reviewNum, searchKey, givenKey, address, latitude, longitude) '
                 'VALUES (%s, %s, %s, %s, %s, %s, %s)')
