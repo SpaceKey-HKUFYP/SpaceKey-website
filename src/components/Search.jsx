@@ -214,15 +214,15 @@ class Search extends Component {
               type: this.state.search.status.activeItem
             };
 
-            const data = new FormData();
-            data.set("wantedObjects", this.state.spm.data.wantedObjects);
+            // const data = new FormData();
+            // data.set("wantedObjects", this.state.spm.data.wantedObjects);
 
             if (this.state.spm.status.isFiltered) {
               axios({
                 method: "post",
-                url: global.projectConstant.apiURL + "/alg/spm",
+                url: global.projectConstant.apiURL + "/alg/spm_simple",
                 params: params,
-                data: data
+                data: { wantedObjects: this.state.spm.data.wantedObjects }
               }).then(res => {
                 let newState = { ...my.state };
                 newState.general.data.queries = res.data.houseData;
