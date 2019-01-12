@@ -95,7 +95,7 @@ def start(MainURL, driver):
 	max_result = driver.find_element_by_xpath("//div[@class='search_total_result']/em").text
 	print("max number of result",max_result)
 	total_page_num = int(max_result)/15.0
-	current_page = 0
+	current_page = 500
 	while current_page <= total_page_num:
 		combined_url = propertyURL_buy + "/" + list_prefix + str(current_page)
 		get_result(MainDriver, combined_url,current_page)
@@ -130,7 +130,7 @@ def get_result(driver, url, current_page):
 
 		page_link = result_ul[i].find_element_by_xpath(".//p[@class='title']//a").get_attribute("href")
 		#href = link.get_attribute("href")  # link is a element
-		img_src =result_ul[i].find_element_by_xpath(".//div[@class='img_a']//img").get_attribute('src')
+		img_src =result_ul[i].find_element_by_xpath(".//div[@class='img_a']//img").get_attribute('src').replace('_tmb3','')
 		#img_src = result_img[i].find_element_by_xpath(".//img").get_attribute('src')
 		agent_name = result_ul[i].find_element_by_xpath(".//div[@class='landlord_2']").text
 
