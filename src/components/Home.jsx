@@ -8,12 +8,11 @@ import {
   Header,
   Icon,
   Image,
-  List,
-  Menu,
   Responsive,
   Segment,
   Sidebar,
-  Visibility
+  Rail,
+  Sticky
 } from "semantic-ui-react";
 
 import NavigationBar from "./NavigationBar";
@@ -61,33 +60,46 @@ HomepageHeading.propTypes = {
  * It can be more complicated, but you can create really flexible markup.
  */
 class DesktopContainer extends Component {
-  state = {};
-  hideFixedMenu = () => this.setState({ fixed: false });
-  showFixedMenu = () => this.setState({ fixed: true });
+  constructor(props) {
+    super(props);
+    this.state = { context: null };
+    this.hideFixedMenu = () => this.setState({ fixed: false });
+    this.showFixedMenu = () => this.setState({ fixed: true });
+    this.handleNavigationBar = ref => {
+      this.setState({ context: ref });
+    };
+  }
 
   render() {
     const { children } = this.props;
     const { fixed } = this.state;
 
     return (
-      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-        <Visibility
-          once={false}
-          onBottomPassed={this.showFixedMenu}
-          onBottomPassedReverse={this.hideFixedMenu}
+      <div ref={this.handleNavigationBar}>
+        <Rail
+          internal
+          position="left"
+          attached
+          style={{ top: "auto", height: "auto", width: "100%" }}
         >
+          <Sticky context={this.state.context}>
+            <Segment inverted>
+              <NavigationBar />
+            </Segment>
+          </Sticky>
+        </Rail>
+        <div style={{ paddingTop: "89.8167px" }}>
           <Segment
             textAlign="center"
-            style={{ minHeight: 700, padding: "1em 0em" }}
+            style={{ minHeight: 600 }}
             vertical
             inverted
           >
-            <NavigationBar />
             <HomepageHeading />
           </Segment>
-        </Visibility>
-        {children}
-      </Responsive>
+          {children}
+        </div>
+      </div>
     );
   }
 }

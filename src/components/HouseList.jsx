@@ -1,15 +1,7 @@
 import React, { Component } from "react";
-import {
-  Segment,
-  Grid,
-  Image,
-  Button,
-  Sticky,
-  Header
-} from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Segment, Grid, Image, Button, Header } from "semantic-ui-react";
 import "../layout.css";
-import Map from "./Map"
+import Map from "./Map";
 
 // address: "No.2 Tai Pak Terrace, Kennedy Town",
 // imageURL: "images/house1.jpg",
@@ -47,10 +39,7 @@ class HouseList extends Component {
           secondary
           clearing
         >
-          <Image
-            src={result.imageURL}
-            className="img-result"
-          />
+          <Image src={result.imageURL} className="img-result" />
 
           <Header as="h4">
             {result.title}
@@ -88,7 +77,7 @@ class HouseList extends Component {
         <Grid.Column>{listOfHouse}</Grid.Column>
         <Grid.Column>
           <Segment style={{ height: "500px" }}>
-            <Map data={this.props.data}/>
+            <Map data={this.props.data} />
           </Segment>
         </Grid.Column>
       </Grid>

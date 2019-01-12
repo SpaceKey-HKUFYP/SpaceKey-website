@@ -1,16 +1,16 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import {
   Segment,
   Menu,
   Button,
   Dropdown,
   Grid,
-  Form,
   Container,
-  Header
+  Header,
+  Rail,
+  Sticky
 } from "semantic-ui-react";
 import { SpmFilter, ScrollFilter } from "./FilterMenu";
-import { Range } from "rc-slider";
 import NavigationBar from "./NavigationBar";
 import HouseList from "./HouseList";
 import axios from "axios";
@@ -124,11 +124,19 @@ class Search extends Component {
 
     this.state = {
       general: {
+        status: {
+          context: null
+        },
         data: {
           queries: [],
           filteredHouse: []
         },
         handler: {
+          handleContextRef: ref => {
+            let newState = my.state;
+            newState.general.status.context = ref;
+            my.setState(newState);
+          },
           openHandler: (typeButton, isOpen) => {
             let newState = my.state;
             newState[typeButton].status.open = isOpen;
@@ -386,40 +394,49 @@ class Search extends Component {
     }
 
     return (
-      <Fragment>
-        <Segment inverted attached>
-          <NavigationBar />
-        </Segment>
-        <Menu pointing size="large" attached>
-          <Dropdown
-            fluid
-            selection
-            multiple={false}
-            search={true}
-            options={search.data.options}
-            placeholder="Select Area"
-            value={search.data.value}
-            onChange={search.handler.handleChange}
-            clearable
-          />
-          <Menu.Item
-            position="right"
-            name="sell"
-            active={search.status.activeItem === "sell"}
-            onClick={search.handler.handleRentOrSell}
-          >
-            For sell
-          </Menu.Item>
-          <Menu.Item
-            position="right"
-            name="rent"
-            active={search.status.activeItem === "rent"}
-            onClick={search.handler.handleRentOrSell}
-          >
-            For rent
-          </Menu.Item>
-        </Menu>
-        <Container>
+      <div ref={general.handler.handleNavigationBar}>
+        <Rail
+          internal
+          position="left"
+          attached
+          style={{ top: "auto", height: "auto", width: "100%" }}
+        >
+          <Sticky context={general.status.context}>
+            <Segment inverted attached>
+              <NavigationBar />
+            </Segment>
+            <Menu pointing size="large" attached>
+              <Dropdown
+                fluid
+                selection
+                multiple={false}
+                search={true}
+                options={search.data.options}
+                placeholder="Select Area"
+                value={search.data.value}
+                onChange={search.handler.handleChange}
+                clearable
+              />
+              <Menu.Item
+                position="right"
+                name="sell"
+                active={search.status.activeItem === "sell"}
+                onClick={search.handler.handleRentOrSell}
+              >
+                For sell
+              </Menu.Item>
+              <Menu.Item
+                position="right"
+                name="rent"
+                active={search.status.activeItem === "rent"}
+                onClick={search.handler.handleRentOrSell}
+              >
+                For rent
+              </Menu.Item>
+            </Menu>
+          </Sticky>
+        </Rail>
+        <Container style={{ paddingTop: "136.033px" }}>
           <Grid
             columns="equal"
             divided
@@ -469,11 +486,12 @@ class Search extends Component {
                   />
                 </div>
               </Segment>
+
               <HouseList data={general.data.filteredHouse} />
             </Grid.Column>
           </Grid>
         </Container>
-      </Fragment>
+      </div>
     );
   }
 }

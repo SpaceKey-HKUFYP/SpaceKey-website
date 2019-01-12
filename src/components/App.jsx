@@ -3,41 +3,31 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Home from "./Home";
 import Search from "./Search";
-import LoginForm from './LoginForm';
-import SignupForm from './SignupForm';
-import FootBar from './FootBar'
-
-import axios from 'axios';
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
+import FootBar from "./FootBar";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-    constructor(props) {
-        super(props);
-        // const getData = (ev, year, month) => {
-        //     axios.get('http://localhost:8080/expense/'+year+'/'+month)
-        //       .then(function(response) {
-        //         ev.setState({data: response.data});
-        //         ev.setState({selectedYear: parseInt(year)});
-        //         ev.setState({selectedMonth: month});
-        //       });
-        // }
-    }
-
-    render() {
-        return (
-            <Fragment>
-                 <Router>
-                    <div>
-                        <Route exact path="/" component={Home} />
-                        <Route path="/search" component={Search} />
-                        <Route path="/login" component={LoginForm} />
-                        <Route path="/signup" component={SignupForm} />
-                    </div>
-                 </Router>
-                 <FootBar />
-            </Fragment>
-        );
-    }
+  render() {
+    return (
+      <Fragment>
+        <Router>
+          <div>
+            <Route exact path="/" component={Home} />
+            <Route path="/search" component={Search} />
+            <Route path="/login" component={LoginForm} />
+            <Route path="/signup" component={SignupForm} />
+          </div>
+        </Router>
+        <FootBar />
+      </Fragment>
+    );
+  }
 }
 
 export default App;

@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import {
   Button,
   Modal,
-  Checkbox,
   Tab,
   Grid,
   Label,
@@ -10,10 +9,8 @@ import {
   Form,
   Header
 } from "semantic-ui-react";
-import InputRange from "react-input-range";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-import { DateRangePicker } from "react-dates";
 
 import { Range } from "rc-slider";
 

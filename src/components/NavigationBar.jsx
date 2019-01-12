@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Link } from "react-router-dom";
 import { Button, Menu, Image } from "semantic-ui-react";
 
 class NavigationBar extends Component {
   render() {
     return (
-      <Menu inverted pointing secondary size="large" attached>
+      <Menu inverted pointing size="large" attached>
         <Link to="/">
           <Menu.Item header name="SpaceKey">
             <Image
