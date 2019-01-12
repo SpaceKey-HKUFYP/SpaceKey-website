@@ -216,6 +216,7 @@ class Search extends Component {
                   newState.general.data.queries
                 );
                 my.setState(newState);
+                my.state.map.setCenter();
               });
           }
         }
@@ -377,6 +378,42 @@ class Search extends Component {
           },
           closeModal: () => this.state.general.handler.openHandler("spm", false)
         }
+      },
+      map: {
+        status: {
+          center: {
+            lat: 22.3964,
+            lng: 114.1095
+          },
+          zoom: 15
+        },
+        setCenter: () => {
+          console.log("djkfhalsdkjfh");
+          let min_lat = 500,
+            max_lat = 0,
+            min_lng = 500,
+            max_lng = 0,
+            avg_lat = 0,
+            avg_lng = 0;
+          const houseData = this.state.general.data.filteredHouse;
+          houseData.forEach(function(prop) {
+            if (prop.lat < min_lat) min_lat = prop.lat;
+            if (prop.lat > max_lat) max_lat = prop.lat;
+            if (prop.lng < min_lng) min_lng = prop.lng;
+            if (prop.lng > max_lng) max_lng = prop.lng;
+            avg_lat += prop.lat;
+            avg_lng += prop.lng;
+          });
+          if (houseData.length != 0) {
+            avg_lat /= houseData.length;
+            avg_lng /= houseData.length;
+          }
+          let newState = { ...my.state };
+          if (avg_lat == 0 && avg_lng == 0)
+            newState.map.status.center = { lat: 22.3964, lng: 114.1095 };
+          else newState.map.status.center = { lat: avg_lat, lng: avg_lng };
+          my.setState(newState);
+        }
       }
     };
   }
@@ -389,7 +426,8 @@ class Search extends Component {
       saleableArea,
       grossArea,
       price,
-      spm
+      spm,
+      map
     } = this.state;
 
     let where;
@@ -509,7 +547,7 @@ class Search extends Component {
             verticalAlign="middle"
           >
             <Grid.Column style={{ maxWidth: 1000 }}>
-              <HouseList data={general.data.filteredHouse} />
+              <HouseList data={general.data.filteredHouse} map={map.status} />
             </Grid.Column>
           </Grid>
         </Container>
