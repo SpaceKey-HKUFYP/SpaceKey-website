@@ -77,7 +77,7 @@ class HouseList extends Component {
         <Grid.Column>{listOfHouse}</Grid.Column>
         <Grid.Column>
           <Segment style={{ height: "500px", padding: "0px" }}>
-            <Map data={this.props.data} map={this.props.map} />
+            <Map data={this.props.data} />
           </Segment>
         </Grid.Column>
       </Grid>
