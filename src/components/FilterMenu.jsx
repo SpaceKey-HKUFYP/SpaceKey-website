@@ -75,8 +75,8 @@ class SpmFilter extends Component {
     const listOfWantedObjects = wantedObjects.map(val => {
       return (
         <WantedObject
-          val={val.id}
-          key={val.id}
+          val={val.keyword}
+          key={val.keyword}
           dir={val.dir}
           dist={val.dist}
           onDistanceChange={event =>
@@ -138,16 +138,22 @@ class SpmFilter extends Component {
         onClose={handler.closeModal}
         centered={false}
       >
+        <Modal.Header>SPM</Modal.Header>
         <Modal.Content>
           <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         </Modal.Content>
         <Modal.Actions>
-          <Button negative content="Clear" />
+          <Button
+            negative
+            content="Clear"
+            onClick={handler.onClearButtonClicked}
+          />
           <Button
             positive
             icon="checkmark"
             labelPosition="right"
             content="Apply"
+            onClick={handler.onApplyButtonClicked}
           />
         </Modal.Actions>
       </Modal>

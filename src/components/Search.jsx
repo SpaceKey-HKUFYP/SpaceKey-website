@@ -13,7 +13,6 @@ import {
 import { SpmFilter, ScrollFilter } from "./FilterMenu";
 import NavigationBar from "./NavigationBar";
 import HouseList from "./HouseList";
-import MapContainer from "./MapContainer";
 import axios from "axios";
 
 import "../layout.css";
@@ -194,30 +193,87 @@ class Search extends Component {
             let newState = { ...my.state };
             newState.search.data.value = value;
             my.setState(newState);
-            this.state.search.handler.handleRequestQuery();
+            this.state.search.handler.requestToAPI();
           },
           handleRentOrSell: (e, { name }) => {
             let newState = { ...my.state };
             newState.search.status.activeItem = name;
             my.setState(newState);
-            this.state.search.handler.handleRequestQuery();
+            this.state.search.handler.requestToAPI();
           },
-          handleRequestQuery: () => {
-            axios
-              .get(global.projectConstant.apiURL + "/data/property/get", {
+          requestToAPI: () => {
+            this.state.search.handler.handleRequestProperty();
+            this.state.search.handler.handleRequestPoi();
+          },
+          handleRequestProperty: () => {
+            let api;
+
+            const region =
+              this.state.search.data.value === null
+                ? "any"
+                : this.state.search.data.value;
+
+            if (this.state.spm.status.isFiltered) {
+              api = {
+                url: global.projectConstant.apiURL + "/alg/spm",
+                method: "post",
                 params: {
                   type: this.state.search.status.activeItem,
-                  region: this.state.search.data.value.replace(/\+/g, "%20")
+                  region: region,
+                  wantedObjects: this.state.spm.data.wantedObjects
                 }
-              })
-              .then(res => {
-                let newState = { ...my.state };
-                newState.general.data.queries = res.data.houseData;
-                newState.general.data.filteredHouse = filterHouse(
-                  newState.general.data.queries
-                );
-                my.setState(newState);
-              });
+              };
+            } else {
+              api = {
+                url: global.projectConstant.apiURL + "/data/property/get",
+                method: "get",
+                params: {
+                  type: this.state.search.status.activeItem,
+                  region: region.replace(/\+/g, "%20")
+                }
+              };
+            }
+
+            console.log(api);
+            axios({
+              method: api.method,
+              url: api.url,
+              params: api.params
+            }).then(res => {
+              let newState = { ...my.state };
+              newState.general.data.queries = res.data.houseData;
+              newState.general.data.filteredHouse = filterHouse(
+                newState.general.data.queries
+              );
+              my.setState(newState);
+            });
+          },
+          handleRequestPoi: () => {
+            if (this.state.spm.status.isFiltered) {
+              axios
+                .post(global.projectConstant.apiURL + "data/poi", {
+                  params: {
+                    type: this.state.search.status.activeItem,
+                    region:
+                      this.state.search.data.value === null
+                        ? "any"
+                        : this.state.search.data.value,
+                    wantedObjects: this.state.spm.data.wantedObjects
+                  }
+                })
+                .then(res => {
+                  let newState = { ...my.state };
+                  newState.spm.data.poiResult = res.data.poiResult;
+                  my.setState(newState);
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            } else {
+              let newState = { ...my.state };
+              newState.spm.data.poiResult = [];
+              my.setState(newState);
+            }
           }
         }
       },
@@ -332,14 +388,16 @@ class Search extends Component {
       spm: {
         status: {
           open: false,
-          isFiltered: false
+          isFiltered: false,
+          anyChanges: false
         },
         data: {
           poi: {
             value: [],
             options: poiOptions
           },
-          wantedObjects: []
+          wantedObjects: [],
+          poiResult: []
         },
         handler: {
           handleChange: (e, { value }) => {
@@ -349,7 +407,7 @@ class Search extends Component {
             if (oldValue.length < value.length) {
               const diffValue = value.diff(oldValue)[0];
               newState.spm.data.wantedObjects.push({
-                id: diffValue,
+                keyword: diffValue,
                 dir: "any",
                 dist: "any"
               });
@@ -357,26 +415,55 @@ class Search extends Component {
               const diffValue = oldValue.diff(value)[0];
               newState.spm.data.wantedObjects = newState.spm.data.wantedObjects.filter(
                 function(obj) {
-                  return obj.id !== diffValue;
+                  return obj.keyword !== diffValue;
                 }
               );
             }
 
             newState.spm.data.poi.value = value;
+
+            if (value === []) {
+              newState.spm.status.isFiltered = false;
+            } else {
+              newState.spm.status.isFiltered = true;
+            }
+
             my.setState(newState);
           },
-          wantedObjectChange: (id, distOrDir, value) => {
+          wantedObjectChange: (keyword, distOrDir, value) => {
             let newState = { ...my.state };
 
             my.state.spm.data.wantedObjects.forEach(function(wantedObject) {
-              if (wantedObject.id === id) {
+              if (wantedObject.keyword === keyword) {
                 wantedObject[distOrDir] = value;
               }
             });
 
             my.setState(newState);
           },
-          closeModal: () => this.state.general.handler.openHandler("spm", false)
+          closeModal: () => {
+            this.state.general.handler.openHandler("spm", false);
+            this.state.search.handler.requestToAPI();
+          },
+          onApplyButtonClicked: () => {
+            this.state.search.handler.requestToAPI();
+          },
+          onClearButtonClicked: () => {
+            let newState = { ...my.state };
+
+            newState.spm.data = {
+              poi: {
+                value: [],
+                options: poiOptions
+              },
+              wantedObjects: [],
+              poiResult: []
+            };
+
+            newState.spm.status.isFiltered = false;
+
+            my.setState(newState);
+          }
         }
       }
     };
