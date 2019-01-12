@@ -6,7 +6,8 @@ import {
   Button,
   Sticky,
   Header,
-  Label
+  Label,
+  Popup
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
@@ -21,6 +22,9 @@ class MapContainer extends Component {
       lng: 114.1095
     };
     this.zoom = 15;
+    this.state = {
+      show: null
+    };
   }
 
   setCenter() {
@@ -48,26 +52,76 @@ class MapContainer extends Component {
     else this.center = { lat: avg_lat, lng: avg_lng };
   }
 
+  mouseEnter(id) {
+    this.setState({ show: id });
+    // console.log("MapContainer mouseEnter " + id);
+  }
+
+  mouseLeave(id) {
+    this.setState({ show: null });
+    // console.log("MapContainer mouseLeave " + id);
+  }
+
   render() {
     this.setCenter();
     const listOfHouse = this.props.data.map(result => {
-      var price_v2 = result.price / 10000;
-      return (
-        <Button
-          compact
-          color="twitter"
-          size="tiny"
-          style={{ textAlign: "center" }}
-          lat={result.lat}
-          lng={result.lng}
-          key={result.id}
-        >
-          ${price_v2}萬
-        </Button>
-      );
+      let price_v2 = result.price / 10000;
+      let flag_focus = result.id === this.props.state.focus;
+      let flag_show = result.id === this.state.show;
+
+      if (!flag_show) {
+        return (
+          <Button
+            compact
+            size="tiny"
+            style={{ textAlign: "center" }}
+            lat={result.lat}
+            lng={result.lng}
+            key={result.id}
+            color={flag_focus ? "red" : "twitter"}
+            onMouseEnter={() => this.mouseEnter(result.id)}
+            onMouseLeave={() => this.mouseLeave(result.id)}
+          >
+            ${price_v2}萬
+          </Button>
+        );
+      } else {
+        return (
+          <Popup
+            lat={result.lat}
+            lng={result.lng}
+            basic
+            on="focus"
+            trigger={
+              <Button
+                compact
+                size="tiny"
+                style={{ textAlign: "center" }}
+                key={result.id}
+                color={flag_focus ? "red" : "twitter"}
+                onMouseEnter={() => this.mouseEnter(result.id)}
+                onMouseLeave={() => this.mouseLeave(result.id)}
+              >
+                ${price_v2}萬
+              </Button>
+            }
+            content="???"
+          >
+            <Popup.Header> {result.title} </Popup.Header>
+            <Popup.Content>
+              {result.propertyName}, {result.region} <br />
+              <b> Price </b> ${result.price} <br />
+              <b> Gross Area </b> {result.grossArea} sq. ft <br />
+              <b> Net Floor Area </b> {result.netFloorArea} sq. ft <br />
+              <b> Address </b> {result.address} <br />
+              <b> Post date </b> {result.postDate} <br />
+              <b> Agency </b> {result.agentName} <br />
+            </Popup.Content>
+          </Popup>
+        );
+      }
     });
 
-    console.log(listOfHouse);
     return (
       <div id="map" style={{ height: "100%", width: "100%" }}>
         <GoogleMapReact

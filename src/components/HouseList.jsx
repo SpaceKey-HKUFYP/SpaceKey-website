@@ -26,17 +26,17 @@ class HouseList extends Component {
   }
 
   mouseEnter(id) {
-    console.log("mouseEnter");
+    // console.log("HouseList mouseEnter " + id);
     this.setState({ focus: id });
   }
 
   mouseLeave(id) {
-    console.log("mouseLeave");
+    // console.log("HouseList mouseLeave" + id);
     this.setState({ focus: null });
   }
 
   mouseClick(id) {
-    console.log("mouseClick");
+    // console.log("HouseList mouseClick" + id);
     this.setState({ show: id });
   }
 
@@ -57,7 +57,6 @@ class HouseList extends Component {
       return (
         <Segment
           key={result.address + result.pageURL}
-          raised
           secondary
           clearing
           onClick={() => this.mouseClick(result.id)}
@@ -101,7 +100,7 @@ class HouseList extends Component {
       <Grid divided={false} padded={false} fluid="true">
         <Grid.Column width={6}>{listOfHouse}</Grid.Column>
         <Grid.Column width={10}>
-          <Segment style={{ height: "500px", padding: "0px" }}>
+          <Segment style={{ height: "600px", padding: "0px" }}>
             <MapContainer data={this.props.data} state={this.state} />
           </Segment>
         </Grid.Column>
