@@ -13,7 +13,7 @@ import GoogleMapReact from "google-map-react";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-class Map extends Component {
+class MapContainer extends Component {
   constructor(props) {
     super(props);
     this.center = {
@@ -82,4 +82,4 @@ class Map extends Component {
   }
 }
 
-export default Map;
+export default MapContainer;
