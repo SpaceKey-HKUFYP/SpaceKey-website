@@ -206,49 +206,50 @@ class Search extends Component {
             this.state.search.handler.handleRequestPoi();
           },
           handleRequestProperty: () => {
-            let api;
+            const params = {
+              region:
+                this.state.search.data.value === null
+                  ? "any"
+                  : this.state.search.data.value.replace(/\+/g, "%20"),
 
-            const region =
-              this.state.search.data.value === null
-                ? "any"
-                : this.state.search.data.value;
+              type: this.state.search.status.activeItem
+            };
+
+            const data = new FormData();
+            data.set("wantedObjects", this.state.spm.data.wantedObjects);
 
             if (this.state.spm.status.isFiltered) {
-              api = {
-                url: global.projectConstant.apiURL + "/alg/spm",
+              axios({
                 method: "post",
-                params: {
-                  type: this.state.search.status.activeItem,
-                  region: region,
-                  wantedObjects: this.state.spm.data.wantedObjects
-                }
-              };
+                url: global.projectConstant.apiURL + "/alg/spm",
+                params: params,
+                data: data
+              }).then(res => {
+                let newState = { ...my.state };
+                newState.general.data.queries = res.data.houseData;
+                newState.general.data.filteredHouse = filterHouse(
+                  newState.general.data.queries
+                );
+                my.setState(newState);
+              });
             } else {
-              api = {
-                url: global.projectConstant.apiURL + "/data/property/get",
+              axios({
                 method: "get",
-                params: {
-                  type: this.state.search.status.activeItem,
-                  region: region.replace(/\+/g, "%20")
-                }
-              };
+                url: global.projectConstant.apiURL + "/data/property/get",
+                params: params
+              }).then(res => {
+                let newState = { ...my.state };
+                newState.general.data.queries = res.data.houseData;
+                newState.general.data.filteredHouse = filterHouse(
+                  newState.general.data.queries
+                );
+                my.setState(newState);
+              });
             }
-
-            console.log(api);
-            axios({
-              method: api.method,
-              url: api.url,
-              params: api.params
-            }).then(res => {
-              let newState = { ...my.state };
-              newState.general.data.queries = res.data.houseData;
-              newState.general.data.filteredHouse = filterHouse(
-                newState.general.data.queries
-              );
-              my.setState(newState);
-            });
           },
           handleRequestPoi: () => {
+            const data = new FormData();
+            data.set("wantedObjects", this.state.spm.data.wantedObjects);
             if (this.state.spm.status.isFiltered) {
               axios
                 .post(global.projectConstant.apiURL + "data/poi", {
@@ -257,13 +258,13 @@ class Search extends Component {
                     region:
                       this.state.search.data.value === null
                         ? "any"
-                        : this.state.search.data.value,
-                    wantedObjects: this.state.spm.data.wantedObjects
-                  }
+                        : this.state.search.data.value
+                  },
+                  data: data
                 })
                 .then(res => {
                   let newState = { ...my.state };
-                  newState.spm.data.poiResult = res.data.poiResult;
+                  newState.spm.data.poiResult = res.data.POIResult;
                   my.setState(newState);
                 })
                 .catch(function(error) {
@@ -422,7 +423,7 @@ class Search extends Component {
 
             newState.spm.data.poi.value = value;
 
-            if (value === []) {
+            if (value.length === 0) {
               newState.spm.status.isFiltered = false;
             } else {
               newState.spm.status.isFiltered = true;
