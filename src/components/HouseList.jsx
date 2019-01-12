@@ -39,19 +39,18 @@ class HouseList extends Component {
         bedroomsInfo = result.bedrooms + " bedrooms";
       }
 
-
-
       return (
         <Segment
           padded={false}
-          key={result.address + result.url}
+          key={result.address + result.pageURL}
           raised
           secondary
           clearing
         >
-          <a href={result.pageURL}>
-            <Image src={result.imageURL} className="img-result" />
-          </a>
+          <Image
+            src={result.imageURL}
+            className="img-result"
+          />
 
           <Header as="h4">
             {result.title}
@@ -89,7 +88,7 @@ class HouseList extends Component {
         <Grid.Column>{listOfHouse}</Grid.Column>
         <Grid.Column>
           <Segment style={{ height: "500px" }}>
-            <Map />
+            <Map data={this.props.data}/>
           </Segment>
         </Grid.Column>
       </Grid>
