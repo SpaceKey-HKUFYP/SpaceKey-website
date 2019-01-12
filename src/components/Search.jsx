@@ -125,16 +125,22 @@ class Search extends Component {
     this.state = {
       general: {
         status: {
-          context: null
+          navigationBarContext: null,
+          filterBarContext: null
         },
         data: {
           queries: [],
           filteredHouse: []
         },
         handler: {
-          handleContextRef: ref => {
+          navigationBarContextHandler: ref => {
             let newState = my.state;
-            newState.general.status.context = ref;
+            newState.general.status.navigationBarContext = ref;
+            my.setState(newState);
+          },
+          filterBarContextHandler: ref => {
+            let newState = my.state;
+            newState.general.status.filterBarContext = ref;
             my.setState(newState);
           },
           openHandler: (typeButton, isOpen) => {
@@ -394,14 +400,20 @@ class Search extends Component {
     }
 
     return (
-      <div ref={general.handler.handleNavigationBar}>
+      <div ref={general.handler.navigationBarContextHandler}>
         <Rail
           internal
           position="left"
           attached
-          style={{ top: "auto", height: "auto", width: "100%" }}
+          style={{
+            top: "auto",
+            height: "auto",
+            width: "100%",
+            backgroundColor: "white",
+            zIndex: 1000
+          }}
         >
-          <Sticky context={general.status.context}>
+          <Sticky context={general.status.navigationBarContext}>
             <Segment inverted attached>
               <NavigationBar />
             </Segment>
@@ -434,9 +446,60 @@ class Search extends Component {
                 For rent
               </Menu.Item>
             </Menu>
+            <Container>
+              <Grid
+                padded
+                divided
+                fluid="true"
+                style={{ height: "100%" }}
+                verticalAlign="middle"
+              >
+                <Grid.Column style={{ maxWidth: 1000 }}>
+                  <Segment>
+                    <Header as="h3">Property for rent in {where}</Header>
+
+                    <ScrollFilter
+                      handler={bedrooms.handler}
+                      data={bedrooms.data}
+                      status={bedrooms.status}
+                    />
+
+                    <ScrollFilter
+                      handler={saleableArea.handler}
+                      data={saleableArea.data}
+                      status={saleableArea.status}
+                    />
+
+                    <ScrollFilter
+                      handler={grossArea.handler}
+                      data={grossArea.data}
+                      status={grossArea.status}
+                    />
+
+                    <ScrollFilter
+                      handler={price.handler}
+                      data={price.data}
+                      status={price.status}
+                    />
+
+                    <Button
+                      onClick={() => general.handler.openHandler("spm", true)}
+                    >
+                      SPM
+                    </Button>
+                    <SpmFilter
+                      data={spm.data}
+                      handler={spm.handler}
+                      status={spm.status}
+                      size="small"
+                    />
+                  </Segment>
+                </Grid.Column>
+              </Grid>
+            </Container>
           </Sticky>
         </Rail>
-        <Container style={{ paddingTop: "136.033px" }}>
+        <Container style={{ paddingTop: "265.9px" }}>
           <Grid
             columns="equal"
             divided
@@ -446,47 +509,6 @@ class Search extends Component {
             verticalAlign="middle"
           >
             <Grid.Column style={{ maxWidth: 1000 }}>
-              <Segment>
-                <Header as="h3">Property for rent in {where}</Header>
-                <div>
-                  <ScrollFilter
-                    handler={bedrooms.handler}
-                    data={bedrooms.data}
-                    status={bedrooms.status}
-                  />
-
-                  <ScrollFilter
-                    handler={saleableArea.handler}
-                    data={saleableArea.data}
-                    status={saleableArea.status}
-                  />
-
-                  <ScrollFilter
-                    handler={grossArea.handler}
-                    data={grossArea.data}
-                    status={grossArea.status}
-                  />
-
-                  <ScrollFilter
-                    handler={price.handler}
-                    data={price.data}
-                    status={price.status}
-                  />
-
-                  <Button
-                    onClick={() => general.handler.openHandler("spm", true)}
-                  >
-                    SPM
-                  </Button>
-                  <SpmFilter
-                    data={spm.data}
-                    handler={spm.handler}
-                    status={spm.status}
-                    size="small"
-                  />
-                </div>
-              </Segment>
-
               <HouseList data={general.data.filteredHouse} />
             </Grid.Column>
           </Grid>

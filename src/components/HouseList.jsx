@@ -33,11 +33,11 @@ class HouseList extends Component {
 
       return (
         <Segment
-          padded={false}
           key={result.address + result.pageURL}
           raised
           secondary
           clearing
+          style={{ padding: "0px" }}
         >
           <Image src={result.imageURL} className="img-result" />
 
@@ -76,7 +76,7 @@ class HouseList extends Component {
       <Grid columns="equal" divided={false} padded={false} fluid="true">
         <Grid.Column>{listOfHouse}</Grid.Column>
         <Grid.Column>
-          <Segment style={{ height: "500px" }}>
+          <Segment style={{ height: "500px", padding: "0px" }}>
             <Map data={this.props.data} />
           </Segment>
         </Grid.Column>
