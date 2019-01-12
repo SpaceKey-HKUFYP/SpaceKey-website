@@ -455,57 +455,47 @@ class Search extends Component {
                 style={{ height: "100%" }}
                 verticalAlign="middle"
               >
-                <Grid.Row>
-                  <Grid.Column style={{ maxWidth: "1400px" }}>
-                    <Segment>
-                      <Header as="h3">Property for rent in {where}</Header>
+                <Grid.Column style={{ maxWidth: "1400px" }}>
+                  <Segment>
+                    <Header as="h3">Property for rent in {where}</Header>
 
-                      <ScrollFilter
-                        handler={bedrooms.handler}
-                        data={bedrooms.data}
-                        status={bedrooms.status}
-                      />
+                    <ScrollFilter
+                      handler={bedrooms.handler}
+                      data={bedrooms.data}
+                      status={bedrooms.status}
+                    />
 
-                      <ScrollFilter
-                        handler={saleableArea.handler}
-                        data={saleableArea.data}
-                        status={saleableArea.status}
-                      />
+                    <ScrollFilter
+                      handler={saleableArea.handler}
+                      data={saleableArea.data}
+                      status={saleableArea.status}
+                    />
 
-                      <ScrollFilter
-                        handler={grossArea.handler}
-                        data={grossArea.data}
-                        status={grossArea.status}
-                      />
+                    <ScrollFilter
+                      handler={grossArea.handler}
+                      data={grossArea.data}
+                      status={grossArea.status}
+                    />
 
-                      <ScrollFilter
-                        handler={price.handler}
-                        data={price.data}
-                        status={price.status}
-                      />
+                    <ScrollFilter
+                      handler={price.handler}
+                      data={price.data}
+                      status={price.status}
+                    />
 
-                      <Button
-                        onClick={() => general.handler.openHandler("spm", true)}
-                      >
-                        SPM
-                      </Button>
-                      <SpmFilter
-                        data={spm.data}
-                        handler={spm.handler}
-                        status={spm.status}
-                        size="small"
-                      />
-                    </Segment>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid.Column width={6} />
-                  <Grid.Column width={10}>
-                    <Segment style={{ height: "500px" }}>
-                      <MapContainer data={general.data.filteredHouse} />
-                    </Segment>
-                  </Grid.Column>
-                </Grid.Row>
+                    <Button
+                      onClick={() => general.handler.openHandler("spm", true)}
+                    >
+                      SPM
+                    </Button>
+                    <SpmFilter
+                      data={spm.data}
+                      handler={spm.handler}
+                      status={spm.status}
+                      size="small"
+                    />
+                  </Segment>
+                </Grid.Column>
               </Grid>
             </Container>
           </Sticky>
