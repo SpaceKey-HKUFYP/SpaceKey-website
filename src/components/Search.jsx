@@ -55,14 +55,7 @@ class Search extends Component {
 
     const regionOptions = global.projectConstant.regionName;
 
-    const poiOptions = [
-      { key: "school", value: "school", text: "school" },
-      { key: "mtr-station", value: "mtr-station", text: "mtr-station" },
-      { key: "university", value: "university", text: "university" },
-      { key: "park", value: "park", text: "park" },
-      { key: "airport", value: "airport", text: "airport" },
-      { key: "cafe", value: "cafe", text: "cafe" }
-    ];
+    const poiOptions = global.projectConstant.poiOptions;
 
     const filterBasedOnBedrooms = data => {
       if (!this.state.bedrooms.status.isFiltered) return data;
