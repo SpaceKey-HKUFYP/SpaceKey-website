@@ -80,10 +80,10 @@ class SpmFilter extends Component {
           dir={val.dir}
           dist={val.dist}
           onDistanceChange={event =>
-            handler.wantedObjectChange(val.id, "dist", event.target.value)
+            handler.wantedObjectChange(val.keyword, "dist", event.target.value)
           }
           onDirectionChange={event =>
-            handler.wantedObjectChange(val.id, "dir", event.target.value)
+            handler.wantedObjectChange(val.keyword, "dir", event.target.value)
           }
         />
       );

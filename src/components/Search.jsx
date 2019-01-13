@@ -427,7 +427,9 @@ class Search extends Component {
           },
           wantedObjectChange: (keyword, distOrDir, value) => {
             let newState = { ...my.state };
-
+            console.log(keyword);
+            console.log(distOrDir);
+            console.log(value);
             my.state.spm.data.wantedObjects.forEach(function(wantedObject) {
               if (wantedObject.keyword === keyword) {
                 wantedObject[distOrDir] = value;
