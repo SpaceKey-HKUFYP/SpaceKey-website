@@ -54,20 +54,27 @@ class MapContainer extends Component {
 
   mouseEnter(id) {
     this.setState({ show: id });
-    // console.log("MapContainer mouseEnter " + id);
   }
 
   mouseLeave(id) {
     this.setState({ show: null });
-    // console.log("MapContainer mouseLeave " + id);
   }
 
   render() {
     this.setCenter();
+
+    const listOfPoi = this.props.poi.map(poi => {
+      return (
+        <div key={poi.id} lat={poi.lat} lng={poi.lng}>
+          poi.searchKey
+        </div>
+      );
+    });
+
     const listOfHouse = this.props.data.map(result => {
-      let price_v2 = result.price / 10000;
-      let flag_focus = result.id === this.props.state.focus;
-      let flag_show = result.id === this.state.show;
+      const price_v2 = result.price / 10000;
+      const flag_focus = result.id === this.props.status.focus;
+      const flag_show = result.id === this.state.show;
 
       if (!flag_show) {
         return (
@@ -130,6 +137,7 @@ class MapContainer extends Component {
           zoom={this.zoom}
         >
           {listOfHouse}
+          {listOfPoi}
         </GoogleMapReact>
       </div>
     );

@@ -444,6 +444,7 @@ class Search extends Component {
           },
           onApplyButtonClicked: () => {
             this.state.search.handler.requestToAPI();
+            this.state.general.handler.openHandler("spm", false);
           },
           onClearButtonClicked: () => {
             let newState = { ...my.state };
@@ -482,6 +483,11 @@ class Search extends Component {
       where = "Hong Kong";
     } else {
       where = search.data.value;
+    }
+
+    let spmButtonColor = "grey";
+    if (spm.status.isFiltered) {
+      spmButtonColor = "red";
     }
 
     return (
@@ -569,6 +575,7 @@ class Search extends Component {
 
                     <Button
                       onClick={() => general.handler.openHandler("spm", true)}
+                      color={spmButtonColor}
                     >
                       SPM
                     </Button>
@@ -594,7 +601,10 @@ class Search extends Component {
             verticalAlign="middle"
           >
             <Grid.Column style={{ maxWidth: "1400px" }}>
-              <HouseList data={general.data.filteredHouse} />
+              <HouseList
+                data={general.data.filteredHouse}
+                poi={spm.data.poiData}
+              />
             </Grid.Column>
           </Grid>
         </Container>

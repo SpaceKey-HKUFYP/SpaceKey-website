@@ -26,17 +26,14 @@ class HouseList extends Component {
   }
 
   mouseEnter(id) {
-    // console.log("HouseList mouseEnter " + id);
     this.setState({ focus: id });
   }
 
   mouseLeave(id) {
-    // console.log("HouseList mouseLeave" + id);
     this.setState({ focus: null });
   }
 
   mouseClick(id) {
-    // console.log("HouseList mouseClick" + id);
     this.setState({ show: id });
   }
 
@@ -101,7 +98,11 @@ class HouseList extends Component {
         <Grid.Column width={6}>{listOfHouse}</Grid.Column>
         <Grid.Column width={10}>
           <Segment style={{ height: "600px", padding: "0px" }}>
-            <MapContainer data={this.props.data} state={this.state} />
+            <MapContainer
+              data={this.props.data}
+              status={this.state}
+              poi={this.props.poi}
+            />
           </Segment>
         </Grid.Column>
       </Grid>

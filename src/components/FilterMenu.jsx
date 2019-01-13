@@ -131,6 +131,7 @@ class SpmFilter extends Component {
         )
       }
     ];
+
     return (
       <Modal
         size={this.props.size}
