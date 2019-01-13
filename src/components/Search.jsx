@@ -222,8 +222,7 @@ class Search extends Component {
                 newState.general.data.filteredHouse = filterHouse(
                   newState.general.data.queries
                 );
-                newState.general.data.poiData = res.data.poiData;
-
+                newState.spm.data.poiData = res.data.poiData;
                 my.setState(newState);
               });
             } else {

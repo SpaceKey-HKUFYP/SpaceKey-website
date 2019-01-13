@@ -65,9 +65,17 @@ class MapContainer extends Component {
 
     const listOfPoi = this.props.poi.map(poi => {
       return (
-        <div key={poi.id} lat={poi.lat} lng={poi.lng}>
-          poi.searchKey
-        </div>
+        <Button
+          compact
+          size="mini"
+          style={{ textAlign: "center", fontSize: "5" }}
+          key={poi.id}
+          lat={poi.lat}
+          lng={poi.lng}
+          color="purple"
+        >
+          {poi.searchKey}
+        </Button>
       );
     });
 
