@@ -1,12 +1,10 @@
 ## Ongoing
 
-- MAP
 - Process POI data
 - Think of something new to the algorithm
 - Set router for searching -> example search/sell/Aberdeen
-- Sticky NavigationBar and Map and FilterBar and SearchBar, etc.
+- Sticky Map on search page
 - Need to implement SPM filter (simple)
-
 
 ## TO-DO List
 
