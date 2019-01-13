@@ -203,7 +203,6 @@ class Search extends Component {
           },
           requestToAPI: () => {
             this.state.search.handler.handleRequestProperty();
-            this.state.search.handler.handleRequestPoi();
           },
           handleRequestProperty: () => {
             const params = {
@@ -215,21 +214,23 @@ class Search extends Component {
               type: this.state.search.status.activeItem
             };
 
-            const data = new FormData();
-            data.set("wantedObjects", this.state.spm.data.wantedObjects);
+            // const data = new FormData();
+            // data.set("wantedObjects", this.state.spm.data.wantedObjects);
 
             if (this.state.spm.status.isFiltered) {
               axios({
                 method: "post",
-                url: global.projectConstant.apiURL + "/alg/spm",
+                url: global.projectConstant.apiURL + "/alg/spm_simple",
                 params: params,
-                data: data
+                data: { wantedObjects: this.state.spm.data.wantedObjects }
               }).then(res => {
                 let newState = { ...my.state };
                 newState.general.data.queries = res.data.houseData;
                 newState.general.data.filteredHouse = filterHouse(
                   newState.general.data.queries
                 );
+                newState.general.data.poiData = res.data.poiData;
+
                 my.setState(newState);
               });
             } else {
@@ -264,7 +265,7 @@ class Search extends Component {
                 })
                 .then(res => {
                   let newState = { ...my.state };
-                  newState.spm.data.poiResult = res.data.POIResult;
+                  newState.spm.data.poiData = res.data.poiData;
                   my.setState(newState);
                 })
                 .catch(function(error) {
@@ -393,16 +394,16 @@ class Search extends Component {
           anyChanges: false
         },
         data: {
-          poi: {
+          poiInput: {
             value: [],
             options: poiOptions
           },
           wantedObjects: [],
-          poiResult: []
+          poiData: []
         },
         handler: {
           handleChange: (e, { value }) => {
-            const oldValue = my.state.spm.data.poi.value;
+            const oldValue = my.state.spm.data.poiInput.value;
             let newState = { ...my.state };
 
             if (oldValue.length < value.length) {
@@ -421,7 +422,7 @@ class Search extends Component {
               );
             }
 
-            newState.spm.data.poi.value = value;
+            newState.spm.data.poiInput.value = value;
 
             if (value.length === 0) {
               newState.spm.status.isFiltered = false;
@@ -453,7 +454,7 @@ class Search extends Component {
             let newState = { ...my.state };
 
             newState.spm.data = {
-              poi: {
+              poiInput: {
                 value: [],
                 options: poiOptions
               },

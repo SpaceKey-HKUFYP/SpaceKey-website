@@ -70,7 +70,7 @@ class ScrollFilter extends Component {
 
 class SpmFilter extends Component {
   render() {
-    const { poi, wantedObjects } = this.props.data;
+    const { poiInput, wantedObjects } = this.props.data;
     const handler = this.props.handler;
     const listOfWantedObjects = wantedObjects.map(val => {
       return (
@@ -98,8 +98,8 @@ class SpmFilter extends Component {
               selection
               multiple={true}
               search={true}
-              options={poi.options}
-              value={poi.value}
+              options={poiInput.options}
+              value={poiInput.value}
               placeholder="Add point of interest"
               onChange={handler.handleChange}
             />
