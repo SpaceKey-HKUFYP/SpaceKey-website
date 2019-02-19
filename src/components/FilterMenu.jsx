@@ -111,27 +111,6 @@ class SpmFilter extends Component {
 
     const AdvancedPanel = () => <div>this is advanced</div>;
 
-    const panes = [
-      {
-        menuItem: "Simple",
-        render: () => (
-          <Tab.Pane attached={false}>
-            {" "}
-            <SimplePanel />{" "}
-          </Tab.Pane>
-        )
-      },
-      {
-        menuItem: "Advanced",
-        render: () => (
-          <Tab.Pane attached={false}>
-            {" "}
-            <AdvancedPanel />{" "}
-          </Tab.Pane>
-        )
-      }
-    ];
-
     return (
       <Modal
         size={this.props.size}
@@ -141,7 +120,7 @@ class SpmFilter extends Component {
       >
         <Modal.Header>SPM</Modal.Header>
         <Modal.Content>
-          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+          <SimplePanel />
         </Modal.Content>
         <Modal.Actions>
           <Button
