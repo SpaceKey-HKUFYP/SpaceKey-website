@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
+import "../constant";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -63,6 +64,16 @@ class MapContainer extends Component {
   render() {
     this.setCenter();
 
+    var colors = global.projectConstant.colors;
+    var poiToColor = {};
+
+    var poi;
+    for (poi in this.props.poi) {
+      if (!(poi.searchKey in poiToColor)) {
+        poiToColor[poi.searchKey] = colors.shift();
+      }
+    }
+
     const listOfPoi = this.props.poi.map(poi => {
       return (
         <Button
@@ -72,7 +83,7 @@ class MapContainer extends Component {
           key={poi.id}
           lat={poi.lat}
           lng={poi.lng}
-          color="purple"
+          color={poiToColor[poi.searchKey]}
         >
           {poi.searchKey}
         </Button>

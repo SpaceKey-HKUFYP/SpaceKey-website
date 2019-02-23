@@ -1,5 +1,6 @@
 global.projectConstant = {
   apiURL: "http://192.168.0.160:8080",
+  colors: ["#c2f9bb", "9ad1d4", "62c370", "cc3363", "20063b"],
   poiOptions: [
     { key: "Temple", value: "Temple", text: "Temple" },
     { key: "beach", value: "beach", text: "Beach" },
