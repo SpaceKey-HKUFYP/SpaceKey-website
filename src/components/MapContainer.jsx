@@ -64,13 +64,15 @@ class MapContainer extends Component {
   render() {
     this.setCenter();
 
-    var colors = global.projectConstant.colors;
+    var colors = global.projectConstant.colors.slice();
     var poiToColor = {};
 
-    var poi;
-    for (poi in this.props.poi) {
-      if (!(poi.searchKey in poiToColor)) {
-        poiToColor[poi.searchKey] = colors.shift();
+    var i;
+
+    for (i = 0; i < this.props.poi.length; i++) {
+      console.log(i);
+      if (poiToColor[this.props.poi[i].searchKey] === undefined) {
+        poiToColor[this.props.poi[i].searchKey] = colors.pop();
       }
     }
 
@@ -80,8 +82,8 @@ class MapContainer extends Component {
       return (
         <Button
           compact
-          size="mini"
-          style={{ textAlign: "center", fontSize: "5" }}
+          size="tiny"
+          style={{ textAlign: "center" }}
           key={poi.id}
           lat={poi.lat}
           lng={poi.lng}
