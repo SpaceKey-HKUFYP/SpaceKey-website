@@ -174,9 +174,9 @@ class WantedObject extends Component {
                     onChange={this.props.onDistanceChange}
                   >
                     <option value="any">any distance</option>
-                    <option value="close">close (0-500m)</option>
-                    <option value="medium">medium (500-1000m)</option>
-                    <option value="far">far (1000-1500m)</option>
+                    <option value="close">close (0-150m)</option>
+                    <option value="medium">medium (150-500m)</option>
+                    <option value="far">far (500-1000m)</option>
                   </Form.Field>
                 </Form>
               </Grid.Column>

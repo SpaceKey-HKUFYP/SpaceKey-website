@@ -8,7 +8,9 @@ import {
   Container,
   Header,
   Rail,
-  Sticky
+  Sticky,
+  Loader,
+  Dimmer
 } from "semantic-ui-react";
 import { SpmFilter, ScrollFilter } from "./FilterMenu";
 import NavigationBar from "./NavigationBar";
@@ -119,13 +121,20 @@ class Search extends Component {
       general: {
         status: {
           navigationBarContext: null,
-          filterBarContext: null
+          filterBarContext: null,
+          isLoading: false
         },
         data: {
           queries: [],
           filteredHouse: []
         },
         handler: {
+          toogleLoading: () => {
+            let newState = my.state;
+            newState.general.status.isLoading = !newState.general.status
+              .isLoading;
+            my.setState(newState);
+          },
           navigationBarContextHandler: ref => {
             let newState = my.state;
             newState.general.status.navigationBarContext = ref;
@@ -211,6 +220,7 @@ class Search extends Component {
             // data.set("wantedObjects", this.state.spm.data.wantedObjects);
 
             if (this.state.spm.status.isFiltered) {
+              this.state.general.handler.toogleLoading();
               axios({
                 method: "post",
                 url: global.projectConstant.apiURL + "/alg/spm_simple",
@@ -224,8 +234,10 @@ class Search extends Component {
                 );
                 newState.spm.data.poiData = res.data.poiData;
                 my.setState(newState);
+                this.state.general.handler.toogleLoading();
               });
             } else {
+              this.state.general.handler.toogleLoading();
               axios({
                 method: "get",
                 url: global.projectConstant.apiURL + "/data/property/get",
@@ -237,6 +249,7 @@ class Search extends Component {
                   newState.general.data.queries
                 );
                 my.setState(newState);
+                this.state.general.handler.toogleLoading();
               });
             }
           },
@@ -244,6 +257,7 @@ class Search extends Component {
             const data = new FormData();
             data.set("wantedObjects", this.state.spm.data.wantedObjects);
             if (this.state.spm.status.isFiltered) {
+              this.state.general.handler.toogleLoading();
               axios
                 .post(global.projectConstant.apiURL + "data/poi", {
                   params: {
@@ -259,6 +273,7 @@ class Search extends Component {
                   let newState = { ...my.state };
                   newState.spm.data.poiData = res.data.poiData;
                   my.setState(newState);
+                  this.state.general.handler.toogleLoading();
                 })
                 .catch(function(error) {
                   console.log(error);
@@ -636,6 +651,15 @@ class Search extends Component {
             </Grid.Column>
           </Grid>
         </Container>
+        <Dimmer active={general.status.isLoading}>
+          <Loader
+            active={general.status.isLoading}
+            inline="centered"
+            id="loader"
+          >
+            Getting properties
+          </Loader>
+        </Dimmer>
       </div>
     );
   }
