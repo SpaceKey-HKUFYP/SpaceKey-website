@@ -135,6 +135,12 @@
   padding: 2px;
 }
 
+.listOfHouse {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 600px;
+}
+
 .scrollFilter-range-wrapper {
   height: 34px;
   padding: 0px 15px;

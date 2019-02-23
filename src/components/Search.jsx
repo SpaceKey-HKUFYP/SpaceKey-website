@@ -454,7 +454,7 @@ class Search extends Component {
                 options: poiOptions
               },
               wantedObjects: [],
-              poiResult: []
+              poiData: []
             };
 
             newState.spm.status.isFiltered = false;

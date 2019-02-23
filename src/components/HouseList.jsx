@@ -71,7 +71,7 @@ class HouseList extends Component {
 
           <Header as="h4">
             {" "}
-            Rent: {result.price} HKD
+            Price: {result.price / 10000}萬 HKD
             <Header.Subheader>
               {" "}
               {"Gross area:" +
@@ -94,8 +94,10 @@ class HouseList extends Component {
     });
 
     return (
-      <Grid divided={false} padded={false} fluid="true">
-        <Grid.Column width={6}>{listOfHouse}</Grid.Column>
+      <Grid divided={false} padded={false} stretched={false}>
+        <Grid.Column width={6} className="listOfHouse">
+          {listOfHouse}
+        </Grid.Column>
         <Grid.Column width={10}>
           <Segment style={{ height: "600px", padding: "0px" }}>
             <MapContainer
