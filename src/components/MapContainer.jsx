@@ -140,7 +140,7 @@ class MapContainer extends Component {
             <Popup.Header> {result.title} </Popup.Header>
             <Popup.Content>
               {result.propertyName}, {result.region} <br />
-              <b> Price </b> ${result.price} <br />
+              <b> Price </b> ${result.price / 10000}萬 <br />
               <b> Gross Area </b> {result.grossArea} sq. ft <br />
               <b> Net Floor Area </b> {result.netFloorArea} sq. ft <br />
               <b> Address </b> {result.address} <br />
