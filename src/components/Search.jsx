@@ -462,6 +462,25 @@ class Search extends Component {
             my.setState(newState);
           }
         }
+      },
+      sort: {
+        value: "default",
+        options: [
+          { key: "default", text: "Default", value: "default" },
+          { key: "recent", text: "Recent", value: "recent" },
+          { key: "highestPrice", text: "Highest price", value: "highestPrice" },
+          { key: "lowestPrice", text: "Lowest price", value: "lowestPrice" },
+          {
+            key: "largestArea",
+            text: "Largest saleable area",
+            value: "largestArea"
+          },
+          {
+            key: "smallestArea",
+            text: "smallest saleable area",
+            value: "smallestArea"
+          }
+        ]
       }
     };
   }
@@ -474,7 +493,8 @@ class Search extends Component {
       saleableArea,
       grossArea,
       price,
-      spm
+      spm,
+      sort
     } = this.state;
 
     let where;
@@ -547,43 +567,52 @@ class Search extends Component {
                 <Grid.Column style={{ maxWidth: "1400px" }}>
                   <Segment>
                     <Header as="h3">Property for rent in {where}</Header>
+                    <div>
+                      <ScrollFilter
+                        handler={bedrooms.handler}
+                        data={bedrooms.data}
+                        status={bedrooms.status}
+                      />
 
-                    <ScrollFilter
-                      handler={bedrooms.handler}
-                      data={bedrooms.data}
-                      status={bedrooms.status}
-                    />
+                      <ScrollFilter
+                        handler={saleableArea.handler}
+                        data={saleableArea.data}
+                        status={saleableArea.status}
+                      />
 
-                    <ScrollFilter
-                      handler={saleableArea.handler}
-                      data={saleableArea.data}
-                      status={saleableArea.status}
-                    />
+                      <ScrollFilter
+                        handler={grossArea.handler}
+                        data={grossArea.data}
+                        status={grossArea.status}
+                      />
 
-                    <ScrollFilter
-                      handler={grossArea.handler}
-                      data={grossArea.data}
-                      status={grossArea.status}
-                    />
+                      <ScrollFilter
+                        handler={price.handler}
+                        data={price.data}
+                        status={price.status}
+                      />
 
-                    <ScrollFilter
-                      handler={price.handler}
-                      data={price.data}
-                      status={price.status}
-                    />
-
-                    <Button
-                      onClick={() => general.handler.openHandler("spm", true)}
-                      color={spmButtonColor}
-                    >
-                      SPM
-                    </Button>
-                    <SpmFilter
-                      data={spm.data}
-                      handler={spm.handler}
-                      status={spm.status}
-                      size="small"
-                    />
+                      <Button
+                        onClick={() => general.handler.openHandler("spm", true)}
+                        color={spmButtonColor}
+                        size="mini"
+                      >
+                        SPM
+                      </Button>
+                      <SpmFilter
+                        data={spm.data}
+                        handler={spm.handler}
+                        status={spm.status}
+                        size="small"
+                      />
+                      <div className="floatRight">
+                        sort:&nbsp;
+                        <Dropdown
+                          options={sort.options}
+                          defaultValue={sort.value}
+                        />
+                      </div>
+                    </div>
                   </Segment>
                 </Grid.Column>
               </Grid>

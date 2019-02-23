@@ -131,6 +131,10 @@
   float: right;
 }
 
+.p-2 {
+  padding: 2px;
+}
+
 .scrollFilter-range-wrapper {
   height: 34px;
   padding: 0px 15px;
