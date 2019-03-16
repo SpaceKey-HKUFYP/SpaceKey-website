@@ -1,9 +1,8 @@
-## Ongoing
-
-- Think of something new to the algorithm
-- Set router for searching -> example search/sell/Aberdeen
-
 ## TO-DO List
-
-- Develop the login/signup system
-- Only show (let's say 10) properties per page
+- Pattern display for SPM filter
+- Specify near/medium/far by user
+- Directional Relations
+- Custom Objects w/ Google Maps API routing
+- Page System
+- Survey
+- Prepare for the meeting
