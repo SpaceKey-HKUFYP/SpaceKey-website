@@ -1,5 +1,5 @@
 global.projectConstant = {
-  apiURL: "http://192.168.0.160:8080",
+  apiURL: "http://localhost:8080",
   colors: ["orange", "violet", "brown", "facebook", "purple"],
   poiOptions: [
     { key: "Temple", value: "Temple", text: "Temple" },

@@ -70,7 +70,6 @@ class MapContainer extends Component {
     var i;
 
     for (i = 0; i < this.props.poi.length; i++) {
-      console.log(i);
       if (poiToColor[this.props.poi[i].searchKey] === undefined) {
         poiToColor[this.props.poi[i].searchKey] = colors.pop();
       }
