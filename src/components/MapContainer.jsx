@@ -76,8 +76,6 @@ class MapContainer extends Component {
       }
     }
 
-    console.log(poiToColor);
-
     const listOfPoi = this.props.poi.map(poi => {
       return (
         <Button

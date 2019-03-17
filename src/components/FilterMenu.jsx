@@ -7,7 +7,8 @@ import {
   Label,
   Dropdown,
   Form,
-  Header
+  Header,
+  Segment
 } from "semantic-ui-react";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
@@ -70,7 +71,7 @@ class ScrollFilter extends Component {
 
 class SpmFilter extends Component {
   render() {
-    const { poiInput, wantedObjects } = this.props.data;
+    const { poiInput, wantedObjects, distOption } = this.props.data;
     const handler = this.props.handler;
     const listOfWantedObjects = wantedObjects.map(val => {
       return (
@@ -109,17 +110,57 @@ class SpmFilter extends Component {
       </Grid>
     );
 
-    const AdvancedPanel = () => <div>this is advanced</div>;
+    const distVal = distOption.data.value;
+    const distUnit = distOption.data.unit;
+
+    const distToLabel = dist => {
+      if (dist === 3000) return "infinity";
+      return dist + distUnit;
+    };
+
+    const rangeLabel =
+      "close: " +
+      distToLabel(distVal[0]) +
+      " - " +
+      distToLabel(distVal[1]) +
+      ", medium: " +
+      distToLabel(distVal[1]) +
+      " - " +
+      distToLabel(distVal[2]) +
+      ", far: " +
+      distToLabel(distVal[2]) +
+      " - " +
+      distToLabel(distVal[3]);
 
     return (
       <Modal
         size={this.props.size}
         open={this.props.status.open}
         onClose={handler.closeModal}
-        centered={false}
+        id="spm-modal"
       >
         <Modal.Header>SPM</Modal.Header>
         <Modal.Content>
+          <Segment>
+            <div style={{ padding: "10px" }}>{rangeLabel}</div>
+            <div className="scrollFilter-range-wrapper">
+              <Range
+                value={distOption.data.value}
+                default={distOption.data.default}
+                onChange={distOption.handler.rangeValueUpdate}
+                step={1}
+                marks={{
+                  0: "0m",
+                  1000: "1000m",
+                  2000: "2000m",
+                  3000: "Infinity"
+                }}
+                min={0}
+                max={3000}
+                count={3}
+              />
+            </div>
+          </Segment>
           <SimplePanel />
         </Modal.Content>
         <Modal.Actions>
@@ -174,9 +215,9 @@ class WantedObject extends Component {
                     onChange={this.props.onDistanceChange}
                   >
                     <option value="any">any distance</option>
-                    <option value="close">close (0-150m)</option>
-                    <option value="medium">medium (150-500m)</option>
-                    <option value="far">far (500-1000m)</option>
+                    <option value="close">close</option>
+                    <option value="medium">medium</option>
+                    <option value="far">far</option>
                   </Form.Field>
                 </Form>
               </Grid.Column>

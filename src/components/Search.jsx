@@ -221,11 +221,44 @@ class Search extends Component {
 
             if (this.state.spm.status.isFiltered) {
               this.state.general.handler.toogleLoading();
+
+              const checkDistance = dist => {
+                if (dist === 3000) return -1;
+                return dist;
+              };
+              let wantedObjectsParameter = this.state.spm.data.wantedObjects.map(
+                wantedObj => {
+                  let dist;
+                  const distValue = my.state.spm.data.distOption.data.value;
+                  if (wantedObj.dist === "any") dist = [0, -1];
+                  else if (wantedObj.dist === "close")
+                    dist = [
+                      checkDistance(distValue[0]),
+                      checkDistance(distValue[1])
+                    ];
+                  else if (wantedObj.dist === "medium")
+                    dist = [
+                      checkDistance(distValue[1]),
+                      checkDistance(distValue[2])
+                    ];
+                  else
+                    dist = [
+                      checkDistance(distValue[2]),
+                      checkDistance(distValue[3])
+                    ];
+                  return {
+                    keyword: wantedObj.keyword,
+                    dir: wantedObj.dir,
+                    dist: dist
+                  };
+                }
+              );
+
               axios({
                 method: "post",
                 url: global.projectConstant.apiURL + "/alg/spm_simple",
                 params: params,
-                data: { wantedObjects: this.state.spm.data.wantedObjects }
+                data: { wantedObjects: wantedObjectsParameter }
               }).then(res => {
                 let newState = { ...my.state };
                 newState.general.data.queries = res.data.houseData;
@@ -406,7 +439,21 @@ class Search extends Component {
             options: poiOptions
           },
           wantedObjects: [],
-          poiData: []
+          poiData: [],
+          distOption: {
+            data: {
+              default: [0, 150, 300, 500],
+              value: [0, 150, 300, 500],
+              unit: "m"
+            },
+            handler: {
+              rangeValueUpdate: value => {
+                let newState = my.state;
+                newState.spm.data.distOption.data.value = value;
+                my.setState(newState);
+              }
+            }
+          }
         },
         handler: {
           handleChange: (e, { value }) => {
