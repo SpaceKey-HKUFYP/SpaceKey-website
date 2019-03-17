@@ -158,6 +158,7 @@ class SpmFilter extends Component {
                 min={0}
                 max={3000}
                 count={3}
+                pushable={100}
               />
             </div>
           </Segment>

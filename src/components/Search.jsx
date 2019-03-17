@@ -228,28 +228,26 @@ class Search extends Component {
               };
               let wantedObjectsParameter = this.state.spm.data.wantedObjects.map(
                 wantedObj => {
-                  let dist;
+                  let lower, upper;
                   const distValue = my.state.spm.data.distOption.data.value;
-                  if (wantedObj.dist === "any") dist = [0, -1];
-                  else if (wantedObj.dist === "close")
-                    dist = [
-                      checkDistance(distValue[0]),
-                      checkDistance(distValue[1])
-                    ];
-                  else if (wantedObj.dist === "medium")
-                    dist = [
-                      checkDistance(distValue[1]),
-                      checkDistance(distValue[2])
-                    ];
-                  else
-                    dist = [
-                      checkDistance(distValue[2]),
-                      checkDistance(distValue[3])
-                    ];
+                  if (wantedObj.dist === "any") {
+                    lower = 0;
+                    upper = -1;
+                  } else if (wantedObj.dist === "close") {
+                    lower = checkDistance(distValue[0]);
+                    upper = checkDistance(distValue[1]);
+                  } else if (wantedObj.dist === "medium") {
+                    lower = checkDistance(distValue[1]);
+                    upper = checkDistance(distValue[2]);
+                  } else {
+                    lower = checkDistance(distValue[2]);
+                    upper = checkDistance(distValue[3]);
+                  }
                   return {
                     keyword: wantedObj.keyword,
                     dir: wantedObj.dir,
-                    dist: dist
+                    lower: lower,
+                    upper: upper
                   };
                 }
               );
@@ -507,14 +505,12 @@ class Search extends Component {
           onClearButtonClicked: () => {
             let newState = { ...my.state };
 
-            newState.spm.data = {
-              poiInput: {
-                value: [],
-                options: poiOptions
-              },
-              wantedObjects: [],
-              poiData: []
+            newState.spm.data.poiInput = {
+              value: [],
+              options: poiOptions
             };
+            newState.spm.data.wantedObjects = [];
+            newState.spm.data.poiData = [];
 
             newState.spm.status.isFiltered = false;
 
