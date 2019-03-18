@@ -122,7 +122,6 @@ class Search extends Component {
     this.ft2 = "sq.ft.";
 
     this.state = {
-
       general: {
         status: {
           navigationBarContext: null,
@@ -135,7 +134,6 @@ class Search extends Component {
           sortedHouse: []
         },
         handler: {
-			
           toogleLoading: () => {
             let newState = my.state;
             newState.general.status.isLoading = !newState.general.status
@@ -538,22 +536,18 @@ class Search extends Component {
         }
       },
 
-	  custom_obj: {
-		  status: {
-			  open: false
-		  },
-		  data: {
-
-		  }
-		  handler: {
-
-			  onApplyButtonClicked: () => {
-				  this.state.search.handler.requestToAPI();
-				  this.general.handler.openHandler("spm", false);
-			  }
-		  }
-	  }
-
+      custom_obj: {
+        status: {
+          open: false
+        },
+        data: {},
+        handler: {
+          onApplyButtonClicked: () => {
+            this.state.search.handler.requestToAPI();
+            this.general.handler.openHandler("spm", false);
+          }
+        }
+      },
       sort: {
         value: "default",
         options: [
@@ -619,7 +613,8 @@ class Search extends Component {
       grossArea,
       price,
       spm,
-      sort
+      sort,
+      custom_obj
     } = this.state;
 
     let where;
@@ -731,19 +726,19 @@ class Search extends Component {
                         size="small"
                       />
 
-					  <Button
-					  	style={{marginLeft:"10px"}}
-					    onClick={() => general.handler.openHandler("spm", true)}
-					    size="mini"
-					  >
-					  	Add Custom Object
-					  </Button>
-					  <CustomObject
-						  data={custom_obj.data}
-						  handler={custom_obj.handler}
-						  status={custom_obj.status}
-						  size="small"
-						/>
+                      <Button
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => general.handler.openHandler("spm", true)}
+                        size="mini"
+                      >
+                        Add Custom Object
+                      </Button>
+                      <CustomObject
+                        data={custom_obj.data}
+                        handler={custom_obj.handler}
+                        status={custom_obj.status}
+                        size="small"
+                      />
 
                       <div className="floatRight">
                         sort:&nbsp;

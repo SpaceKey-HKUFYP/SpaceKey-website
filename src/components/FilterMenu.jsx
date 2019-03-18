@@ -184,29 +184,25 @@ class SpmFilter extends Component {
 }
 
 class CustomObject extends Component {
-	render() {
-	  const handler = this.props.handler;
-	  return (
-		<Modal
-		  size={this.props.size}
-		  id="custom-object-modal"
-		>
-		  <Modal.Header> Custom Object </Modal.Header>
-		  <Modal.Content> Custom Object </Modal.Content>
-		  <Modal.Actions>
-			<Button
-			  positive
-			  icon="checkmark"
-			  labelPosition="right"
-			  content="Apply"
-			  onClick={handler.onApplyButtonClicked}
-			/>
-		  </Modal.Actions>
-		</Modal>
-	);
+  render() {
+    const handler = this.props.handler;
+    return (
+      <Modal size={this.props.size} id="custom-object-modal">
+        <Modal.Header> Custom Object </Modal.Header>
+        <Modal.Content> Custom Object </Modal.Content>
+        <Modal.Actions>
+          <Button
+            positive
+            icon="checkmark"
+            labelPosition="right"
+            content="Apply"
+            onClick={handler.onApplyButtonClicked}
+          />
+        </Modal.Actions>
+      </Modal>
+    );
   }
 }
-
 
 class WantedObject extends Component {
   render() {
@@ -244,7 +240,7 @@ class WantedObject extends Component {
                     <option value="close">close</option>
                     <option value="medium">medium</option>
                     <option value="far">far</option>
-                    <option value="inf">unwanted</optiom>
+                    <option value="inf">unwanted</option>
                   </Form.Field>
                 </Form>
               </Grid.Column>
