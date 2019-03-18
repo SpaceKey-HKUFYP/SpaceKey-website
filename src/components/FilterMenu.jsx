@@ -183,6 +183,31 @@ class SpmFilter extends Component {
   }
 }
 
+class CustomObject extends Component {
+	render() {
+	  const handler = this.props.handler;
+	  return (
+		<Modal
+		  size={this.props.size}
+		  id="custom-object-modal"
+		>
+		  <Modal.Header> Custom Object </Modal.Header>
+		  <Modal.Content> Custom Object </Modal.Content>
+		  <Modal.Actions>
+			<Button
+			  positive
+			  icon="checkmark"
+			  labelPosition="right"
+			  content="Apply"
+			  onClick={handler.onApplyButtonClicked}
+			/>
+		  </Modal.Actions>
+		</Modal>
+	);
+  }
+}
+
+
 class WantedObject extends Component {
   render() {
     return (
@@ -231,5 +256,5 @@ class WantedObject extends Component {
   }
 }
 
-export { ScrollFilter, SpmFilter };
+export { ScrollFilter, SpmFilter, CustomObject };
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };

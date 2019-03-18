@@ -12,7 +12,7 @@ import {
   Loader,
   Dimmer
 } from "semantic-ui-react";
-import { SpmFilter, ScrollFilter } from "./FilterMenu";
+import { SpmFilter, ScrollFilter, CustomObject } from "./FilterMenu";
 import NavigationBar from "./NavigationBar";
 import HouseList from "./HouseList";
 import axios from "axios";
@@ -122,6 +122,7 @@ class Search extends Component {
     this.ft2 = "sq.ft.";
 
     this.state = {
+
       general: {
         status: {
           navigationBarContext: null,
@@ -134,37 +135,42 @@ class Search extends Component {
           sortedHouse: []
         },
         handler: {
+			
           toogleLoading: () => {
             let newState = my.state;
             newState.general.status.isLoading = !newState.general.status
               .isLoading;
             my.setState(newState);
           },
+
           navigationBarContextHandler: ref => {
             let newState = my.state;
             newState.general.status.navigationBarContext = ref;
             my.setState(newState);
           },
+
           filterBarContextHandler: ref => {
             let newState = my.state;
             newState.general.status.filterBarContext = ref;
             my.setState(newState);
           },
+
           openHandler: (typeButton, isOpen) => {
             let newState = my.state;
             newState[typeButton].status.open = isOpen;
             my.setState(newState);
           },
+
           rangeValueUpdate: (typeButton, value) => {
             let newState = my.state;
             newState[typeButton].data.value = value;
             my.setState(newState);
           },
+
           onAfterValueUpdated: typeButton => {
             let newState = my.state;
             let data = newState[typeButton].data;
             let status = newState[typeButton].status;
-
             if (data.value[0] === data.min && data.value[1] === data.max) {
               status.isFiltered = false;
               status.text = status.defaultText;
@@ -178,7 +184,6 @@ class Search extends Component {
                 data.unit +
                 (data.value[1] === data.max ? "+" : "");
             }
-
             newState.general.data.filteredHouse = filterHouse(
               newState.general.data.queries
             );
@@ -188,6 +193,7 @@ class Search extends Component {
           }
         }
       },
+
       search: {
         status: {
           activeItem: "sell"
@@ -221,13 +227,10 @@ class Search extends Component {
 
               type: this.state.search.status.activeItem
             };
-
             // const data = new FormData();
             // data.set("wantedObjects", this.state.spm.data.wantedObjects);
-
             if (this.state.spm.status.isFiltered) {
               this.state.general.handler.toogleLoading();
-
               const checkDistance = dist => {
                 if (dist === 3000) return -1;
                 return dist;
@@ -260,7 +263,6 @@ class Search extends Component {
                   };
                 }
               );
-
               axios({
                 method: "post",
                 url: global.projectConstant.apiURL + "/alg/spm_simple",
@@ -329,6 +331,7 @@ class Search extends Component {
           }
         }
       },
+
       bedrooms: {
         status: {
           open: false,
@@ -356,6 +359,7 @@ class Search extends Component {
             this.state.general.handler.onAfterValueUpdated("bedrooms")
         }
       },
+
       saleableArea: {
         status: {
           open: false,
@@ -383,6 +387,7 @@ class Search extends Component {
             this.state.general.handler.onAfterValueUpdated("saleableArea")
         }
       },
+
       grossArea: {
         status: {
           open: false,
@@ -410,6 +415,7 @@ class Search extends Component {
             this.state.general.handler.onAfterValueUpdated("grossArea")
         }
       },
+
       price: {
         status: {
           open: false,
@@ -437,6 +443,7 @@ class Search extends Component {
             this.state.general.handler.onAfterValueUpdated("price")
         }
       },
+
       spm: {
         status: {
           open: false,
@@ -530,6 +537,23 @@ class Search extends Component {
           }
         }
       },
+
+	  custom_obj: {
+		  status: {
+			  open: false
+		  },
+		  data: {
+
+		  }
+		  handler: {
+
+			  onApplyButtonClicked: () => {
+				  this.state.search.handler.requestToAPI();
+				  this.general.handler.openHandler("spm", false);
+			  }
+		  }
+	  }
+
       sort: {
         value: "default",
         options: [
@@ -706,6 +730,21 @@ class Search extends Component {
                         status={spm.status}
                         size="small"
                       />
+
+					  <Button
+					  	style={{marginLeft:"10px"}}
+					    onClick={() => general.handler.openHandler("spm", true)}
+					    size="mini"
+					  >
+					  	Add Custom Object
+					  </Button>
+					  <CustomObject
+						  data={custom_obj.data}
+						  handler={custom_obj.handler}
+						  status={custom_obj.status}
+						  size="small"
+						/>
+
                       <div className="floatRight">
                         sort:&nbsp;
                         <Dropdown
