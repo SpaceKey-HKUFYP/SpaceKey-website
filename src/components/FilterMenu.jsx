@@ -219,6 +219,7 @@ class WantedObject extends Component {
                     <option value="close">close</option>
                     <option value="medium">medium</option>
                     <option value="far">far</option>
+                    <option value="inf">unwanted</optiom>
                   </Form.Field>
                 </Form>
               </Grid.Column>

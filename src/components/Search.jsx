@@ -245,9 +245,12 @@ class Search extends Component {
                   } else if (wantedObj.dist === "medium") {
                     lower = checkDistance(distValue[1]);
                     upper = checkDistance(distValue[2]);
-                  } else {
+                  } else if (wantedObj.dist === "far") {
                     lower = checkDistance(distValue[2]);
                     upper = checkDistance(distValue[3]);
+                  } else {
+                    lower = -1;
+                    upper = -1;
                   }
                   return {
                     keyword: wantedObj.keyword,
