@@ -31,7 +31,7 @@ import "../constant";
 // 	public int netFloorArea;
 // 	public String floor;
 // 	public String address;
-// 	public String postDate;
+// 	public long postDate;
 // 	public double lat;
 // 	public double lng;
 // 	public String title;
@@ -110,7 +110,11 @@ class Search extends Component {
 
     const filterHouse = data => {
       return filterBasedOnSaleableArea(
-        filterBasedOnGrossArea(filterBasedOnPrice(filterBasedOnBedrooms(data)))
+        filterBasedOnGrossArea(
+          filterBasedOnPrice(
+            filterBasedOnBedrooms(JSON.parse(JSON.stringify(data)))
+          )
+        )
       );
     };
 
@@ -126,7 +130,8 @@ class Search extends Component {
         },
         data: {
           queries: [],
-          filteredHouse: []
+          filteredHouse: [],
+          sortedHouse: []
         },
         handler: {
           toogleLoading: () => {
@@ -177,8 +182,9 @@ class Search extends Component {
             newState.general.data.filteredHouse = filterHouse(
               newState.general.data.queries
             );
-
             my.setState(newState);
+
+            my.state.sort.updateSorted();
           }
         }
       },
@@ -263,8 +269,10 @@ class Search extends Component {
                 newState.general.data.filteredHouse = filterHouse(
                   newState.general.data.queries
                 );
+
                 newState.spm.data.poiData = res.data.poiData;
                 my.setState(newState);
+                my.state.sort.updateSorted();
                 this.state.general.handler.toogleLoading();
               });
             } else {
@@ -280,6 +288,7 @@ class Search extends Component {
                   newState.general.data.queries
                 );
                 my.setState(newState);
+                my.state.sort.updateSorted();
                 this.state.general.handler.toogleLoading();
               });
             }
@@ -535,7 +544,41 @@ class Search extends Component {
             text: "smallest saleable area",
             value: "smallestArea"
           }
-        ]
+        ],
+        handler: {
+          onChange: (e, { value }) => {
+            let newState = { ...my.state };
+            newState.sort.value = value;
+            my.setState(newState);
+
+            my.state.sort.updateSorted();
+          }
+        },
+        updateSorted: () => {
+          let newState = { ...my.state };
+          const method = newState.sort.value;
+
+          newState.general.data.sortedHouse = JSON.parse(
+            JSON.stringify(newState.general.data)
+          ).filteredHouse;
+
+          let sorted = newState.general.data.sortedHouse;
+
+          if (method === "default") {
+          } else if (method === "recent") {
+            sorted.sort((a, b) => (a.postDate > b.postDate ? 1 : -1));
+          } else if (method === "highestPrice") {
+            sorted.sort((a, b) => (a.price < b.price ? 1 : -1));
+          } else if (method === "lowestPrice") {
+            sorted.sort((a, b) => (a.price > b.price ? 1 : -1));
+          } else if (method === "largestArea") {
+            sorted.sort((a, b) => (a.saleableArea < b.saleableArea ? 1 : -1));
+          } else {
+            sorted.sort((a, b) => (a.saleableArea > b.saleableArea ? 1 : -1));
+          }
+
+          my.setState(newState);
+        }
       }
     };
   }
@@ -665,6 +708,7 @@ class Search extends Component {
                         <Dropdown
                           options={sort.options}
                           defaultValue={sort.value}
+                          onChange={sort.handler.onChange}
                         />
                       </div>
                     </div>
@@ -685,7 +729,7 @@ class Search extends Component {
           >
             <Grid.Column style={{ maxWidth: "1400px" }}>
               <HouseList
-                data={general.data.filteredHouse}
+                data={general.data.sortedHouse}
                 poi={spm.data.poiData}
               />
             </Grid.Column>

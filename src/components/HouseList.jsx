@@ -51,6 +51,15 @@ class HouseList extends Component {
         bedroomsInfo = result.bedrooms + " bedrooms";
       }
 
+      const grossAreaDisplay =
+        result.grossArea === 0
+          ? ""
+          : "Gross area:" + result.grossArea + "sq.ft.";
+      const saleableAreaDisplay =
+        result.saleableArea === 0
+          ? ""
+          : "Saleable area:" + result.saleableArea + "sq.ft.";
+
       return (
         <Segment
           key={result.address + result.pageURL}
@@ -73,12 +82,8 @@ class HouseList extends Component {
             {" "}
             Price: {result.price / 10000}萬 HKD
             <Header.Subheader>
-              {" "}
-              {"Gross area:" +
-                result.grossArea +
-                "sq.ft. | Saleable area:" +
-                result.saleableArea +
-                "sq.ft."}
+              <div>{grossAreaDisplay}</div>
+              <div> {saleableAreaDisplay}</div>
             </Header.Subheader>
           </Header>
           <Header as="h4" floated="left">
