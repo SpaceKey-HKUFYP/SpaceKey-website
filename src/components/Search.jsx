@@ -758,7 +758,7 @@ class Search extends Component {
                         data={spm.data}
                         handler={spm.handler}
                         status={spm.status}
-                        size="small"
+                        size="medium"
                       />
 
                       <Button
