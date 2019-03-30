@@ -3,7 +3,6 @@
 - Pattern display for SPM filter
 - Custom Objects w/ Google Maps API routing
 - Handling the Exceptions of data
-- Page System
 
 ## DONE
 
@@ -11,3 +10,4 @@
 - Directional Relations
 - Survey
 - Sorting System (Front-end)
+- Page System
