@@ -166,6 +166,7 @@ class HouseList extends Component {
               status={this.state}
               poi={this.props.poi}
               customObjects={this.props.customObjects}
+              mapCenter={this.props.mapCenter}
             />
           </Segment>
         </Grid.Column>
