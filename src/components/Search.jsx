@@ -48,7 +48,6 @@ import "../constant";
 class Search extends Component {
   constructor(props) {
     super(props);
-
     Array.prototype.diff = function(a) {
       return this.filter(function(i) {
         return a.indexOf(i) < 0;
@@ -225,8 +224,6 @@ class Search extends Component {
 
               type: this.state.search.status.activeItem
             };
-            // const data = new FormData();
-            // data.set("wantedObjects", this.state.spm.data.wantedObjects);
             if (this.state.spm.status.isFiltered) {
               this.state.general.handler.toogleLoading();
               const checkDistance = dist => {
@@ -276,6 +273,7 @@ class Search extends Component {
                 newState.spm.data.poiData = res.data.poiData;
                 my.setState(newState);
                 my.state.sort.updateSorted();
+                this.state.map.handler.setCenter();
                 this.state.general.handler.toogleLoading();
               });
             } else {
@@ -490,15 +488,12 @@ class Search extends Component {
                 }
               );
             }
-
             newState.spm.data.poiInput.value = value;
-
             if (value.length === 0) {
               newState.spm.status.isFiltered = false;
             } else {
               newState.spm.status.isFiltered = true;
             }
-
             my.setState(newState);
           },
           wantedObjectChange: (keyword, distOrDir, value) => {
@@ -521,16 +516,13 @@ class Search extends Component {
           },
           onClearButtonClicked: () => {
             let newState = { ...my.state };
-
             newState.spm.data.poiInput = {
               value: [],
               options: poiOptions
             };
             newState.spm.data.wantedObjects = [];
             newState.spm.data.poiData = [];
-
             newState.spm.status.isFiltered = false;
-
             my.setState(newState);
           }
         }
@@ -540,14 +532,46 @@ class Search extends Component {
         status: {
           open: false
         },
-        data: {},
+        data: { customObjectNameInput: "", customObjects: [] },
         handler: {
-          onApplyButtonClicked: () => {
-            this.state.search.handler.requestToAPI();
-            this.general.handler.openHandler("spm", false);
+          closeModal: () => {
+            my.state.general.handler.openHandler("custom_obj", false);
+
+            var newState = { ...my.state };
+            newState.custom_obj.data.customObjectNameInput = "";
+            my.setState(newState);
+          },
+          customObjectNameInputHandler: (e, { value }) => {
+            let newState = my.state;
+            newState.custom_obj.data.customObjectNameInput = value;
+            my.setState(newState);
+          },
+          addCustomObjectHandler: () => {
+            if (!my.state.custom_obj.status.isAddingCustomObject) {
+              var newState = { ...my.state };
+              const name = newState.custom_obj.data.customObjectNameInput;
+
+              var customObjectAdded = { pos: this.state.map.data.center };
+              if (name === "")
+                customObjectAdded.name =
+                  "c" + newState.custom_obj.data.customObjects.length;
+              else customObjectAdded.name = name;
+
+              newState.custom_obj.data.customObjects.push(customObjectAdded);
+              newState.custom_obj.data.customObjectNameInput = "";
+
+              my.setState(newState);
+
+              my.state.general.handler.openHandler("custom_obj", false);
+
+              alert("click on the map to add custom object");
+
+              console.log(my.state.custom_obj.data.customObjects);
+            }
           }
         }
       },
+
       sort: {
         value: "default",
         options: [
@@ -562,7 +586,7 @@ class Search extends Component {
           },
           {
             key: "smallestArea",
-            text: "smallest saleable area",
+            text: "Smallest saleable area",
             value: "smallestArea"
           }
         ],
@@ -571,7 +595,6 @@ class Search extends Component {
             let newState = { ...my.state };
             newState.sort.value = value;
             my.setState(newState);
-
             my.state.sort.updateSorted();
           }
         },
@@ -600,6 +623,17 @@ class Search extends Component {
 
           my.setState(newState);
         }
+      },
+
+      map: {
+        data: { center: { lat: 22.3964, lng: 114.1095 } },
+        handler: {
+          getCenter: (lat, lng) => {
+            var newState = { ...my.state };
+            newState.map.data.center = { lat: lat, lng: lng };
+            my.setState(newState);
+          }
+        }
       }
     };
   }
@@ -614,7 +648,8 @@ class Search extends Component {
       price,
       spm,
       sort,
-      custom_obj
+      custom_obj,
+      map
     } = this.state;
 
     let where;
@@ -723,12 +758,14 @@ class Search extends Component {
                         data={spm.data}
                         handler={spm.handler}
                         status={spm.status}
-                        size="small"
+                        size="medium"
                       />
 
                       <Button
                         style={{ marginLeft: "10px" }}
-                        onClick={() => general.handler.openHandler("spm", true)}
+                        onClick={() =>
+                          general.handler.openHandler("custom_obj", true)
+                        }
                         size="mini"
                       >
                         Add Custom Object
@@ -737,7 +774,7 @@ class Search extends Component {
                         data={custom_obj.data}
                         handler={custom_obj.handler}
                         status={custom_obj.status}
-                        size="small"
+                        size="mini"
                       />
 
                       <div className="floatRight">
@@ -768,6 +805,7 @@ class Search extends Component {
               <HouseList
                 data={general.data.sortedHouse}
                 poi={spm.data.poiData}
+                customObjects={custom_obj.data.customObjects}
               />
             </Grid.Column>
           </Grid>

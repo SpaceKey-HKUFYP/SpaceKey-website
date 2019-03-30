@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import {
   Button,
   Modal,
-  Tab,
   Grid,
   Label,
   Dropdown,
   Form,
   Header,
-  Segment
+  Segment,
+  Input
 } from "semantic-ui-react";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
@@ -69,10 +69,17 @@ class ScrollFilter extends Component {
   }
 }
 
+class SpmGraph extends Component {
+  render() {
+    return <div />;
+  }
+}
+
 class SpmFilter extends Component {
   render() {
-    const { poiInput, wantedObjects, distOption } = this.props.data;
-    const handler = this.props.handler;
+    const { status, handler, data } = this.props;
+    const { poiInput, wantedObjects, distOption } = data;
+
     const listOfWantedObjects = wantedObjects.map(val => {
       return (
         <WantedObject
@@ -118,51 +125,60 @@ class SpmFilter extends Component {
       return dist + distUnit;
     };
 
-    const rangeLabel =
-      "close: " +
-      distToLabel(distVal[0]) +
-      " - " +
-      distToLabel(distVal[1]) +
-      ", medium: " +
-      distToLabel(distVal[1]) +
-      " - " +
-      distToLabel(distVal[2]) +
-      ", far: " +
-      distToLabel(distVal[2]) +
-      " - " +
-      distToLabel(distVal[3]);
+    const rangeLabel1 =
+      "close: " + distToLabel(distVal[0]) + " - " + distToLabel(distVal[1]);
+    const rangeLabel2 =
+      "medium: " + distToLabel(distVal[1]) + " - " + distToLabel(distVal[2]);
+    const rangeLabel3 =
+      "far: " + distToLabel(distVal[2]) + " - " + distToLabel(distVal[3]);
 
     return (
       <Modal
         size={this.props.size}
-        open={this.props.status.open}
+        open={status.open}
         onClose={handler.closeModal}
         id="spm-modal"
       >
         <Modal.Header>SPM</Modal.Header>
         <Modal.Content>
-          <Segment>
-            <div style={{ padding: "10px" }}>{rangeLabel}</div>
-            <div className="scrollFilter-range-wrapper">
-              <Range
-                value={distOption.data.value}
-                default={distOption.data.default}
-                onChange={distOption.handler.rangeValueUpdate}
-                step={1}
-                marks={{
-                  0: "0m",
-                  1000: "1000m",
-                  2000: "2000m",
-                  3000: "Infinity"
+          <Grid>
+            <Grid.Column width={10}>
+              <Segment>
+                <div style={{ padding: "10px" }}>{rangeLabel1} </div>
+                <div style={{ padding: "10px" }}>{rangeLabel2} </div>
+                <div style={{ padding: "10px" }}>{rangeLabel3} </div>
+                <div className="scrollFilter-range-wrapper">
+                  <Range
+                    value={distOption.data.value}
+                    default={distOption.data.default}
+                    onChange={distOption.handler.rangeValueUpdate}
+                    step={1}
+                    marks={{
+                      0: "0m",
+                      1000: "1000m",
+                      2000: "2000m",
+                      3000: "Infinity"
+                    }}
+                    min={0}
+                    max={3000}
+                    count={3}
+                    pushable={100}
+                  />
+                </div>
+              </Segment>
+              <SimplePanel />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <canvas
+                id="myCanvas"
+                style={{
+                  border: "1px solid #000000",
+                  width: "100%",
+                  height: "100%"
                 }}
-                min={0}
-                max={3000}
-                count={3}
-                pushable={100}
-              />
-            </div>
-          </Segment>
-          <SimplePanel />
+              />{" "}
+            </Grid.Column>
+          </Grid>
         </Modal.Content>
         <Modal.Actions>
           <Button
@@ -185,20 +201,29 @@ class SpmFilter extends Component {
 
 class CustomObject extends Component {
   render() {
-    const handler = this.props.handler;
+    const { data, status, handler } = this.props;
     return (
-      <Modal size={this.props.size} id="custom-object-modal">
+      <Modal
+        size={this.props.size}
+        id="custom-object-modal"
+        open={status.open}
+        onClose={handler.closeModal}
+      >
         <Modal.Header> Custom Object </Modal.Header>
-        <Modal.Content> Custom Object </Modal.Content>
-        <Modal.Actions>
+        <Modal.Content>
+          <Input
+            placeholder="Name"
+            value={data.customObjectNameInput}
+            onChange={handler.customObjectNameInputHandler}
+          />
           <Button
             positive
             icon="checkmark"
             labelPosition="right"
             content="Apply"
-            onClick={handler.onApplyButtonClicked}
+            onClick={handler.addCustomObjectHandler}
           />
-        </Modal.Actions>
+        </Modal.Content>
       </Modal>
     );
   }
