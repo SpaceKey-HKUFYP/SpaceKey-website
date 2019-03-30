@@ -48,7 +48,6 @@ import "../constant";
 class Search extends Component {
   constructor(props) {
     super(props);
-
     Array.prototype.diff = function(a) {
       return this.filter(function(i) {
         return a.indexOf(i) < 0;
@@ -490,15 +489,12 @@ class Search extends Component {
                 }
               );
             }
-
             newState.spm.data.poiInput.value = value;
-
             if (value.length === 0) {
               newState.spm.status.isFiltered = false;
             } else {
               newState.spm.status.isFiltered = true;
             }
-
             my.setState(newState);
           },
           wantedObjectChange: (keyword, distOrDir, value) => {
@@ -521,16 +517,13 @@ class Search extends Component {
           },
           onClearButtonClicked: () => {
             let newState = { ...my.state };
-
             newState.spm.data.poiInput = {
               value: [],
               options: poiOptions
             };
             newState.spm.data.wantedObjects = [];
             newState.spm.data.poiData = [];
-
             newState.spm.status.isFiltered = false;
-
             my.setState(newState);
           }
         }
@@ -544,10 +537,10 @@ class Search extends Component {
         handler: {
           onApplyButtonClicked: () => {
             this.state.search.handler.requestToAPI();
-            this.general.handler.openHandler("spm", false);
           }
         }
       },
+
       sort: {
         value: "default",
         options: [
@@ -571,7 +564,6 @@ class Search extends Component {
             let newState = { ...my.state };
             newState.sort.value = value;
             my.setState(newState);
-
             my.state.sort.updateSorted();
           }
         },

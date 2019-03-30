@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
   Button,
   Modal,
-  Tab,
   Grid,
   Label,
   Dropdown,
