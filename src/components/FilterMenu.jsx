@@ -125,19 +125,12 @@ class SpmFilter extends Component {
       return dist + distUnit;
     };
 
-    const rangeLabel =
-      "close: " +
-      distToLabel(distVal[0]) +
-      " - " +
-      distToLabel(distVal[1]) +
-      ", medium: " +
-      distToLabel(distVal[1]) +
-      " - " +
-      distToLabel(distVal[2]) +
-      ", far: " +
-      distToLabel(distVal[2]) +
-      " - " +
-      distToLabel(distVal[3]);
+    const rangeLabel1 =
+      "close: " + distToLabel(distVal[0]) + " - " + distToLabel(distVal[1]);
+    const rangeLabel2 =
+      "medium: " + distToLabel(distVal[1]) + " - " + distToLabel(distVal[2]);
+    const rangeLabel3 =
+      "far: " + distToLabel(distVal[2]) + " - " + distToLabel(distVal[3]);
 
     return (
       <Modal
@@ -148,28 +141,44 @@ class SpmFilter extends Component {
       >
         <Modal.Header>SPM</Modal.Header>
         <Modal.Content>
-          <Segment>
-            <div style={{ padding: "10px" }}>{rangeLabel}</div>
-            <div className="scrollFilter-range-wrapper">
-              <Range
-                value={distOption.data.value}
-                default={distOption.data.default}
-                onChange={distOption.handler.rangeValueUpdate}
-                step={1}
-                marks={{
-                  0: "0m",
-                  1000: "1000m",
-                  2000: "2000m",
-                  3000: "Infinity"
+          <Grid>
+            <Grid.Column width={10}>
+              <Segment>
+                <div style={{ padding: "10px" }}>{rangeLabel1} </div>
+                <div style={{ padding: "10px" }}>{rangeLabel2} </div>
+                <div style={{ padding: "10px" }}>{rangeLabel3} </div>
+                <div className="scrollFilter-range-wrapper">
+                  <Range
+                    value={distOption.data.value}
+                    default={distOption.data.default}
+                    onChange={distOption.handler.rangeValueUpdate}
+                    step={1}
+                    marks={{
+                      0: "0m",
+                      1000: "1000m",
+                      2000: "2000m",
+                      3000: "Infinity"
+                    }}
+                    min={0}
+                    max={3000}
+                    count={3}
+                    pushable={100}
+                  />
+                </div>
+              </Segment>
+              <SimplePanel />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <canvas
+                id="myCanvas"
+                style={{
+                  border: "1px solid #000000",
+                  width: "100%",
+                  height: "100%"
                 }}
-                min={0}
-                max={3000}
-                count={3}
-                pushable={100}
-              />
-            </div>
-          </Segment>
-          <SimplePanel />
+              />{" "}
+            </Grid.Column>
+          </Grid>
         </Modal.Content>
         <Modal.Actions>
           <Button
