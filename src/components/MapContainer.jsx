@@ -14,8 +14,6 @@ import { Link } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
 import "../constant";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
 class MapContainer extends Component {
   constructor(props) {
     super(props);
