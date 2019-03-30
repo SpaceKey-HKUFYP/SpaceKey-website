@@ -7,7 +7,8 @@ import {
   Sticky,
   Header,
   Label,
-  Popup
+  Popup,
+  Menu
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
@@ -24,7 +25,8 @@ class MapContainer extends Component {
     };
     this.zoom = 15;
     this.state = {
-      show: null
+      show: null,
+      showAddButton: { show: false, lat: 0, lng: 0 }
     };
   }
 
@@ -62,6 +64,7 @@ class MapContainer extends Component {
   }
 
   render() {
+    const { poi, customObjects, data } = this.props;
     this.setCenter();
 
     var colors = global.projectConstant.colors.slice();
@@ -69,13 +72,13 @@ class MapContainer extends Component {
 
     var i;
 
-    for (i = 0; i < this.props.poi.length; i++) {
-      if (poiToColor[this.props.poi[i].searchKey] === undefined) {
-        poiToColor[this.props.poi[i].searchKey] = colors.pop();
+    for (i = 0; i < poi.length; i++) {
+      if (poiToColor[poi[i].searchKey] === undefined) {
+        poiToColor[poi[i].searchKey] = colors.pop();
       }
     }
 
-    const listOfPoi = this.props.poi.map(poi => {
+    const listOfPoi = poi.map(poi => {
       return (
         <Button
           compact
@@ -91,7 +94,7 @@ class MapContainer extends Component {
       );
     });
 
-    const listOfHouse = this.props.data.map(result => {
+    const listOfHouse = data.map(result => {
       const price_v2 = result.price / 10000;
       const flag_focus = result.id === this.props.status.focus;
       const flag_show = result.id === this.state.show;
@@ -149,16 +152,37 @@ class MapContainer extends Component {
       }
     });
 
+    const my = this;
+    var _onClick = ({ x, y, lat, lng, event }) => {
+      // if(customObjects.status.)
+    };
+
     return (
       <div id="map" style={{ height: "100%", width: "100%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyA2cdiYB3xgDumC7eu-1FTkMJkZPyHotlc" }}
           center={this.center}
           zoom={this.zoom}
+          onClick={_onClick}
         >
           {listOfHouse}
           {listOfPoi}
         </GoogleMapReact>
+      </div>
+    );
+  }
+}
+
+class AddCustomObjectButton extends Component {
+  render() {
+    const displayOption = this.props.show
+      ? { display: "block" }
+      : { display: "none" };
+    return (
+      <div style={displayOption}>
+        <Button compact size="tiny" style={{ textAlign: "center" }}>
+          add custom object
+        </Button>
       </div>
     );
   }

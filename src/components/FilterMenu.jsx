@@ -8,7 +8,8 @@ import {
   Dropdown,
   Form,
   Header,
-  Segment
+  Segment,
+  Input
 } from "semantic-ui-react";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
@@ -69,10 +70,17 @@ class ScrollFilter extends Component {
   }
 }
 
+class SpmGraph extends Component {
+  render() {
+    return <div />;
+  }
+}
+
 class SpmFilter extends Component {
   render() {
-    const { poiInput, wantedObjects, distOption } = this.props.data;
-    const handler = this.props.handler;
+    const { status, handler, data } = this.props;
+    const { poiInput, wantedObjects, distOption } = data;
+
     const listOfWantedObjects = wantedObjects.map(val => {
       return (
         <WantedObject
@@ -135,7 +143,7 @@ class SpmFilter extends Component {
     return (
       <Modal
         size={this.props.size}
-        open={this.props.status.open}
+        open={status.open}
         onClose={handler.closeModal}
         id="spm-modal"
       >
@@ -185,20 +193,29 @@ class SpmFilter extends Component {
 
 class CustomObject extends Component {
   render() {
-    const handler = this.props.handler;
+    const { data, status, handler } = this.props;
     return (
-      <Modal size={this.props.size} id="custom-object-modal">
+      <Modal
+        size={this.props.size}
+        id="custom-object-modal"
+        open={status.open}
+        onClose={handler.closeModal}
+      >
         <Modal.Header> Custom Object </Modal.Header>
-        <Modal.Content> Custom Object </Modal.Content>
-        <Modal.Actions>
+        <Modal.Content>
+          <Input
+            placeholder="Name"
+            value={data.customObjectNameInput}
+            onChange={handler.customObjectNameInputHandler}
+          />
           <Button
             positive
             icon="checkmark"
             labelPosition="right"
             content="Apply"
-            onClick={handler.onApplyButtonClicked}
+            onClick={handler.addCustomObjectHandler}
           />
-        </Modal.Actions>
+        </Modal.Content>
       </Modal>
     );
   }

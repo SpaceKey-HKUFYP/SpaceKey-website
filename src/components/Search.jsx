@@ -225,8 +225,6 @@ class Search extends Component {
 
               type: this.state.search.status.activeItem
             };
-            // const data = new FormData();
-            // data.set("wantedObjects", this.state.spm.data.wantedObjects);
             if (this.state.spm.status.isFiltered) {
               this.state.general.handler.toogleLoading();
               const checkDistance = dist => {
@@ -538,13 +536,45 @@ class Search extends Component {
 
       custom_obj: {
         status: {
-          open: false
+          open: false,
+          isAddingCustomObject: false
         },
-        data: {},
+        data: { customObjectNameInput: "", customObjects: [] },
         handler: {
-          onApplyButtonClicked: () => {
-            this.state.search.handler.requestToAPI();
-            this.general.handler.openHandler("spm", false);
+          closeModal: () => {
+            my.state.general.handler.openHandler("custom_obj", false);
+
+            var newState = { ...my.state };
+            newState.custom_obj.data.customObjectNameInput = "";
+            my.setState(newState);
+          },
+          customObjectNameInputHandler: (e, { value }) => {
+            let newState = my.state;
+            newState.custom_obj.data.customObjectNameInput = value;
+            my.setState(newState);
+          },
+          addCustomObjectHandler: () => {
+            if (!my.state.custom_obj.status.isAddingCustomObject) {
+              var newState = { ...my.state };
+              const name = newState.custom_obj.data.customObjectNameInput;
+
+              if (name === "")
+                newState.custom_obj.data.customObjects.push({
+                  name: "c" + newState.custom_obj.data.customObjects.length
+                });
+              else newState.custom_obj.data.customObjects.push({ name: name });
+
+              newState.custom_obj.data.customObjectNameInput = "";
+              newState.custom_obj.status.isAddingCustomObject = true;
+
+              my.setState(newState);
+
+              my.state.general.handler.openHandler("custom_obj", false);
+
+              alert("click on the map to add custom object");
+
+              console.log(my.state.custom_obj.data.customObjects);
+            }
           }
         }
       },
@@ -562,7 +592,7 @@ class Search extends Component {
           },
           {
             key: "smallestArea",
-            text: "smallest saleable area",
+            text: "Smallest saleable area",
             value: "smallestArea"
           }
         ],
@@ -728,7 +758,9 @@ class Search extends Component {
 
                       <Button
                         style={{ marginLeft: "10px" }}
-                        onClick={() => general.handler.openHandler("spm", true)}
+                        onClick={() =>
+                          general.handler.openHandler("custom_obj", true)
+                        }
                         size="mini"
                       >
                         Add Custom Object
@@ -737,7 +769,7 @@ class Search extends Component {
                         data={custom_obj.data}
                         handler={custom_obj.handler}
                         status={custom_obj.status}
-                        size="small"
+                        size="mini"
                       />
 
                       <div className="floatRight">
@@ -768,6 +800,7 @@ class Search extends Component {
               <HouseList
                 data={general.data.sortedHouse}
                 poi={spm.data.poiData}
+                customObjects={custom_obj}
               />
             </Grid.Column>
           </Grid>

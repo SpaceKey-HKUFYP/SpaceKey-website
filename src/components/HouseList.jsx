@@ -109,6 +109,7 @@ class HouseList extends Component {
               data={this.props.data}
               status={this.state}
               poi={this.props.poi}
+              customObjects={this.props.customObjects}
             />
           </Segment>
         </Grid.Column>
