@@ -42,21 +42,23 @@ class HouseList extends Component {
     const housesPerPage = 10;
     const numOfPages = Math.ceil(this.props.data.length / housesPerPage);
 
-    // Calculate the list of button strings
-    var buttonList = ["<"];
-    if (this.state.currPage - 2 > 1) buttonList.push("...");
-    // Calculate starting point & ending point
-    var start, end;
-    if (this.state.currPage - 2 >= 1) start = this.state.currPage - 2;
-    else start = 1;
-    if (start + 4 <= numOfPages) end = start + 4;
-    else end = numOfPages;
-    // Push number strings to the list
-    for (var i = start; i <= end; i++) {
-      if (i >= 1 && i <= numOfPages) buttonList.push(String(i));
-    }
-    if (this.state.currPage + 2 < numOfPages) buttonList.push("...");
-    buttonList.push(">");
+    if (numOfPages !== 0) {
+      // Calculate the list of button strings
+      var buttonList = ["<"];
+      if (this.state.currPage - 2 > 1) buttonList.push("...");
+      // Calculate starting point & ending point
+      var start, end;
+      if (this.state.currPage - 2 >= 1) start = this.state.currPage - 2;
+      else start = 1;
+      if (start + 4 <= numOfPages) end = start + 4;
+      else end = numOfPages;
+      // Push number strings to the list
+      for (var i = start; i <= end; i++) {
+        if (i >= 1 && i <= numOfPages) buttonList.push(String(i));
+      }
+      if (this.state.currPage + 2 < numOfPages) buttonList.push("...");
+      buttonList.push(">");
+    } else buttonList = [];
 
     const listOfPages = buttonList.map(param => {
       var color = "default";
@@ -150,10 +152,11 @@ class HouseList extends Component {
     return (
       <Grid divided={false} padded={false} stretched={false}>
         <Grid.Column width={6} className="listOfHouse">
-          <Button.Group>{listOfPages}</Button.Group>
           {listOfHouse}
         </Grid.Column>
         <Grid.Column width={10}>
+          <Button.Group>{listOfPages}</Button.Group>
+
           <Segment style={{ height: "600px", padding: "0px" }}>
             <MapContainer
               data={this.props.data.slice(
