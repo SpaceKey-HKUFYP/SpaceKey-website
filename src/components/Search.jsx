@@ -278,7 +278,6 @@ class Search extends Component {
                 newState.spm.data.poiData = res.data.poiData;
                 my.setState(newState);
                 my.state.sort.updateSorted();
-                this.state.map.handler.setCenter();
                 this.state.general.handler.toogleLoading();
               });
             } else {
