@@ -290,7 +290,6 @@ class Search extends Component {
                 );
                 my.setState(newState);
                 my.state.sort.updateSorted();
-                this.state.map.handler.setCenter();
                 this.state.general.handler.toogleLoading();
               });
             }
@@ -531,8 +530,7 @@ class Search extends Component {
 
       custom_obj: {
         status: {
-          open: false,
-          isAddingCustomObject: false
+          open: false
         },
         data: { customObjectNameInput: "", customObjects: [] },
         handler: {
@@ -553,14 +551,14 @@ class Search extends Component {
               var newState = { ...my.state };
               const name = newState.custom_obj.data.customObjectNameInput;
 
+              var customObjectAdded = { pos: this.state.map.data.center };
               if (name === "")
-                newState.custom_obj.data.customObjects.push({
-                  name: "c" + newState.custom_obj.data.customObjects.length
-                });
-              else newState.custom_obj.data.customObjects.push({ name: name });
+                customObjectAdded.name =
+                  "c" + newState.custom_obj.data.customObjects.length;
+              else customObjectAdded.name = name;
 
+              newState.custom_obj.data.customObjects.push(customObjectAdded);
               newState.custom_obj.data.customObjectNameInput = "";
-              newState.custom_obj.status.isAddingCustomObject = true;
 
               my.setState(newState);
 
@@ -570,11 +568,6 @@ class Search extends Component {
 
               console.log(my.state.custom_obj.data.customObjects);
             }
-          },
-          setisAddingCustomObject: isAdding => {
-            let newState = my.state;
-            newState.custom_obj.status.isAddingCustomObject = isAdding;
-            my.setState(newState);
           }
         }
       },
@@ -635,34 +628,9 @@ class Search extends Component {
       map: {
         data: { center: { lat: 22.3964, lng: 114.1095 } },
         handler: {
-          setCenter: () => {
-            let min_lat = 500,
-              max_lat = 0,
-              min_lng = 500,
-              max_lng = 0,
-              avg_lat = 0,
-              avg_lng = 0;
-            const houseData = my.state.general.data.queries;
-
-            houseData.forEach(function(prop) {
-              if (prop.lat < min_lat) min_lat = prop.lat;
-              if (prop.lat > max_lat) max_lat = prop.lat;
-              if (prop.lng < min_lng) min_lng = prop.lng;
-              if (prop.lng > max_lng) max_lng = prop.lng;
-              avg_lat += prop.lat;
-              avg_lng += prop.lng;
-            });
-            if (houseData.length !== 0) {
-              avg_lat /= houseData.length;
-              avg_lng /= houseData.length;
-            }
-
+          getCenter: (lat, lng) => {
             var newState = { ...my.state };
-
-            if (avg_lat === 0 && avg_lng === 0)
-              newState.map.data.center = { lat: 22.3964, lng: 114.1095 };
-            else newState.map.data.center = { lat: avg_lat, lng: avg_lng };
-
+            newState.map.data.center = { lat: lat, lng: lng };
             my.setState(newState);
           }
         }
@@ -837,8 +805,7 @@ class Search extends Component {
               <HouseList
                 data={general.data.sortedHouse}
                 poi={spm.data.poiData}
-                customObjects={custom_obj}
-                mapCenter={map.data.center}
+                customObjects={custom_obj.data.customObjects}
               />
             </Grid.Column>
           </Grid>

@@ -24,6 +24,8 @@ class HouseList extends Component {
       show: null,
       currPage: 1
     };
+
+    const housesPerPage = 10;
   }
 
   mouseEnter(id) {
@@ -38,9 +40,37 @@ class HouseList extends Component {
     this.setState({ show: id });
   }
 
+  getCenter() {
+    let min_lat = 500,
+      max_lat = 0,
+      min_lng = 500,
+      max_lng = 0,
+      avg_lat = 0,
+      avg_lng = 0;
+    const houseData = this.props.data.slice(
+      this.housesPerPage * (this.state.currPage - 1),
+      this.housesPerPage * this.state.currPage
+    );
+
+    houseData.forEach(function(prop) {
+      if (prop.lat < min_lat) min_lat = prop.lat;
+      if (prop.lat > max_lat) max_lat = prop.lat;
+      if (prop.lng < min_lng) min_lng = prop.lng;
+      if (prop.lng > max_lng) max_lng = prop.lng;
+      avg_lat += prop.lat;
+      avg_lng += prop.lng;
+    });
+    if (houseData.length !== 0) {
+      avg_lat /= houseData.length;
+      avg_lng /= houseData.length;
+    }
+
+    if (avg_lat === 0 && avg_lng === 0) return { lat: 22.3964, lng: 114.1095 };
+    else return { lat: avg_lat, lng: avg_lng };
+  }
+
   render() {
-    const housesPerPage = 10;
-    const numOfPages = Math.ceil(this.props.data.length / housesPerPage);
+    const numOfPages = Math.ceil(this.props.data.length / this.housesPerPage);
 
     if (numOfPages !== 0) {
       // Calculate the list of button strings
@@ -86,8 +116,8 @@ class HouseList extends Component {
     });
     const listOfHouse = this.props.data
       .slice(
-        housesPerPage * (this.state.currPage - 1),
-        housesPerPage * this.state.currPage
+        this.housesPerPage * (this.state.currPage - 1),
+        this.housesPerPage * this.state.currPage
       )
       .map(result => {
         let bedroomsInfo;
@@ -160,13 +190,12 @@ class HouseList extends Component {
           <Segment style={{ height: "600px", padding: "0px" }}>
             <MapContainer
               data={this.props.data.slice(
-                housesPerPage * (this.state.currPage - 1),
-                housesPerPage * this.state.currPage
+                this.housesPerPage * (this.state.currPage - 1),
+                this.housesPerPage * this.state.currPage
               )}
               status={this.state}
               poi={this.props.poi}
               customObjects={this.props.customObjects}
-              mapCenter={this.props.mapCenter}
             />
           </Segment>
         </Grid.Column>
