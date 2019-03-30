@@ -54,6 +54,11 @@ class Search extends Component {
       });
     };
 
+    this.getCenter = center => {
+      this.state.custom_obj.data.center = center;
+      console.log(center);
+    };
+
     const regionOptions = global.projectConstant.regionName;
 
     const poiOptions = global.projectConstant.poiOptions;
@@ -806,6 +811,7 @@ class Search extends Component {
                 data={general.data.sortedHouse}
                 poi={spm.data.poiData}
                 customObjects={custom_obj.data.customObjects}
+                passCenter={this.getCenter}
               />
             </Grid.Column>
           </Grid>

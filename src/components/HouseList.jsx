@@ -25,7 +25,7 @@ class HouseList extends Component {
       currPage: 1
     };
 
-    const housesPerPage = 10;
+    this.housesPerPage = 10;
   }
 
   mouseEnter(id) {
@@ -51,7 +51,6 @@ class HouseList extends Component {
       this.housesPerPage * (this.state.currPage - 1),
       this.housesPerPage * this.state.currPage
     );
-
     houseData.forEach(function(prop) {
       if (prop.lat < min_lat) min_lat = prop.lat;
       if (prop.lat > max_lat) max_lat = prop.lat;
@@ -64,9 +63,9 @@ class HouseList extends Component {
       avg_lat /= houseData.length;
       avg_lng /= houseData.length;
     }
-
-    if (avg_lat === 0 && avg_lng === 0) return { lat: 22.3964, lng: 114.1095 };
-    else return { lat: avg_lat, lng: avg_lng };
+    if (avg_lat === 0 && avg_lng === 0)
+      this.props.passCenter({ lat: 22.3964, lng: 114.1095 });
+    else this.props.passCenter({ lat: avg_lat, lng: avg_lng });
   }
 
   render() {
@@ -179,6 +178,7 @@ class HouseList extends Component {
         );
       });
 
+    this.getCenter();
     return (
       <Grid divided={false} padded={false} stretched={false}>
         <Grid.Column width={6} className="listOfHouse">
