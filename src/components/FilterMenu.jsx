@@ -199,36 +199,6 @@ class SpmFilter extends Component {
   }
 }
 
-class CustomObject extends Component {
-  render() {
-    const { data, status, handler } = this.props;
-    return (
-      <Modal
-        size={this.props.size}
-        id="custom-object-modal"
-        open={status.open}
-        onClose={handler.closeModal}
-      >
-        <Modal.Header> Custom Object </Modal.Header>
-        <Modal.Content>
-          <Input
-            placeholder="Name"
-            value={data.customObjectNameInput}
-            onChange={handler.customObjectNameInputHandler}
-          />
-          <Button
-            positive
-            icon="checkmark"
-            labelPosition="right"
-            content="Apply"
-            onClick={handler.addCustomObjectHandler}
-          />
-        </Modal.Content>
-      </Modal>
-    );
-  }
-}
-
 class WantedObject extends Component {
   render() {
     return (
@@ -277,5 +247,5 @@ class WantedObject extends Component {
   }
 }
 
-export { ScrollFilter, SpmFilter, CustomObject };
+export { ScrollFilter, SpmFilter };
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };

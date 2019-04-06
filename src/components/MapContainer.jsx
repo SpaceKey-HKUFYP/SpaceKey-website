@@ -24,7 +24,7 @@ class MapContainer extends Component {
       show: null,
       showAddButton: { show: false, lat: 0, lng: 0 }
     };
-    console.log("constructed with state id" + this.state.show)
+    console.log("constructed with state id" + this.state.show);
   }
 
   mouseEnter(id) {
@@ -51,11 +51,13 @@ class MapContainer extends Component {
       if (prop.lng < min_lng) min_lng = prop.lng;
       if (prop.lng > max_lng) max_lng = prop.lng;
 
-      if(Math.abs(prop.lat - avg_lat/count) > 1 || Math.abs(prop.lng - avg_lng/count) > 1){
+      if (
+        Math.abs(prop.lat - avg_lat / count) > 1 ||
+        Math.abs(prop.lng - avg_lng / count) > 1
+      ) {
         //console.log("!!!!!!!")
         //console.log(prop)
-      }
-      else {
+      } else {
         avg_lat += prop.lat;
         avg_lng += prop.lng;
         count += 1;
@@ -85,6 +87,22 @@ class MapContainer extends Component {
       }
     }
 
+    const listOfMapCustomObject = customObjects.map(customObject => {
+      return (
+        <Button
+          compact
+          size="tiny"
+          style={{ textAlign: "center" }}
+          key={customObject.id}
+          color="grey"
+          lng={customObject.pos.lng}
+          lat={customObject.pos.lat}
+        >
+          {customObject.name}
+        </Button>
+      );
+    });
+
     const listOfPoi = poi.map(poi => {
       return (
         <Button
@@ -102,12 +120,13 @@ class MapContainer extends Component {
     });
 
     const listOfHouse = data.map(result => {
-      const price_v2 = result.type === "rent"
-        ? result.rent/1000.0 + "k"
-          :result.price / 1000000.0 + "M";
+      const price_v2 =
+        result.type === "rent"
+          ? result.rent / 1000.0 + "k"
+          : result.price / 1000000.0 + "M";
       const flag_focus = result.id === this.props.status.focus;
       const flag_show = result.id === this.state.show;
-      if(result.id === this.state.show) console.log("!!!!!!!!!!!")
+      if (result.id === this.state.show) console.log("!!!!!!!!!!!");
 
       if (!flag_show) {
         return (
@@ -120,13 +139,12 @@ class MapContainer extends Component {
             key={result.id}
             color={flag_focus ? "red" : "twitter"}
             onMouseEnter={() => this.mouseEnter(result.id)}
-
           >
             ${price_v2}
           </Button>
         );
       } else {
-        console.log("display popup")
+        console.log("display popup");
         return (
           <Popup
             lat={result.lat}
@@ -163,22 +181,6 @@ class MapContainer extends Component {
     });
 
     this.setCenter();
-    var _onClick = ({ x, y, lat, lng, event }) => {};
-
-    // const listOfCustomObject = customObjects.map(customObject => {
-    //   return (
-    //     <Button
-    //       compact
-    //       size="tiny"
-    //       style={{ textAlign: "center" }}
-    //       key={customObject.name}
-    //       lat={customObject.pos.lat}
-    //       lng={customObject.pos.lng}
-    //     >
-    //       {customObject.name}
-    //     </Button>
-    //   );
-    // });
 
     return (
       <div id="map" style={{ height: "100%", width: "100%" }}>
@@ -186,26 +188,11 @@ class MapContainer extends Component {
           bootstrapURLKeys={{ key: "AIzaSyA2cdiYB3xgDumC7eu-1FTkMJkZPyHotlc" }}
           center={this.center}
           zoom={this.zoom}
-          onClick={_onClick}
         >
           {listOfHouse}
           {listOfPoi}
+          {listOfMapCustomObject}
         </GoogleMapReact>
-      </div>
-    );
-  }
-}
-
-class AddCustomObjectButton extends Component {
-  render() {
-    const displayOption = this.props.show
-      ? { display: "block" }
-      : { display: "none" };
-    return (
-      <div style={displayOption}>
-        <Button compact size="tiny" style={{ textAlign: "center" }}>
-          add custom object
-        </Button>
       </div>
     );
   }

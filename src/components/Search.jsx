@@ -12,9 +12,10 @@ import {
   Loader,
   Dimmer
 } from "semantic-ui-react";
-import { SpmFilter, ScrollFilter, CustomObject } from "./FilterMenu";
+import { SpmFilter, ScrollFilter } from "./FilterMenu";
 import NavigationBar from "./NavigationBar";
 import HouseList from "./HouseList";
+import CustomObject from "./CustomObject";
 import axios from "axios";
 
 import "../layout.css";
@@ -52,11 +53,6 @@ class Search extends Component {
       return this.filter(function(i) {
         return a.indexOf(i) < 0;
       });
-    };
-
-    this.getCenter = center => {
-      this.state.custom_obj.data.center = center;
-      console.log(center);
     };
 
     const regionOptions = global.projectConstant.regionName;
@@ -534,28 +530,32 @@ class Search extends Component {
 
       custom_obj: {
         status: {
-          open: false
+          open: false,
+          keyGenerator: 0,
+          selected: null
         },
-        data: { customObjectNameInput: "", customObjects: [] },
+        data: {
+          customObjectNameInput: "",
+          customObjects: []
+        },
         handler: {
           closeModal: () => {
             my.state.general.handler.openHandler("custom_obj", false);
-
-            var newState = { ...my.state };
-            newState.custom_obj.data.customObjectNameInput = "";
-            my.setState(newState);
           },
           customObjectNameInputHandler: (e, { value }) => {
             let newState = my.state;
             newState.custom_obj.data.customObjectNameInput = value;
             my.setState(newState);
           },
-          addCustomObjectHandler: () => {
+          addCustomObjectHandler: pos => {
             if (!my.state.custom_obj.status.isAddingCustomObject) {
               var newState = { ...my.state };
               const name = newState.custom_obj.data.customObjectNameInput;
 
-              var customObjectAdded = { pos: this.state.map.data.center };
+              var customObjectAdded = {
+                pos: pos,
+                id: newState.custom_obj.status.keyGenerator
+              };
               if (name === "")
                 customObjectAdded.name =
                   "c" + newState.custom_obj.data.customObjects.length;
@@ -564,14 +564,49 @@ class Search extends Component {
               newState.custom_obj.data.customObjects.push(customObjectAdded);
               newState.custom_obj.data.customObjectNameInput = "";
 
+              newState.custom_obj.status.keyGenerator =
+                newState.custom_obj.status.keyGenerator + 1;
+
               my.setState(newState);
-
-              my.state.general.handler.openHandler("custom_obj", false);
-
-              alert("click on the map to add custom object");
-
-              console.log(my.state.custom_obj.data.customObjects);
             }
+          },
+          removeCustomObjectHandler: id => {
+            var newState = { ...my.state };
+            newState.custom_obj.data.customObjects = newState.custom_obj.data.customObjects.filter(
+              customObjects => customObjects.id !== id
+            );
+
+            newState.custom_obj.selected = null;
+            my.setState(newState);
+          },
+          updatePosition: (lat, lng) => {
+            if (this.state.custom_obj.status.selected !== null) {
+              var newState = { ...my.state };
+
+              newState.custom_obj.data.customObjects = newState.custom_obj.data.customObjects.map(
+                customObject => {
+                  if (customObject.id === newState.custom_obj.status.selected)
+                    customObject.pos = { lat: lat, lng: lng };
+                  return customObject;
+                }
+              );
+
+              newState.custom_obj.status.selected = null;
+              my.setState(newState);
+            }
+          },
+          updateSelected: id => {
+            setTimeout(function() {
+              var newState = { ...my.state };
+
+              if (newState.custom_obj.status.selected === id) {
+                newState.custom_obj.status.selected = null;
+              } else {
+                newState.custom_obj.status.selected = id;
+              }
+
+              my.setState(newState);
+            }, 50);
           }
         }
       },
@@ -627,17 +662,6 @@ class Search extends Component {
 
           my.setState(newState);
         }
-      },
-
-      map: {
-        data: { center: { lat: 22.3964, lng: 114.1095 } },
-        handler: {
-          getCenter: (lat, lng) => {
-            var newState = { ...my.state };
-            newState.map.data.center = { lat: lat, lng: lng };
-            my.setState(newState);
-          }
-        }
       }
     };
   }
@@ -661,11 +685,6 @@ class Search extends Component {
       where = "Hong Kong";
     } else {
       where = search.data.value;
-    }
-
-    let spmButtonColor = "grey";
-    if (spm.status.isFiltered) {
-      spmButtonColor = "red";
     }
 
     return (
@@ -753,7 +772,7 @@ class Search extends Component {
 
                       <Button
                         onClick={() => general.handler.openHandler("spm", true)}
-                        color={spmButtonColor}
+                        color={spm.status.isFiltered ? "red" : "grey"}
                         size="mini"
                       >
                         SPM
@@ -771,6 +790,11 @@ class Search extends Component {
                           general.handler.openHandler("custom_obj", true)
                         }
                         size="mini"
+                        color={
+                          custom_obj.data.customObjects.length === 0
+                            ? "grey"
+                            : "red"
+                        }
                       >
                         Add Custom Object
                       </Button>
@@ -778,7 +802,7 @@ class Search extends Component {
                         data={custom_obj.data}
                         handler={custom_obj.handler}
                         status={custom_obj.status}
-                        size="mini"
+                        size="large"
                       />
 
                       <div className="floatRight">

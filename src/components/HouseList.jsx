@@ -40,34 +40,6 @@ class HouseList extends Component {
     this.setState({ show: id });
   }
 
-  getCenter() {
-    let min_lat = 500,
-      max_lat = 0,
-      min_lng = 500,
-      max_lng = 0,
-      avg_lat = 0,
-      avg_lng = 0;
-    const houseData = this.props.data.slice(
-      this.housesPerPage * (this.state.currPage - 1),
-      this.housesPerPage * this.state.currPage
-    );
-    houseData.forEach(function(prop) {
-      if (prop.lat < min_lat) min_lat = prop.lat;
-      if (prop.lat > max_lat) max_lat = prop.lat;
-      if (prop.lng < min_lng) min_lng = prop.lng;
-      if (prop.lng > max_lng) max_lng = prop.lng;
-      avg_lat += prop.lat;
-      avg_lng += prop.lng;
-    });
-    if (houseData.length !== 0) {
-      avg_lat /= houseData.length;
-      avg_lng /= houseData.length;
-    }
-    if (avg_lat === 0 && avg_lng === 0)
-      this.props.passCenter({ lat: 22.3964, lng: 114.1095 });
-    else this.props.passCenter({ lat: avg_lat, lng: avg_lng });
-  }
-
   render() {
     const numOfPages = Math.ceil(this.props.data.length / this.housesPerPage);
 
@@ -95,7 +67,6 @@ class HouseList extends Component {
       return (
         <Button
           onClick={() => {
-            console.log(param);
             if (param === "<") {
               if (this.state.currPage !== 1)
                 this.setState({ currPage: this.state.currPage - 1 });
@@ -141,8 +112,8 @@ class HouseList extends Component {
             : "Saleable area:" + result.saleableArea + "sq.ft.";
         const propertyPrice =
           result.type === "rent"
-            ? "Price : " + result.rent/ 1000.0 + "k HKD"
-            : "Price : " + result.price / 1000000.0 + "M HKD"
+            ? "Price : " + result.rent / 1000.0 + "k HKD"
+            : "Price : " + result.price / 1000000.0 + "M HKD";
 
         return (
           <Segment
@@ -182,7 +153,6 @@ class HouseList extends Component {
         );
       });
 
-    this.getCenter();
     return (
       <Grid divided={false} padded={false} stretched={false}>
         <Grid.Column width={6} className="listOfHouse">
