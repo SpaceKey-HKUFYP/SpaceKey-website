@@ -158,3 +158,8 @@
 #custom-object-modal {
   top: 50px;
 }
+
+.map-object {
+  text-align: center;
+  transform: translate(-50%, -50%);
+}

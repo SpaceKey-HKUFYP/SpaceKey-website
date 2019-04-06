@@ -78,9 +78,9 @@ class MapContainer extends Component {
     const listOfMapCustomObject = customObjects.map(customObject => {
       return (
         <Button
+          className="map-object"
           compact
           size="tiny"
-          style={{ textAlign: "center" }}
           key={customObject.id}
           color="grey"
           lng={customObject.pos.lng}
@@ -94,9 +94,9 @@ class MapContainer extends Component {
     const listOfPoi = poi.map(poi => {
       return (
         <Button
+          className="map-object"
           compact
           size="tiny"
-          style={{ textAlign: "center" }}
           key={poi.id}
           lat={poi.lat}
           lng={poi.lng}
@@ -119,9 +119,9 @@ class MapContainer extends Component {
       if (!flag_show) {
         return (
           <Button
+            className="map-object"
             compact
             size="tiny"
-            style={{ textAlign: "center" }}
             lat={result.lat}
             lng={result.lng}
             key={result.id}
@@ -141,9 +141,9 @@ class MapContainer extends Component {
             on="focus"
             trigger={
               <Button
+                className="map-object"
                 compact
                 size="tiny"
-                style={{ textAlign: "center" }}
                 key={result.id}
                 color={flag_focus ? "red" : "twitter"}
                 onMouseLeave={() => this.mouseLeave(result.id)}

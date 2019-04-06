@@ -65,9 +65,9 @@ class CustomObject extends Component {
     const listOfMapCustomObject = data.customObjects.map(customObject => {
       return (
         <Button
+          className="map-object"
           compact
           size="tiny"
-          style={{ textAlign: "center" }}
           key={customObject.id}
           color={status.selected === customObject.id ? "linkedin" : "grey"}
           lng={customObject.pos.lng}
