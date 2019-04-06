@@ -1,20 +1,8 @@
 import React, { Component } from "react";
-import {
-  Segment,
-  Grid,
-  Image,
-  Button,
-  Sticky,
-  Header,
-  Label,
-  Popup,
-  Menu
-} from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Button, Popup } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import "../constant";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 class MapContainer extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +12,7 @@ class MapContainer extends Component {
       show: null,
       showAddButton: { show: false, lat: 0, lng: 0 }
     };
-    console.log("constructed with state id" + this.state.show)
+    console.log("constructed with state id" + this.state.show);
   }
 
   mouseEnter(id) {
@@ -51,11 +39,13 @@ class MapContainer extends Component {
       if (prop.lng < min_lng) min_lng = prop.lng;
       if (prop.lng > max_lng) max_lng = prop.lng;
 
-      if(Math.abs(prop.lat - avg_lat/count) > 1 || Math.abs(prop.lng - avg_lng/count) > 1){
+      if (
+        Math.abs(prop.lat - avg_lat / count) > 1 ||
+        Math.abs(prop.lng - avg_lng / count) > 1
+      ) {
         //console.log("!!!!!!!")
         //console.log(prop)
-      }
-      else {
+      } else {
         avg_lat += prop.lat;
         avg_lng += prop.lng;
         count += 1;
@@ -102,12 +92,13 @@ class MapContainer extends Component {
     });
 
     const listOfHouse = data.map(result => {
-      const price_v2 = result.type === "rent"
-        ? result.rent/1000.0 + "k"
-          :result.price / 1000000.0 + "M";
+      const price_v2 =
+        result.type === "rent"
+          ? result.rent / 1000.0 + "k"
+          : result.price / 1000000.0 + "M";
       const flag_focus = result.id === this.props.status.focus;
       const flag_show = result.id === this.state.show;
-      if(result.id === this.state.show) console.log("!!!!!!!!!!!")
+      if (result.id === this.state.show) console.log("!!!!!!!!!!!");
 
       if (!flag_show) {
         return (
@@ -120,13 +111,12 @@ class MapContainer extends Component {
             key={result.id}
             color={flag_focus ? "red" : "twitter"}
             onMouseEnter={() => this.mouseEnter(result.id)}
-
           >
             ${price_v2}
           </Button>
         );
       } else {
-        console.log("display popup")
+        console.log("display popup");
         return (
           <Popup
             lat={result.lat}
