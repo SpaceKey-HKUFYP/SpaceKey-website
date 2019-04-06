@@ -1,20 +1,8 @@
 import React, { Component } from "react";
-import {
-  Segment,
-  Grid,
-  Image,
-  Button,
-  Sticky,
-  Header,
-  Label,
-  Popup,
-  Menu
-} from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Button, Popup } from "semantic-ui-react";
 import GoogleMapReact from "google-map-react";
 import "../constant";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 class MapContainer extends Component {
   constructor(props) {
     super(props);

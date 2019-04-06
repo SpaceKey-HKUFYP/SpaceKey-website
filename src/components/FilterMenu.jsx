@@ -70,8 +70,113 @@ class ScrollFilter extends Component {
 }
 
 class SpmGraph extends Component {
+  constructor(props) {
+    super(props);
+
+    const drawPOI = pois => {
+      const canvas = this.refs.canvas;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+
+      for (var poi in pois) {
+        if (poi.dist.equals("close")) {
+        } else if (poi.dist.equals("medium")) {
+        } else if (poi.dist.equals("far")) {
+        }
+
+        if (poi.dir.equals("north")) {
+        } else if (poi.dir.equals("south")) {
+        } else if (poi.dir.equals("west")) {
+        } else if (poi.dir.equals("east")) {
+        }
+      }
+    };
+
+    const blinkPOI = poi => {
+      const canvas = this.refs.canvas;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+
+      if (poi.dist.equals("close")) {
+      } else if (poi.dist.equals("medium")) {
+      } else if (poi.dist.equals("far")) {
+      }
+
+      if (poi.dir.equals("north")) {
+      } else if (poi.dir.equals("south")) {
+      } else if (poi.dir.equals("west")) {
+      } else if (poi.dir.equals("east")) {
+      }
+    };
+
+    this.state = {
+      status: {},
+      data: {},
+      handler: {}
+    };
+  }
+
+  componentDidMount() {
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
+    canvas.setAttribute("width", w);
+    canvas.setAttribute("height", h);
+
+    //  circles
+    const maxR = Math.min(w, h) / 2 - 1;
+    for (var i = 3; i >= 1; i--) {
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, (maxR / 3) * i, 0, 2 * Math.PI);
+      // set colors for sections
+      if (i === 1) ctx.fillStyle = "green";
+      else if (i === 2) ctx.fillStyle = "yellow";
+      else if (i === 3) ctx.fillStyle = "red";
+      // draw circles
+      ctx.fill();
+      if (i !== 3) ctx.stroke();
+      else {
+        const step = Math.PI / 30;
+        for (let b = 0, e = step / 2; e <= 2 * Math.PI; b += step, e += step) {
+          ctx.beginPath();
+          ctx.arc(w / 2, h / 2, maxR, b, e);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // lines
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, h);
+    ctx.moveTo(0, h);
+    ctx.lineTo(w, 0);
+    ctx.stroke();
+
+    // directions text
+    ctx.font = "15px Georgia";
+    const offset = 15;
+    ctx.fillText("N", w / 2, 0 + offset);
+    ctx.fillText("S", w / 2, h);
+    ctx.fillText("E", w - offset, h / 2);
+    ctx.fillText("W", 0, h / 2);
+  }
+
   render() {
-    return <div />;
+    return (
+      <canvas
+        ref="canvas"
+        style={{
+          border: "0px solid #000000",
+          width: "100%",
+          height: "100%"
+        }}
+      />
+    );
   }
 }
 
@@ -169,14 +274,7 @@ class SpmFilter extends Component {
               <SimplePanel />
             </Grid.Column>
             <Grid.Column width={6}>
-              <canvas
-                id="myCanvas"
-                style={{
-                  border: "1px solid #000000",
-                  width: "100%",
-                  height: "100%"
-                }}
-              />{" "}
+              <SpmGraph />
             </Grid.Column>
           </Grid>
         </Modal.Content>
@@ -247,5 +345,5 @@ class WantedObject extends Component {
   }
 }
 
-export { ScrollFilter, SpmFilter };
+export { ScrollFilter, SpmFilter, SpmGraph };
 // export default Price_Modal, HomeType_Modal, MoreFilters_Modal };
