@@ -479,6 +479,11 @@ class Search extends Component {
                 dist: "any",
                 isCustomObject: false
               });
+
+              newState.spm.status.isFiltered = true;
+              newState.spm.data.poiInput.value = value;
+              console.log(newState.spm.data.wantedObjects);
+              my.setState(newState);
             } else {
               const diffValue = oldValue.diff(value)[0];
 
@@ -494,19 +499,19 @@ class Search extends Component {
                 }
               );
 
+              newState.spm.data.poiInput.value = value;
+
+              if (value.length === 0) {
+                newState.spm.status.isFiltered = false;
+              }
+
+              my.setState(newState);
               if (removedCustomObject.isCustomObject) {
                 this.state.customObject.handler.removeCustomObjectHandler(
-                  removedCustomObject.name
+                  removedCustomObject.keyword
                 );
               }
             }
-            newState.spm.data.poiInput.value = value;
-            if (value.length === 0) {
-              newState.spm.status.isFiltered = false;
-            } else {
-              newState.spm.status.isFiltered = true;
-            }
-            my.setState(newState);
           },
           wantedObjectChange: (keyword, distOrDir, value) => {
             let newState = { ...my.state };
@@ -518,6 +523,7 @@ class Search extends Component {
 
             my.setState(newState);
           },
+
           closeModal: () => {
             this.state.general.handler.openHandler("spm", false);
             this.state.search.handler.requestToAPI();
@@ -544,6 +550,33 @@ class Search extends Component {
             });
 
             newState.spm.status.isFiltered = true;
+
+            my.setState(newState);
+          },
+          removeCustomObject: value => {
+            var newState = { ...my.state };
+
+            newState.spm.data.poiInput.options = newState.spm.data.poiInput.options.filter(
+              function(obj) {
+                return obj.key !== value;
+              }
+            );
+
+            newState.spm.data.poiInput.value = newState.spm.data.poiInput.value.filter(
+              function(obj) {
+                return obj !== value;
+              }
+            );
+
+            newState.spm.data.wantedObjects = newState.spm.data.wantedObjects.filter(
+              function(obj) {
+                return obj.keyword !== value;
+              }
+            );
+
+            if (value.length === 0) {
+              newState.spm.status.isFiltered = false;
+            }
 
             my.setState(newState);
           }
@@ -606,6 +639,8 @@ class Search extends Component {
 
             newState.customObject.selected = null;
             my.setState(newState);
+
+            this.state.spm.handler.removeCustomObject(name);
           },
           updatePosition: (lat, lng) => {
             if (this.state.customObject.status.selected !== null) {

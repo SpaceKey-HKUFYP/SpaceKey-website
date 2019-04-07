@@ -120,7 +120,7 @@ class SpmFilter extends Component {
         open={status.open}
         onClose={handler.closeModal}
         id="spm-modal"
-        style={{ height: "500px" }}
+        style={{ minHeight: "500px" }}
       >
         <Modal.Header>SPM</Modal.Header>
         <Modal.Content style={{ height: "100%" }}>
