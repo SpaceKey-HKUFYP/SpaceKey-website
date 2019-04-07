@@ -55,7 +55,6 @@ class Search extends Component {
     };
 
     const regionOptions = global.projectConstant.regionName;
-
     const poiOptions = global.projectConstant.poiOptions;
 
     const filterBasedOnBedrooms = data => {

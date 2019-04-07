@@ -100,17 +100,33 @@ class SpmGraph extends Component {
       const ctx = canvas.getContext("2d");
       const w = canvas.offsetWidth;
       const h = canvas.offsetHeight;
-
+      const maxR = Math.min(w, h) / 2 - 1;
+      // decide the radius, start angle, end angle.
+      var r, s, t;
       if (poi.dist.equals("close")) {
+        r = (maxR / 3) * 1;
       } else if (poi.dist.equals("medium")) {
+        r = (maxR / 3) * 2;
       } else if (poi.dist.equals("far")) {
+        r = (maxR / 3) * 3;
       }
-
       if (poi.dir.equals("north")) {
+        s = -Math.PI / 4;
+        t = Math.PI / 4;
       } else if (poi.dir.equals("south")) {
+        s = Math.PI / 4;
+        t = Math.PI / 4 + Math.PI / 2;
       } else if (poi.dir.equals("west")) {
+        s = Math.PI / 4 + Math.PI / 2;
+        t = Math.PI / 4 + (Math.PI / 2) * 2;
       } else if (poi.dir.equals("east")) {
+        s = Math.PI / 4 + (Math.PI / 2) * 2;
+        t = Math.PI / 4 + (Math.PI / 2) * 3;
       }
+      // fill the shape
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, r, s, t);
+      ctx.fill();
     };
 
     this.state = {
@@ -127,7 +143,6 @@ class SpmGraph extends Component {
     const h = canvas.offsetHeight;
     canvas.setAttribute("width", w);
     canvas.setAttribute("height", h);
-
     //  circles
     const maxR = Math.min(w, h) / 2 - 1;
     for (var i = 3; i >= 1; i--) {
@@ -149,7 +164,6 @@ class SpmGraph extends Component {
         }
       }
     }
-
     // lines
     ctx.fillStyle = "black";
     ctx.beginPath();
@@ -158,7 +172,6 @@ class SpmGraph extends Component {
     ctx.moveTo(0, h);
     ctx.lineTo(w, 0);
     ctx.stroke();
-
     // directions text
     ctx.font = "15px Georgia";
     const offset = 15;
