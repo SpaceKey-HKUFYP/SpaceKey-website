@@ -263,7 +263,8 @@ class Search extends Component {
                     dir: wantedObj.dir,
                     lower: lower,
                     upper: upper,
-                    pos: thisCustomObject.pos
+                    lat: thisCustomObject.pos.lat,
+                    lng: thisCustomObject.pos.lng
                   };
                 });
 
