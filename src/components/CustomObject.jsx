@@ -17,34 +17,14 @@ import GoogleMapReact from "google-map-react";
 class CustomObject extends Component {
   constructor(props) {
     super(props);
-
-    const regionOptions = global.projectConstant.regionName;
-    const my = this;
-
     this._onClick = ({ x, y, lat, lng, event }) => {
       this.props.handler.updatePosition(lat, lng);
-    };
-
-    this.state = {
-      search: { options: regionOptions, value: null },
-      status: { center: { lat: 22.3964, lng: 114.1095 }, zoom: 15 },
-      handler: {
-        searchHandler: (e, { value }) => {
-          let newState = { ...my.state };
-          newState.search.value = value;
-          newState.status.center = regionOptions.filter(region => {
-            return region.key === value;
-          })[0].position;
-
-          my.setState(newState);
-        }
-      }
     };
   }
 
   render() {
     const { data, status, handler } = this.props;
-    const search = this.state.search;
+    const search = status.search;
 
     const listOfCustomObject = data.customObjects.map(customObject => {
       return (
@@ -88,7 +68,7 @@ class CustomObject extends Component {
             options={search.options}
             placeholder="Select Area"
             value={search.value}
-            onChange={this.state.handler.searchHandler}
+            onChange={handler.searchHandler}
           />
         </Grid.Row>
         <Grid.Row>
@@ -104,7 +84,7 @@ class CustomObject extends Component {
                   <Form.Button
                     content="Add"
                     onClick={() =>
-                      handler.addCustomObjectHandler(this.state.status.center)
+                      handler.addCustomObjectHandler(status.center)
                     }
                     color="green"
                   />
@@ -119,8 +99,8 @@ class CustomObject extends Component {
                 bootstrapURLKeys={{
                   key: "AIzaSyA2cdiYB3xgDumC7eu-1FTkMJkZPyHotlc"
                 }}
-                center={this.state.status.center}
-                zoom={this.state.status.zoom}
+                center={status.center}
+                zoom={status.zoom}
                 onClick={this._onClick}
               >
                 {listOfMapCustomObject}

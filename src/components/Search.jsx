@@ -627,13 +627,27 @@ class Search extends Component {
 
       customObject: {
         status: {
-          selected: null
+          selected: null,
+          search: { options: regionOptions, value: null },
+          center: { lat: 22.3964, lng: 114.1095 },
+          zoom: 15
         },
         data: {
           customObjectNameInput: "",
           customObjects: []
         },
         handler: {
+          searchHandler: (e, { value }) => {
+            let newState = { ...my.state };
+            newState.customObject.status.search.value = value;
+            newState.customObject.status.center = regionOptions.filter(
+              region => {
+                return region.key === value;
+              }
+            )[0].position;
+
+            my.setState(newState);
+          },
           customObjectNameInputHandler: (e, { value }) => {
             let newState = my.state;
             newState.customObject.data.customObjectNameInput = value;
