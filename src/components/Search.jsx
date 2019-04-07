@@ -229,8 +229,47 @@ class Search extends Component {
                 if (dist === 3000) return -1;
                 return dist;
               };
-              var wantedObjectsParameter = this.state.spm.data.wantedObjects.map(
-                wantedObj => {
+
+              var wantedCustomObject = this.state.spm.data.wantedObjects
+                .filter(wantedObj => wantedObj.isCustomObject)
+                .map(wantedObj => {
+                  let lower, upper;
+                  const distValue = my.state.spm.data.distOption.data.value;
+                  if (wantedObj.dist === "any") {
+                    lower = 0;
+                    upper = -1;
+                  } else if (wantedObj.dist === "close") {
+                    lower = checkDistance(distValue[0]);
+                    upper = checkDistance(distValue[1]);
+                  } else if (wantedObj.dist === "medium") {
+                    lower = checkDistance(distValue[1]);
+                    upper = checkDistance(distValue[2]);
+                  } else if (wantedObj.dist === "far") {
+                    lower = checkDistance(distValue[2]);
+                    upper = checkDistance(distValue[3]);
+                  } else {
+                    lower = -1;
+                    upper = -1;
+                  }
+
+                  const thisCustomObject = this.state.customObject.data.customObjects.filter(
+                    customObject => {
+                      return customObject.name === wantedObj.keyword;
+                    }
+                  )[0];
+
+                  return {
+                    keyword: wantedObj.keyword,
+                    dir: wantedObj.dir,
+                    lower: lower,
+                    upper: upper,
+                    pos: thisCustomObject.pos
+                  };
+                });
+
+              var wantedObjectsParameter = this.state.spm.data.wantedObjects
+                .filter(wantedObj => !wantedObj.isCustomObject)
+                .map(wantedObj => {
                   let lower, upper;
                   const distValue = my.state.spm.data.distOption.data.value;
                   if (wantedObj.dist === "any") {
@@ -255,15 +294,14 @@ class Search extends Component {
                     lower: lower,
                     upper: upper
                   };
-                }
-              );
+                });
               axios({
                 method: "post",
                 url: global.projectConstant.apiURL + "/alg/spm_simple",
                 params: params,
                 data: {
                   wantedObjects: wantedObjectsParameter,
-                  customObjects: this.state.customObject.data.customObjects
+                  customObjects: wantedCustomObject
                 }
               }).then(res => {
                 let newState = { ...my.state };
