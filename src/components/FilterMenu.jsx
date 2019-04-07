@@ -8,8 +8,7 @@ import {
   Form,
   Header,
   Segment,
-  Input,
-  Tab
+  Input
 } from "semantic-ui-react";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
@@ -17,6 +16,8 @@ import CustomObject from "./CustomObject";
 
 import { Range } from "rc-slider";
 
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 import "../layout.css";
 import "rc-slider/assets/index.css";
 
@@ -196,8 +197,13 @@ class SpmGraph extends Component {
 }
 
 class SpmFilter extends Component {
+  constructor() {
+    super();
+    this.state = { tabIndex: 0 };
+  }
+
   render() {
-    const { status, handler, data } = this.props;
+    const { status, handler, data, customObject } = this.props;
     const { poiInput, wantedObjects, distOption } = data;
 
     const listOfWantedObjects = wantedObjects.map(val => {
@@ -232,87 +238,6 @@ class SpmFilter extends Component {
     const rangeLabel3 =
       "far: " + distToLabel(distVal[2]) + " - " + distToLabel(distVal[3]);
 
-    const SPMPanel = () => (
-      <div>
-        <Grid>
-          <Grid.Column width={10}>
-            <Segment>
-              <div style={{ padding: "10px" }}>{rangeLabel1} </div>
-              <div style={{ padding: "10px" }}>{rangeLabel2} </div>
-              <div style={{ padding: "10px" }}>{rangeLabel3} </div>
-              <div className="scrollFilter-range-wrapper">
-                <Range
-                  value={distOption.data.value}
-                  default={distOption.data.default}
-                  onChange={distOption.handler.rangeValueUpdate}
-                  step={1}
-                  marks={{
-                    0: "0m",
-                    1000: "1000m",
-                    2000: "2000m",
-                    3000: "Infinity"
-                  }}
-                  min={0}
-                  max={3000}
-                  count={3}
-                  pushable={100}
-                />
-              </div>
-            </Segment>
-            <Grid columns="equal" divided={false} padded fluid="true">
-              <Grid.Row>
-                <Grid.Column>
-                  <Dropdown
-                    fluid
-                    selection
-                    multiple={true}
-                    search={true}
-                    options={poiInput.options}
-                    value={poiInput.value}
-                    placeholder="Add point of interest"
-                    onChange={handler.handleChange}
-                  />
-                </Grid.Column>
-              </Grid.Row>
-              {listOfWantedObjects}
-            </Grid>
-          </Grid.Column>
-          <Grid.Column width={6}>
-            <SpmGraph />
-          </Grid.Column>
-        </Grid>
-      </div>
-    );
-
-    const CustomObjectPanel = () => (
-      <CustomObject
-        data={this.props.custom_obj.data}
-        handler={this.props.custom_obj.handler}
-        status={this.props.custom_obj.status}
-      />
-    );
-
-    const panes = [
-      {
-        menuItem: "Point of Interests",
-        render: () => (
-          <Tab.Pane attached={false}>
-            {" "}
-            <SPMPanel />{" "}
-          </Tab.Pane>
-        )
-      },
-      {
-        menuItem: "Custom Object",
-        render: () => (
-          <Tab.Pane attached={false}>
-            {" "}
-            <CustomObjectPanel />{" "}
-          </Tab.Pane>
-        )
-      }
-    ];
-
     return (
       <Modal
         size={this.props.size}
@@ -322,14 +247,73 @@ class SpmFilter extends Component {
       >
         <Modal.Header>SPM</Modal.Header>
         <Modal.Content>
-          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+          <Tabs
+            selectedIndex={this.state.tabIndex}
+            onSelect={tabIndex => this.setState({ tabIndex })}
+          >
+            <TabList>
+              <Tab>Point of Interests</Tab>
+              <Tab>Custom Object</Tab>
+            </TabList>
+            <TabPanel>
+              <Grid>
+                <Grid.Column width={10}>
+                  <Segment>
+                    <div style={{ padding: "10px" }}>{rangeLabel1} </div>
+                    <div style={{ padding: "10px" }}>{rangeLabel2} </div>
+                    <div style={{ padding: "10px" }}>{rangeLabel3} </div>
+                    <div className="scrollFilter-range-wrapper">
+                      <Range
+                        value={distOption.data.value}
+                        default={distOption.data.default}
+                        onChange={distOption.handler.rangeValueUpdate}
+                        step={1}
+                        marks={{
+                          0: "0m",
+                          1000: "1000m",
+                          2000: "2000m",
+                          3000: "Infinity"
+                        }}
+                        min={0}
+                        max={3000}
+                        count={3}
+                        pushable={100}
+                      />
+                    </div>
+                  </Segment>
+                  <Grid columns="equal" divided={false} padded fluid="true">
+                    <Grid.Row>
+                      <Grid.Column>
+                        <Dropdown
+                          fluid
+                          selection
+                          multiple={true}
+                          search={true}
+                          options={poiInput.options}
+                          value={poiInput.value}
+                          placeholder="Add point of interest"
+                          onChange={handler.handleChange}
+                        />
+                      </Grid.Column>
+                    </Grid.Row>
+                    {listOfWantedObjects}
+                  </Grid>
+                </Grid.Column>
+                <Grid.Column width={6}>
+                  <SpmGraph />
+                </Grid.Column>
+              </Grid>
+            </TabPanel>
+            <TabPanel>
+              <CustomObject
+                data={customObject.data}
+                handler={customObject.handler}
+                status={customObject.status}
+              />
+            </TabPanel>
+          </Tabs>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            negative
-            content="Clear"
-            onClick={handler.onClearButtonClicked}
-          />
           <Button
             positive
             icon="checkmark"

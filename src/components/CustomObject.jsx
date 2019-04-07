@@ -32,20 +32,25 @@ class CustomObject extends Component {
         searchHandler: (e, { value }) => {
           let newState = { ...my.state };
           newState.search.value = value;
-
+          console.log(newState.status.center);
           newState.status.center = regionOptions.filter(region => {
             return region.key === value;
           })[0].position;
 
+          console.log(newState.status.center);
           my.setState(newState);
         }
       }
     };
+
+    console.log("haha");
   }
 
   render() {
     const { data, status, handler } = this.props;
     const search = this.state.search;
+
+    console.log(this.state.status.center);
 
     const listOfCustomObject = data.customObjects.map(customObject => {
       return (
