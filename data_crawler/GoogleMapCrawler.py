@@ -1,21 +1,24 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import time
 import _thread
 import datetime
 import mySQLsupport
 import random
+
 # ----------------- Configuration
-headless = False
+headless = True
 
 timeDelay = 5
-timeMiniDelay = 0.1
+timeMiniDelay = 0.2
 nullValue = "None"
-maxAttempt = 30 # maxmimum attempt to locate element
+maxAttempt = 50 # maxmimum attempt to locate element
 
 chromeOptions = webdriver.ChromeOptions()
-if headless == True:
+if headless == False:
+	chromeOptions.add_argument('--incognito')
 	chromeOptions.add_argument('--disable-gpu')
-	chromeOptions.add_argument('--headless')
+	#chromeOptions.add_argument('--headless')
 #prefs = { 'disk-cache-size':4096}
 #chromeOptions.add_experimental_option('prefs', prefs)
 
@@ -38,8 +41,11 @@ main_driver = webdriver.Chrome(chrome_options=chromeOptions)
 main_driver.get(TargetURL)
 #main_driver.implicitly_wait(timeDelay)
 
+pluscode_trans_url = "https://plus.codes/map"
+
+expand = False
 translation_driver = webdriver.Chrome(chrome_options=chromeOptions)
-translation_driver.get(TargetURL)
+translation_driver.get(pluscode_trans_url)
 #translation_driver.implicitly_wait(timeDelay)
 def pick_start_point():
 	temp_str = ""
@@ -57,8 +63,8 @@ pick_start_point()
 #propertyURL_buy = "https://www.28hse.com/en/buy"
 #propertyURL_rent = "https://www.28hse.com/en/rent"
 
-set_keywords = ["school","hospital","bank","restaurant","bar","coffee","parking lot","post office", "supermarket", "park", "garden", "beach", "store","bus terminal","sport center","University","McDonald","Theater","Mall","FireStation","Police office","ATM","Gas station","Temple"]
-start_index = 3
+set_keywords = ["pet shop","gym","school","hospital","bank","restaurant","bar","coffee","parking lot","post office", "supermarket", "park", "garden", "beach", "store","bus terminal","sport center","university","mcDonald","theater","mall","fire station","police office","ATM","gas station","temple"]
+start_index = 0
 current_k = {}
 
 def set_current_key(key):
@@ -80,18 +86,21 @@ def go_back(driver):
 	back_button.click()
 
 #time.sleep(5)
-def init_search(driver, keyword):
+def init_search(driver, keyword, search_bar_id):
 	#SearchBarInput = driver.find_element_by_xpath("//input[@id='searchboxinput']")
 	#SearchBarInput = driver.find_element_by_xpath("input[@class='tactile-searchbox-input']")
-	SearchBarInput = find_element_by_xpath_until_found(driver, "//input[@id='searchboxinput']", False)
+	xpath = "//input[@id = '" + search_bar_id+ "']"
+	xpath = xpath.replace(' ','')
+	print("xpath : " + xpath)
+	SearchBarInput = find_element_by_xpath_until_found(driver, xpath , False)
 	SearchBarInput.click()
 	SearchBarInput.clear()
 	SearchBarInput.send_keys(keyword)
 
 	#SearchBarButton = driver.find_element_by_xpath("//button[@id='searchbox-searchbutton']")
-	SearchBarButton = find_element_by_xpath_until_found(driver, "//button[@id='searchbox-searchbutton']", False)
-	SearchBarButton.click()
-
+	#SearchBarButton = find_element_by_xpath_until_found(driver, "//button[@id='searchbox-searchbutton']", False)
+	#SearchBarButton.click()
+	SearchBarInput.send_keys(Keys.ENTER)
 def get_result_div(driver):
 	result_div_list = driver.find_elements_by_class_name("section-result")
 	#print("div list: ", result_div_list)
@@ -118,7 +127,7 @@ def fetch_return(driver, div):
 		#time.sleep(5)
 		#location_name = driver.find_elements_by_class_name("section-hero-header-description").text
 		#location_name = driver.find_element_by_xpath("//div[@class='section-hero-header-description']//h1[@class='section-hero-header-title']").text
-		location_name = find_element_by_xpath_until_found(driver, "//div[@class='section-hero-header-description']//h1[@class='section-hero-header-title']", True)
+		location_name = find_element_by_xpath_until_found(driver, "//div[contains(@class,'section-hero-header-description')]//h1[contains(@class,'section-hero-header-title')]", True)
 		#rating = driver.find_elements_by_class_name("//div[@class='section-hero-header-description']/div[@class='section-hero-header-description-container']/div/div/span/span/span").text
 		all_info = driver.find_elements_by_class_name("widget-pane-link")
 
@@ -140,6 +149,7 @@ def fetch_return(driver, div):
 			if splited[1] == "Hong" and splited[2] == "Kong":
 				plus_code_location = t
 		#check if has review
+		print("prepare to store ... ")
 		if text[0].find("review") == -1:
 			#index_adjust -= 1
 			store_info(location_name,0,0,text[0],text[1], plus_code_location)
@@ -147,13 +157,13 @@ def fetch_return(driver, div):
 			store_info(location_name, 0, text[0], text[1], text[2], plus_code_location)
 
 	except Exception as error:
-		print("fetch return failed with error", error)
+		print("fetch return failed with error : ", error)
 	current_url = driver.current_url
 	#driver.back()
 	go_back(driver)
 	while driver.current_url == current_url:
 		time.sleep(timeMiniDelay)
-		#print("going back")
+		print("going back ... ")
 
 
 
@@ -172,6 +182,7 @@ def store_info(place_name, rating, review_num, keyword, addr, location):
 		latitude = coordinate.split(',')[0]
 		longitude = coordinate.split(',')[1]
 	else:
+		print("entry discarded with coordinate : ", coordinate)
 		# discard POI without latitude and longitude
 		return
 	#info_to_store = place_name + "@" + str(review_num).split(' ')[0] + "@" + current_key_word + "@" + keyword + "@" + addr + "@" + coordinate + "\n"
@@ -180,11 +191,11 @@ def store_info(place_name, rating, review_num, keyword, addr, location):
 	print('current key word before store', get_current_key())
 	#print('set_keywords',set_keywords)
 
-	list = [place_name, review_num_int, get_current_key(), keyword, addr, latitude, longitude]
+	entry = [place_name, review_num_int, get_current_key(), keyword, addr, latitude, longitude]
 	#tuple = tuple(list)
 	#print("storing info :",tuple)
-	mySQLsupport.db_add_place(tuple(list))
-
+	mySQLsupport.db_add_place(tuple(entry))
+	print("mysql support called")
 	#_thread.start_new_thread(thread_store_info_to_file,(info_to_store, location))
 
 
@@ -222,16 +233,23 @@ def turn_page(driver):
 
 
 def translate_plusCode(plus_code):
-	init_search(translation_driver, plus_code)
+	global expand
+	init_search(translation_driver, plus_code , "search-input")
 	while True:
 		try:
 			#coordinate_text = translation_driver.find_element_by_xpath("//div[@class='section-hero-header-description']//h2[@class='section-hero-header-subtitle']").text
-			coordinate_text = find_element_by_xpath_until_found(translation_driver, "//div[@class='section-hero-header-description']//h2[@class='section-hero-header-subtitle']", True)
+			#coordinate_text = find_element_by_xpath_until_found(translation_driver, "//div[@class='section-hero-header-description']//h2[@class='section-hero-header-subtitle']", True)
+			if not expand: 
+				expand_button = translation_driver.find_element_by_xpath("//div[@id='summary']//div[@class='expand sprite-bg']")
+				expand_button.click()
+				expand = True
+			coordinate_text = find_element_by_xpath_until_found(translation_driver, "//div[@class='detail latlng clipboard vertical-center']", True)
+			print(coordinate_text)
 			#print(coordinate_span.text)
 			return coordinate_text
 		except:
 			time.sleep(timeMiniDelay)
-			#print("translation_driver stucked")
+			print("translation_driver stucked")
 
 
 
@@ -259,7 +277,7 @@ def find_element_by_xpath_until_found(driver, xpath, isText):
 def start(driver):
 	for k in range(start_index,len(set_keywords)):
 		set_current_key(set_keywords[k])
-		init_search(driver, set_keywords[k])
+		init_search(driver, set_keywords[k], "searchboxinput")
 		while True:
 			time.sleep(timeDelay)
 			get_result_div(driver)
@@ -268,5 +286,6 @@ def start(driver):
 while True:
 	pick_start_point()
 	start(main_driver)
+	start_index = 0
 #turn_page(main_driver)
 #translate_plusCode("74PP+2V Hong Kong")
