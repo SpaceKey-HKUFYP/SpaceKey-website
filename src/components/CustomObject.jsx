@@ -80,69 +80,57 @@ class CustomObject extends Component {
     });
 
     return (
-      <Modal
-        size={this.props.size}
-        id="custom-object-modal"
-        open={status.open}
-        onClose={handler.closeModal}
-      >
-        <Modal.Header> Custom Object </Modal.Header>
-        <Modal.Content>
-          <Grid divided={false} padded={false}>
+      <Grid divided={false} padded={false}>
+        <Grid.Row>
+          <Dropdown
+            fluid
+            selection
+            multiple={false}
+            search={true}
+            options={search.options}
+            placeholder="Select Area"
+            value={search.value}
+            onChange={this.state.handler.searchHandler}
+          />
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={6}>
             <Grid.Row>
-              <Dropdown
-                fluid
-                selection
-                multiple={false}
-                search={true}
-                options={search.options}
-                placeholder="Select Area"
-                value={search.value}
-                onChange={this.state.handler.searchHandler}
-              />
+              <Form>
+                <Form.Group>
+                  <Form.Input
+                    placeholder="Name"
+                    value={data.customObjectNameInput}
+                    onChange={handler.customObjectNameInputHandler}
+                  />
+                  <Form.Button
+                    content="Add"
+                    onClick={() =>
+                      handler.addCustomObjectHandler(this.state.status.center)
+                    }
+                    color="green"
+                  />
+                </Form.Group>
+              </Form>
             </Grid.Row>
-            <Grid.Row>
-              <Grid.Column width={6}>
-                <Grid.Row>
-                  <Form>
-                    <Form.Group>
-                      <Form.Input
-                        placeholder="Name"
-                        value={data.customObjectNameInput}
-                        onChange={handler.customObjectNameInputHandler}
-                      />
-                      <Form.Button
-                        content="Add"
-                        onClick={() =>
-                          handler.addCustomObjectHandler(
-                            this.state.status.center
-                          )
-                        }
-                        color="green"
-                      />
-                    </Form.Group>
-                  </Form>
-                </Grid.Row>
-                {listOfCustomObject}
-              </Grid.Column>
-              <Grid.Column width={10}>
-                <div style={{ height: "500px", width: "100%" }}>
-                  <GoogleMapReact
-                    bootstrapURLKeys={{
-                      key: "AIzaSyA2cdiYB3xgDumC7eu-1FTkMJkZPyHotlc"
-                    }}
-                    center={this.state.status.center}
-                    zoom={this.state.status.zoom}
-                    onClick={this._onClick}
-                  >
-                    {listOfMapCustomObject}
-                  </GoogleMapReact>
-                </div>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Modal.Content>
-      </Modal>
+            {listOfCustomObject}
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <div style={{ height: "500px", width: "100%" }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: "AIzaSyA2cdiYB3xgDumC7eu-1FTkMJkZPyHotlc"
+                }}
+                center={this.state.status.center}
+                zoom={this.state.status.zoom}
+                onClick={this._onClick}
+              >
+                {listOfMapCustomObject}
+              </GoogleMapReact>
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }
