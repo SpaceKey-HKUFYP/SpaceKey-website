@@ -107,7 +107,6 @@ class MapContainer extends Component {
           : result.price / 1000000.0 + "M";
       const flag_focus = result.id === this.props.status.focus;
       const flag_show = result.id === this.state.show;
-      if (result.id === this.state.show) console.log("!!!!!!!!!!!");
 
       if (!flag_show) {
         return (
@@ -125,7 +124,6 @@ class MapContainer extends Component {
           </Button>
         );
       } else {
-        console.log("display popup");
         return (
           <Popup
             lat={result.lat}
