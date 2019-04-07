@@ -31,8 +31,8 @@ class MapContainer extends Component {
       avg_lat = 0.0,
       avg_lng = 0.0,
       count = 0;
-    const houseData = this.props.data;
 
+    const houseData = this.props.data;
     houseData.forEach(function(prop) {
       if (prop.lat < min_lat) min_lat = prop.lat;
       if (prop.lat > max_lat) max_lat = prop.lat;
@@ -43,8 +43,6 @@ class MapContainer extends Component {
         Math.abs(prop.lat - avg_lat / count) > 1 ||
         Math.abs(prop.lng - avg_lng / count) > 1
       ) {
-        //console.log("!!!!!!!")
-        //console.log(prop)
       } else {
         avg_lat += prop.lat;
         avg_lng += prop.lng;
@@ -55,7 +53,6 @@ class MapContainer extends Component {
       avg_lat /= count;
       avg_lng /= count;
     }
-
     if (avg_lat === 0 && avg_lng === 0)
       this.center = { lat: 22.3964, lng: 114.1095 };
     else this.center = { lat: avg_lat, lng: avg_lng };
@@ -63,13 +60,10 @@ class MapContainer extends Component {
 
   render() {
     const { poi, customObjects, data } = this.props;
-
     var colors = global.projectConstant.colors.slice();
     var poiToColor = {};
 
-    var i;
-
-    for (i = 0; i < poi.length; i++) {
+    for (var i = 0; i < poi.length; i++) {
       if (poiToColor[poi[i].searchKey] === undefined) {
         poiToColor[poi[i].searchKey] = colors.pop();
       }
@@ -169,7 +163,6 @@ class MapContainer extends Component {
     });
 
     this.setCenter();
-
     return (
       <div id="map" style={{ height: "100%", width: "100%" }}>
         <GoogleMapReact
