@@ -91,11 +91,11 @@ class SpmFilter extends Component {
           dist={val.dist}
           onDistanceChange={event => {
             handler.wantedObjectChange(val.keyword, "dist", event.target.value);
-            this.spmGraph.current.blinkPOI(val.keyword, wantedObjects);
+            this.spmGraph.current.drawWantedObjects(wantedObjects);
           }}
           onDirectionChange={event => {
             handler.wantedObjectChange(val.keyword, "dir", event.target.value);
-            this.spmGraph.current.blinkPOI(val.keyword, wantedObjects);
+            this.spmGraph.current.drawWantedObjects(wantedObjects);
           }}
         />
       );
@@ -207,16 +207,6 @@ class SpmFilter extends Component {
 class SpmGraph extends Component {
   constructor(props) {
     super(props);
-
-    const drawPOI = pois => {
-      const canvas = this.refs.canvas;
-      const ctx = canvas.getContext("2d");
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      for (var poi in pois) {
-      }
-    };
-
     this.state = {
       status: {},
       data: {},
@@ -270,14 +260,14 @@ class SpmGraph extends Component {
     ctx.stroke();
     // directions text
     ctx.font = "15px Georgia";
-    const offset = 15;
+    const offset = 20;
     ctx.fillText("N", w / 2, 0 + offset);
     ctx.fillText("S", w / 2, h);
     ctx.fillText("E", w - offset, h / 2);
     ctx.fillText("W", 0, h / 2);
   }
 
-  blinkPOI(keyword, wantedObjects) {
+  drawWantedObjects(wantedObjects) {
     const canvas = this.refs.canvas;
     const ctx = canvas.getContext("2d");
     const w = canvas.offsetWidth;
@@ -286,56 +276,73 @@ class SpmGraph extends Component {
     canvas.setAttribute("height", h);
 
     for (var i = 0; i < wantedObjects.length; i++) {
-      if (true) {
-        var poi = wantedObjects[i];
-        const maxR = Math.min(w, h) / 2 - 1;
-        // decide the radius, start angle, end angle.
-        var ra, rb, s, t;
-        if (poi.dist === "close") {
-          ra = 0;
-          rb = (maxR / 3) * 1;
-        } else if (poi.dist === "medium") {
-          ra = (maxR / 3) * 1;
-          rb = (maxR / 3) * 2;
-        } else if (poi.dist === "far") {
-          ra = (maxR / 3) * 2;
-          rb = (maxR / 3) * 3;
-        } else {
-          ra = (maxR / 3) * 0;
-          rb = (maxR / 3) * 3;
-        }
-        if (poi.dir === "east") {
-          s = -Math.PI / 4;
-          t = Math.PI / 4;
-        } else if (poi.dir === "south") {
-          s = Math.PI / 4;
-          t = Math.PI / 4 + Math.PI / 2;
-        } else if (poi.dir === "west") {
-          s = Math.PI / 4 + Math.PI / 2;
-          t = Math.PI / 4 + (Math.PI / 2) * 2;
-        } else if (poi.dir === "north") {
-          s = Math.PI / 4 + (Math.PI / 2) * 2;
-          t = Math.PI / 4 + (Math.PI / 2) * 3;
-        } else {
-          s = 0;
-          t = Math.PI * 2;
-        }
-        // fill the shape
-        ctx.beginPath();
-        ctx.arc(w / 2, h / 2, ra, s, t);
-        ctx.arc(w / 2, h / 2, rb, t, s, true);
-        ctx.closePath();
-        if (poi.dist === "close") {
-          ctx.fillStyle = "green";
-        } else if (poi.dist === "medium") {
-          ctx.fillStyle = "yellow";
-        } else if (poi.dist === "far") {
-          ctx.fillStyle = "red";
-        } else {
-          ctx.fillStyle = "blue";
-        }
-        ctx.fill();
+      var poi = wantedObjects[i];
+      const maxR = Math.min(w, h) / 2 - 1;
+      // decide the radius, start angle, end angle.
+      var ra, rb, s, t, tx, ty;
+      if (poi.dist === "close") {
+        ra = 0;
+        rb = (maxR / 3) * 1;
+      } else if (poi.dist === "medium") {
+        ra = (maxR / 3) * 1;
+        rb = (maxR / 3) * 2;
+      } else if (poi.dist === "far") {
+        ra = (maxR / 3) * 2;
+        rb = (maxR / 3) * 3;
+      } else if (poi.dist === "any") {
+        ra = (maxR / 3) * 0;
+        rb = (maxR / 3) * 3;
+      } else {
+        ra = (maxR / 3) * 4;
+        rb = (maxR / 3) * 4;
       }
+      var r = (ra + rb) / 2;
+      if (poi.dir === "east") {
+        s = -Math.PI / 4;
+        t = Math.PI / 4;
+        tx = r * Math.cos(0);
+        ty = r * Math.sin(0);
+      } else if (poi.dir === "south") {
+        s = Math.PI / 4;
+        t = Math.PI / 4 + Math.PI / 2;
+        tx = r * Math.cos(Math.PI / 2);
+        ty = r * Math.sin(Math.PI / 2);
+      } else if (poi.dir === "west") {
+        s = Math.PI / 4 + Math.PI / 2;
+        t = Math.PI / 4 + (Math.PI / 2) * 2;
+        tx = r * Math.cos(Math.PI);
+        ty = r * Math.sin(Math.PI);
+      } else if (poi.dir === "north") {
+        s = Math.PI / 4 + (Math.PI / 2) * 2;
+        t = Math.PI / 4 + (Math.PI / 2) * 3;
+        tx = r * Math.cos((Math.PI / 2) * 3);
+        ty = r * Math.sin((Math.PI / 2) * 3);
+      } else {
+        s = 0;
+        t = Math.PI * 2;
+        tx = 0;
+        ty = 0;
+      }
+      // fill the shape
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, ra, s, t);
+      ctx.arc(w / 2, h / 2, rb, t, s, true);
+      ctx.closePath();
+      if (poi.dist === "close") {
+        ctx.fillStyle = "green";
+      } else if (poi.dist === "medium") {
+        ctx.fillStyle = "yellow";
+      } else if (poi.dist === "far") {
+        ctx.fillStyle = "red";
+      } else {
+        ctx.fillStyle = "blue";
+      }
+      ctx.fill();
+      // show the text in the shape
+      ctx.font = "10px Consolas";
+      ctx.fillStyle = "black";
+      ctx.textAlign = "center";
+      ctx.fillText(poi.keyword, w / 2 + tx, h / 2 + ty);
     }
     this.drawOutline();
   }
