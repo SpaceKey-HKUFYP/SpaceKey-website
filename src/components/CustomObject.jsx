@@ -114,7 +114,7 @@ class CustomObject extends Component {
             {listOfCustomObject}
           </Grid.Column>
           <Grid.Column width={10}>
-            <div style={{ height: "500px", width: "100%" }}>
+            <div style={{ height: "350px", width: "100%" }}>
               <GoogleMapReact
                 bootstrapURLKeys={{
                   key: "AIzaSyA2cdiYB3xgDumC7eu-1FTkMJkZPyHotlc"

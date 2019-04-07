@@ -812,7 +812,7 @@ class Search extends Component {
                         handler={spm.handler}
                         status={spm.status}
                         customObject={customObject}
-                        size="medium"
+                        size="large"
                       />
 
                       <div className="floatRight">

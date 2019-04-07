@@ -120,9 +120,10 @@ class SpmFilter extends Component {
         open={status.open}
         onClose={handler.closeModal}
         id="spm-modal"
+        style={{ height: "500px" }}
       >
         <Modal.Header>SPM</Modal.Header>
-        <Modal.Content>
+        <Modal.Content style={{ height: "100%" }}>
           <Tabs
             selectedIndex={this.state.tabIndex}
             onSelect={tabIndex => this.setState({ tabIndex })}
@@ -212,7 +213,6 @@ class SpmGraph extends Component {
       const ctx = canvas.getContext("2d");
       const w = canvas.offsetWidth;
       const h = canvas.offsetHeight;
-
       for (var poi in pois) {
       }
     };
@@ -231,6 +231,14 @@ class SpmGraph extends Component {
     const h = canvas.offsetHeight;
     canvas.setAttribute("width", w);
     canvas.setAttribute("height", h);
+    this.drawOutline();
+  }
+
+  drawOutline() {
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
     //  circles
     const maxR = Math.min(w, h) / 2 - 1;
     for (var i = 3; i >= 1; i--) {
@@ -241,7 +249,7 @@ class SpmGraph extends Component {
       else if (i === 2) ctx.fillStyle = "yellow";
       else if (i === 3) ctx.fillStyle = "red";
       // draw circles
-      ctx.fill();
+      // ctx.fill();
       if (i !== 3) ctx.stroke();
       else {
         const step = Math.PI / 30;
@@ -270,54 +278,66 @@ class SpmGraph extends Component {
   }
 
   blinkPOI(keyword, wantedObjects) {
-    for (var i = 0; i < wantedObjects.length; i++) {
-      if (wantedObjects[i].keyword === keyword) {
-        var poi = wantedObjects[i];
-      }
-    }
     const canvas = this.refs.canvas;
     const ctx = canvas.getContext("2d");
     const w = canvas.offsetWidth;
     const h = canvas.offsetHeight;
-    const maxR = Math.min(w, h) / 2 - 1;
-    // decide the radius, start angle, end angle.
-    var ra, rb, s, t;
-    if (poi.dist === "close") {
-      ra = 0;
-      rb = (maxR / 3) * 1;
-    } else if (poi.dist === "medium") {
-      ra = (maxR / 3) * 1;
-      rb = (maxR / 3) * 2;
-    } else if (poi.dist === "far") {
-      ra = (maxR / 3) * 2;
-      rb = (maxR / 3) * 3;
-    } else {
-      ra = (maxR / 3) * 2;
-      rb = (maxR / 3) * 3;
+    canvas.setAttribute("width", w);
+    canvas.setAttribute("height", h);
+
+    for (var i = 0; i < wantedObjects.length; i++) {
+      if (true) {
+        var poi = wantedObjects[i];
+        const maxR = Math.min(w, h) / 2 - 1;
+        // decide the radius, start angle, end angle.
+        var ra, rb, s, t;
+        if (poi.dist === "close") {
+          ra = 0;
+          rb = (maxR / 3) * 1;
+        } else if (poi.dist === "medium") {
+          ra = (maxR / 3) * 1;
+          rb = (maxR / 3) * 2;
+        } else if (poi.dist === "far") {
+          ra = (maxR / 3) * 2;
+          rb = (maxR / 3) * 3;
+        } else {
+          ra = (maxR / 3) * 0;
+          rb = (maxR / 3) * 3;
+        }
+        if (poi.dir === "east") {
+          s = -Math.PI / 4;
+          t = Math.PI / 4;
+        } else if (poi.dir === "south") {
+          s = Math.PI / 4;
+          t = Math.PI / 4 + Math.PI / 2;
+        } else if (poi.dir === "west") {
+          s = Math.PI / 4 + Math.PI / 2;
+          t = Math.PI / 4 + (Math.PI / 2) * 2;
+        } else if (poi.dir === "north") {
+          s = Math.PI / 4 + (Math.PI / 2) * 2;
+          t = Math.PI / 4 + (Math.PI / 2) * 3;
+        } else {
+          s = 0;
+          t = Math.PI * 2;
+        }
+        // fill the shape
+        ctx.beginPath();
+        ctx.arc(w / 2, h / 2, ra, s, t);
+        ctx.arc(w / 2, h / 2, rb, t, s, true);
+        ctx.closePath();
+        if (poi.dist === "close") {
+          ctx.fillStyle = "green";
+        } else if (poi.dist === "medium") {
+          ctx.fillStyle = "yellow";
+        } else if (poi.dist === "far") {
+          ctx.fillStyle = "red";
+        } else {
+          ctx.fillStyle = "blue";
+        }
+        ctx.fill();
+      }
     }
-    if (poi.dir === "north") {
-      s = -Math.PI / 4;
-      t = Math.PI / 4;
-    } else if (poi.dir === "south") {
-      s = Math.PI / 4;
-      t = Math.PI / 4 + Math.PI / 2;
-    } else if (poi.dir === "west") {
-      s = Math.PI / 4 + Math.PI / 2;
-      t = Math.PI / 4 + (Math.PI / 2) * 2;
-    } else if (poi.dir === "east") {
-      s = Math.PI / 4 + (Math.PI / 2) * 2;
-      t = Math.PI / 4 + (Math.PI / 2) * 3;
-    } else {
-      s = 0;
-      t = Math.PI * 2;
-    }
-    console.log(ra, rb, s, t);
-    // fill the shape
-    ctx.beginPath();
-    ctx.arc(w / 2, h / 2, ra, 0, Math.PI * 2);
-    // ctx.arc(w / 2, h / 2, rb, t, s);
-    ctx.fill();
-    ctx.stroke();
+    this.drawOutline();
   }
 
   render() {
@@ -326,8 +346,8 @@ class SpmGraph extends Component {
         ref="canvas"
         style={{
           border: "0px solid #000000",
-          width: "100%",
-          height: "100%"
+          width: "370px",
+          height: "370px"
         }}
       />
     );
