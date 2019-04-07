@@ -12,7 +12,6 @@ class MapContainer extends Component {
       show: null,
       showAddButton: { show: false, lat: 0, lng: 0 }
     };
-    console.log("constructed with state id" + this.state.show);
   }
 
   mouseEnter(id) {

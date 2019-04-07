@@ -71,135 +71,15 @@ class ScrollFilter extends Component {
   }
 }
 
-class SpmGraph extends Component {
+class SpmFilter extends Component {
   constructor(props) {
     super(props);
-
-    const drawPOI = pois => {
-      const canvas = this.refs.canvas;
-      const ctx = canvas.getContext("2d");
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-
-      for (var poi in pois) {
-        if (poi.dist.equals("close")) {
-        } else if (poi.dist.equals("medium")) {
-        } else if (poi.dist.equals("far")) {
-        }
-
-        if (poi.dir.equals("north")) {
-        } else if (poi.dir.equals("south")) {
-        } else if (poi.dir.equals("west")) {
-        } else if (poi.dir.equals("east")) {
-        }
-      }
-    };
-
-    const blinkPOI = poi => {
-      const canvas = this.refs.canvas;
-      const ctx = canvas.getContext("2d");
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      const maxR = Math.min(w, h) / 2 - 1;
-      // decide the radius, start angle, end angle.
-      var r, s, t;
-      if (poi.dist.equals("close")) {
-        r = (maxR / 3) * 1;
-      } else if (poi.dist.equals("medium")) {
-        r = (maxR / 3) * 2;
-      } else if (poi.dist.equals("far")) {
-        r = (maxR / 3) * 3;
-      }
-      if (poi.dir.equals("north")) {
-        s = -Math.PI / 4;
-        t = Math.PI / 4;
-      } else if (poi.dir.equals("south")) {
-        s = Math.PI / 4;
-        t = Math.PI / 4 + Math.PI / 2;
-      } else if (poi.dir.equals("west")) {
-        s = Math.PI / 4 + Math.PI / 2;
-        t = Math.PI / 4 + (Math.PI / 2) * 2;
-      } else if (poi.dir.equals("east")) {
-        s = Math.PI / 4 + (Math.PI / 2) * 2;
-        t = Math.PI / 4 + (Math.PI / 2) * 3;
-      }
-      // fill the shape
-      ctx.beginPath();
-      ctx.arc(w / 2, h / 2, r, s, t);
-      ctx.fill();
-    };
-
-    this.state = {
-      status: {},
-      data: {},
-      handler: {}
-    };
+    this.spmGraph = React.createRef();
   }
 
-  componentDidMount() {
-    const canvas = this.refs.canvas;
-    const ctx = canvas.getContext("2d");
-    const w = canvas.offsetWidth;
-    const h = canvas.offsetHeight;
-    canvas.setAttribute("width", w);
-    canvas.setAttribute("height", h);
-    //  circles
-    const maxR = Math.min(w, h) / 2 - 1;
-    for (var i = 3; i >= 1; i--) {
-      ctx.beginPath();
-      ctx.arc(w / 2, h / 2, (maxR / 3) * i, 0, 2 * Math.PI);
-      // set colors for sections
-      if (i === 1) ctx.fillStyle = "green";
-      else if (i === 2) ctx.fillStyle = "yellow";
-      else if (i === 3) ctx.fillStyle = "red";
-      // draw circles
-      ctx.fill();
-      if (i !== 3) ctx.stroke();
-      else {
-        const step = Math.PI / 30;
-        for (let b = 0, e = step / 2; e <= 2 * Math.PI; b += step, e += step) {
-          ctx.beginPath();
-          ctx.arc(w / 2, h / 2, maxR, b, e);
-          ctx.stroke();
-        }
-      }
-    }
-    // lines
-    ctx.fillStyle = "black";
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(w, h);
-    ctx.moveTo(0, h);
-    ctx.lineTo(w, 0);
-    ctx.stroke();
-    // directions text
-    ctx.font = "15px Georgia";
-    const offset = 15;
-    ctx.fillText("N", w / 2, 0 + offset);
-    ctx.fillText("S", w / 2, h);
-    ctx.fillText("E", w - offset, h / 2);
-    ctx.fillText("W", 0, h / 2);
-  }
-
-  render() {
-    return (
-      <canvas
-        ref="canvas"
-        style={{
-          border: "0px solid #000000",
-          width: "100%",
-          height: "100%"
-        }}
-      />
-    );
-  }
-}
-
-class SpmFilter extends Component {
   render() {
     const { status, handler, data } = this.props;
     const { poiInput, wantedObjects, distOption } = data;
-
     const listOfWantedObjects = wantedObjects.map(val => {
       return (
         <WantedObject
@@ -207,24 +87,24 @@ class SpmFilter extends Component {
           key={val.keyword}
           dir={val.dir}
           dist={val.dist}
-          onDistanceChange={event =>
-            handler.wantedObjectChange(val.keyword, "dist", event.target.value)
-          }
-          onDirectionChange={event =>
-            handler.wantedObjectChange(val.keyword, "dir", event.target.value)
-          }
+          onDistanceChange={event => {
+            handler.wantedObjectChange(val.keyword, "dist", event.target.value);
+            this.spmGraph.current.blinkPOI(val.keyword, wantedObjects);
+          }}
+          onDirectionChange={event => {
+            handler.wantedObjectChange(val.keyword, "dir", event.target.value);
+            this.spmGraph.current.blinkPOI(val.keyword, wantedObjects);
+          }}
         />
       );
     });
 
     const distVal = distOption.data.value;
     const distUnit = distOption.data.unit;
-
     const distToLabel = dist => {
       if (dist === 3000) return "infinity";
       return dist + distUnit;
     };
-
     const rangeLabel1 =
       "close: " + distToLabel(distVal[0]) + " - " + distToLabel(distVal[1]);
     const rangeLabel2 =
@@ -278,7 +158,7 @@ class SpmFilter extends Component {
             </Grid>
           </Grid.Column>
           <Grid.Column width={6}>
-            <SpmGraph />
+            <SpmGraph ref={this.spmGraph} />
           </Grid.Column>
         </Grid>
       </div>
@@ -339,6 +219,137 @@ class SpmFilter extends Component {
           />
         </Modal.Actions>
       </Modal>
+    );
+  }
+}
+
+class SpmGraph extends Component {
+  constructor(props) {
+    super(props);
+
+    const drawPOI = pois => {
+      const canvas = this.refs.canvas;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+
+      for (var poi in pois) {
+      }
+    };
+
+    this.state = {
+      status: {},
+      data: {},
+      handler: {}
+    };
+  }
+
+  componentDidMount() {
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
+    canvas.setAttribute("width", w);
+    canvas.setAttribute("height", h);
+    //  circles
+    const maxR = Math.min(w, h) / 2 - 1;
+    for (var i = 3; i >= 1; i--) {
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, (maxR / 3) * i, 0, 2 * Math.PI);
+      // set colors for sections
+      if (i === 1) ctx.fillStyle = "green";
+      else if (i === 2) ctx.fillStyle = "yellow";
+      else if (i === 3) ctx.fillStyle = "red";
+      // draw circles
+      ctx.fill();
+      if (i !== 3) ctx.stroke();
+      else {
+        const step = Math.PI / 30;
+        for (let b = 0, e = step / 2; e <= 2 * Math.PI; b += step, e += step) {
+          ctx.beginPath();
+          ctx.arc(w / 2, h / 2, maxR, b, e);
+          ctx.stroke();
+        }
+      }
+    }
+    // lines
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, h);
+    ctx.moveTo(0, h);
+    ctx.lineTo(w, 0);
+    ctx.stroke();
+    // directions text
+    ctx.font = "15px Georgia";
+    const offset = 15;
+    ctx.fillText("N", w / 2, 0 + offset);
+    ctx.fillText("S", w / 2, h);
+    ctx.fillText("E", w - offset, h / 2);
+    ctx.fillText("W", 0, h / 2);
+  }
+
+  blinkPOI(keyword, wantedObjects) {
+    for (var i = 0; i < wantedObjects.length; i++) {
+      if (wantedObjects[i].keyword === keyword) {
+        var poi = wantedObjects[i];
+      }
+    }
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
+    const maxR = Math.min(w, h) / 2 - 1;
+    // decide the radius, start angle, end angle.
+    var ra, rb, s, t;
+    if (poi.dist === "close") {
+      ra = 0;
+      rb = (maxR / 3) * 1;
+    } else if (poi.dist === "medium") {
+      ra = (maxR / 3) * 1;
+      rb = (maxR / 3) * 2;
+    } else if (poi.dist === "far") {
+      ra = (maxR / 3) * 2;
+      rb = (maxR / 3) * 3;
+    } else {
+      ra = (maxR / 3) * 2;
+      rb = (maxR / 3) * 3;
+    }
+    if (poi.dir === "north") {
+      s = -Math.PI / 4;
+      t = Math.PI / 4;
+    } else if (poi.dir === "south") {
+      s = Math.PI / 4;
+      t = Math.PI / 4 + Math.PI / 2;
+    } else if (poi.dir === "west") {
+      s = Math.PI / 4 + Math.PI / 2;
+      t = Math.PI / 4 + (Math.PI / 2) * 2;
+    } else if (poi.dir === "east") {
+      s = Math.PI / 4 + (Math.PI / 2) * 2;
+      t = Math.PI / 4 + (Math.PI / 2) * 3;
+    } else {
+      s = 0;
+      t = Math.PI * 2;
+    }
+    console.log(ra, rb, s, t);
+    // fill the shape
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, ra, 0, Math.PI * 2);
+    // ctx.arc(w / 2, h / 2, rb, t, s);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  render() {
+    return (
+      <canvas
+        ref="canvas"
+        style={{
+          border: "0px solid #000000",
+          width: "100%",
+          height: "100%"
+        }}
+      />
     );
   }
 }
