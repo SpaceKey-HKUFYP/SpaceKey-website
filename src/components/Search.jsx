@@ -229,7 +229,7 @@ class Search extends Component {
                 if (dist === 3000) return -1;
                 return dist;
               };
-              let wantedObjectsParameter = this.state.spm.data.wantedObjects.map(
+              var wantedObjectsParameter = this.state.spm.data.wantedObjects.map(
                 wantedObj => {
                   let lower, upper;
                   const distValue = my.state.spm.data.distOption.data.value;
@@ -261,7 +261,10 @@ class Search extends Component {
                 method: "post",
                 url: global.projectConstant.apiURL + "/alg/spm_simple",
                 params: params,
-                data: { wantedObjects: wantedObjectsParameter }
+                data: {
+                  wantedObjects: wantedObjectsParameter,
+                  customObjects: this.state.customObject.data.customObjects
+                }
               }).then(res => {
                 let newState = { ...my.state };
                 newState.general.data.queries = res.data.houseData;
