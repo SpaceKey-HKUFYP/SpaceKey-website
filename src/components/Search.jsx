@@ -481,11 +481,24 @@ class Search extends Component {
               });
             } else {
               const diffValue = oldValue.diff(value)[0];
+
+              const removedCustomObject = newState.spm.data.wantedObjects.filter(
+                function(obj) {
+                  return obj.keyword === diffValue;
+                }
+              )[0];
+
               newState.spm.data.wantedObjects = newState.spm.data.wantedObjects.filter(
                 function(obj) {
                   return obj.keyword !== diffValue;
                 }
               );
+
+              if (removedCustomObject.isCustomObject) {
+                this.state.customObject.handler.removeCustomObjectHandler(
+                  removedCustomObject.name
+                );
+              }
             }
             newState.spm.data.poiInput.value = value;
             if (value.length === 0) {
@@ -512,13 +525,33 @@ class Search extends Component {
           onApplyButtonClicked: () => {
             this.state.search.handler.requestToAPI();
             this.state.general.handler.openHandler("spm", false);
+          },
+          addCustomObject: value => {
+            let newState = { ...my.state };
+            newState.spm.data.poiInput.options.push({
+              key: value,
+              value: value,
+              text: value
+            });
+
+            newState.spm.data.poiInput.value.push(value);
+
+            newState.spm.data.wantedObjects.push({
+              keyword: value,
+              dir: "any",
+              dist: "any",
+              isCustomObject: true
+            });
+
+            newState.spm.status.isFiltered = true;
+
+            my.setState(newState);
           }
         }
       },
 
       customObject: {
         status: {
-          keyGenerator: 0,
           selected: null
         },
         data: {
@@ -546,8 +579,7 @@ class Search extends Component {
                 var newState = { ...my.state };
 
                 var customObjectAdded = {
-                  pos: pos,
-                  id: newState.customObject.status.keyGenerator
+                  pos: pos
                 };
                 if (name === "")
                   customObjectAdded.name =
@@ -559,18 +591,17 @@ class Search extends Component {
                 );
                 newState.customObject.data.customObjectNameInput = "";
 
-                newState.customObject.status.keyGenerator =
-                  newState.customObject.status.keyGenerator + 1;
-
                 my.setState(newState);
+
+                this.state.spm.handler.addCustomObject(customObjectAdded.name);
               }
             }
           },
 
-          removeCustomObjectHandler: id => {
+          removeCustomObjectHandler: name => {
             var newState = { ...my.state };
             newState.customObject.data.customObjects = newState.customObject.data.customObjects.filter(
-              customObjects => customObjects.id !== id
+              customObjects => customObjects.name !== name
             );
 
             newState.customObject.selected = null;
@@ -582,7 +613,9 @@ class Search extends Component {
 
               newState.customObject.data.customObjects = newState.customObject.data.customObjects.map(
                 customObject => {
-                  if (customObject.id === newState.customObject.status.selected)
+                  if (
+                    customObject.name === newState.customObject.status.selected
+                  )
                     customObject.pos = { lat: lat, lng: lng };
                   return customObject;
                 }
@@ -592,14 +625,14 @@ class Search extends Component {
               my.setState(newState);
             }
           },
-          updateSelected: id => {
+          updateSelected: name => {
             setTimeout(function() {
               var newState = { ...my.state };
 
-              if (newState.customObject.status.selected === id) {
+              if (newState.customObject.status.selected === name) {
                 newState.customObject.status.selected = null;
               } else {
-                newState.customObject.status.selected = id;
+                newState.customObject.status.selected = name;
               }
 
               my.setState(newState);

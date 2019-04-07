@@ -52,11 +52,10 @@ class CustomObject extends Component {
           lat={customObject.pos.lat}
           lng={customObject.pos.lng}
           name={customObject.name}
-          id={customObject.id}
           key={customObject.key}
           removeObject={handler.removeCustomObjectHandler}
           updateSelected={handler.updateSelected}
-          color={status.selected === customObject.id ? "linkedin" : "grey"}
+          color={status.selected === customObject.name ? "linkedin" : "grey"}
         />
       );
     });
@@ -67,11 +66,11 @@ class CustomObject extends Component {
           className="map-object"
           compact
           size="tiny"
-          key={customObject.id}
-          color={status.selected === customObject.id ? "linkedin" : "grey"}
+          key={customObject.name}
+          color={status.selected === customObject.name ? "linkedin" : "grey"}
           lng={customObject.pos.lng}
           lat={customObject.pos.lat}
-          onClick={() => handler.updateSelected(customObject.id)}
+          onClick={() => handler.updateSelected(customObject.name)}
         >
           {customObject.name}
         </Button>
@@ -143,14 +142,14 @@ class CustomObjectUnit extends Component {
             <Button
               color={this.props.color}
               style={{ width: "50%" }}
-              onClick={() => this.props.updateSelected(this.props.id)}
+              onClick={() => this.props.updateSelected(this.props.name)}
             >
               {this.props.name}
             </Button>
             <Button
               content="Remove"
               color="red"
-              onClick={() => this.props.removeObject(this.props.id)}
+              onClick={() => this.props.removeObject(this.props.name)}
             />
           </Form.Group>
         </Form>
