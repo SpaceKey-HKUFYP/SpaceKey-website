@@ -15,7 +15,6 @@ import {
 import { SpmFilter, ScrollFilter } from "./FilterMenu";
 import NavigationBar from "./NavigationBar";
 import HouseList from "./HouseList";
-import CustomObject from "./CustomObject";
 import axios from "axios";
 
 import "../layout.css";
@@ -56,7 +55,6 @@ class Search extends Component {
     };
 
     const regionOptions = global.projectConstant.regionName;
-
     const poiOptions = global.projectConstant.poiOptions;
 
     const filterBasedOnBedrooms = data => {
@@ -539,9 +537,6 @@ class Search extends Component {
           customObjects: []
         },
         handler: {
-          closeModal: () => {
-            my.state.general.handler.openHandler("custom_obj", false);
-          },
           customObjectNameInputHandler: (e, { value }) => {
             let newState = my.state;
             newState.custom_obj.data.customObjectNameInput = value;
@@ -781,28 +776,8 @@ class Search extends Component {
                         data={spm.data}
                         handler={spm.handler}
                         status={spm.status}
+                        custom_obj={custom_obj}
                         size="medium"
-                      />
-
-                      <Button
-                        style={{ marginLeft: "10px" }}
-                        onClick={() =>
-                          general.handler.openHandler("custom_obj", true)
-                        }
-                        size="mini"
-                        color={
-                          custom_obj.data.customObjects.length === 0
-                            ? "grey"
-                            : "red"
-                        }
-                      >
-                        Add Custom Object
-                      </Button>
-                      <CustomObject
-                        data={custom_obj.data}
-                        handler={custom_obj.handler}
-                        status={custom_obj.status}
-                        size="large"
                       />
 
                       <div className="floatRight">
