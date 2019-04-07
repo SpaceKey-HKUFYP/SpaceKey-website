@@ -32,7 +32,6 @@ class CustomObject extends Component {
         searchHandler: (e, { value }) => {
           let newState = { ...my.state };
           newState.search.value = value;
-
           newState.status.center = regionOptions.filter(region => {
             return region.key === value;
           })[0].position;

@@ -1,9 +1,10 @@
 import mysql.connector
 database_name = "spacekey"
 
-
+#port = 3306
 database = mysql.connector.connect(
   host="spacekey.cthmasw2nisj.ap-southeast-1.rds.amazonaws.com",
+  port=3306,
   user="FYP",
   passwd="FYP123456",
   database=database_name
@@ -16,7 +17,7 @@ def executeSQL(command):
 
 # place
 place_table_define = ('place('
-                            'name VARCHAR(200) UNIQUE,'
+                            'name VARCHAR(200),'
                             'reviewNum INT,'
                             'searchKey VARCHAR(100),'
                             'givenKey VARCHAR(100),'
@@ -86,6 +87,7 @@ def create_table(table_define):
     executeSQL(command)
 
 def db_add_place(tuple):
+    print('adding record ... ')
     try:
         prefix = 'INSERT INTO ' # insert ignore should not be used, which will ignore all error
         #options = ' CHARACTER SET = utf8;'
@@ -114,7 +116,7 @@ def db_add_property(tuple):
         return
     print('property record inserted')
 
-    #print('record inserted with tuple ', tuple)
+    #   print('record inserted with tuple ', tuple)
 
-create_table(place_table_define)
-create_table(property_table_define)
+#create_table(place_table_define)
+#create_table(property_table_define)

@@ -476,7 +476,8 @@ class Search extends Component {
               newState.spm.data.wantedObjects.push({
                 keyword: diffValue,
                 dir: "any",
-                dist: "any"
+                dist: "any",
+                isCustomObject: false
               });
             } else {
               const diffValue = oldValue.diff(value)[0];
@@ -511,24 +512,12 @@ class Search extends Component {
           onApplyButtonClicked: () => {
             this.state.search.handler.requestToAPI();
             this.state.general.handler.openHandler("spm", false);
-          },
-          onClearButtonClicked: () => {
-            let newState = { ...my.state };
-            newState.spm.data.poiInput = {
-              value: [],
-              options: poiOptions
-            };
-            newState.spm.data.wantedObjects = [];
-            newState.spm.data.poiData = [];
-            newState.spm.status.isFiltered = false;
-            my.setState(newState);
           }
         }
       },
 
-      custom_obj: {
+      customObject: {
         status: {
-          open: false,
           keyGenerator: 0,
           selected: null
         },
@@ -539,54 +528,67 @@ class Search extends Component {
         handler: {
           customObjectNameInputHandler: (e, { value }) => {
             let newState = my.state;
-            newState.custom_obj.data.customObjectNameInput = value;
+            newState.customObject.data.customObjectNameInput = value;
             my.setState(newState);
           },
           addCustomObjectHandler: pos => {
-            if (!my.state.custom_obj.status.isAddingCustomObject) {
-              var newState = { ...my.state };
-              const name = newState.custom_obj.data.customObjectNameInput;
+            if (!my.state.customObject.status.isAddingCustomObject) {
+              const name = this.state.customObject.data.customObjectNameInput;
+              if (
+                this.state.customObject.data.customObjects.some(function(
+                  element
+                ) {
+                  return element.name === name;
+                })
+              ) {
+                alert("custom object with the same name already exists");
+              } else {
+                var newState = { ...my.state };
 
-              var customObjectAdded = {
-                pos: pos,
-                id: newState.custom_obj.status.keyGenerator
-              };
-              if (name === "")
-                customObjectAdded.name =
-                  "c" + newState.custom_obj.data.customObjects.length;
-              else customObjectAdded.name = name;
+                var customObjectAdded = {
+                  pos: pos,
+                  id: newState.customObject.status.keyGenerator
+                };
+                if (name === "")
+                  customObjectAdded.name =
+                    "c" + newState.customObject.data.customObjects.length;
+                else customObjectAdded.name = name;
 
-              newState.custom_obj.data.customObjects.push(customObjectAdded);
-              newState.custom_obj.data.customObjectNameInput = "";
+                newState.customObject.data.customObjects.push(
+                  customObjectAdded
+                );
+                newState.customObject.data.customObjectNameInput = "";
 
-              newState.custom_obj.status.keyGenerator =
-                newState.custom_obj.status.keyGenerator + 1;
+                newState.customObject.status.keyGenerator =
+                  newState.customObject.status.keyGenerator + 1;
 
-              my.setState(newState);
+                my.setState(newState);
+              }
             }
           },
+
           removeCustomObjectHandler: id => {
             var newState = { ...my.state };
-            newState.custom_obj.data.customObjects = newState.custom_obj.data.customObjects.filter(
+            newState.customObject.data.customObjects = newState.customObject.data.customObjects.filter(
               customObjects => customObjects.id !== id
             );
 
-            newState.custom_obj.selected = null;
+            newState.customObject.selected = null;
             my.setState(newState);
           },
           updatePosition: (lat, lng) => {
-            if (this.state.custom_obj.status.selected !== null) {
+            if (this.state.customObject.status.selected !== null) {
               var newState = { ...my.state };
 
-              newState.custom_obj.data.customObjects = newState.custom_obj.data.customObjects.map(
+              newState.customObject.data.customObjects = newState.customObject.data.customObjects.map(
                 customObject => {
-                  if (customObject.id === newState.custom_obj.status.selected)
+                  if (customObject.id === newState.customObject.status.selected)
                     customObject.pos = { lat: lat, lng: lng };
                   return customObject;
                 }
               );
 
-              newState.custom_obj.status.selected = null;
+              newState.customObject.status.selected = null;
               my.setState(newState);
             }
           },
@@ -594,10 +596,10 @@ class Search extends Component {
             setTimeout(function() {
               var newState = { ...my.state };
 
-              if (newState.custom_obj.status.selected === id) {
-                newState.custom_obj.status.selected = null;
+              if (newState.customObject.status.selected === id) {
+                newState.customObject.status.selected = null;
               } else {
-                newState.custom_obj.status.selected = id;
+                newState.customObject.status.selected = id;
               }
 
               my.setState(newState);
@@ -671,7 +673,7 @@ class Search extends Component {
       price,
       spm,
       sort,
-      custom_obj,
+      customObject,
       map
     } = this.state;
 
@@ -776,7 +778,7 @@ class Search extends Component {
                         data={spm.data}
                         handler={spm.handler}
                         status={spm.status}
-                        custom_obj={custom_obj}
+                        customObject={customObject}
                         size="medium"
                       />
 
@@ -808,7 +810,7 @@ class Search extends Component {
               <HouseList
                 data={general.data.sortedHouse}
                 poi={spm.data.poiData}
-                customObjects={custom_obj.data.customObjects}
+                customObjects={customObject.data.customObjects}
                 passCenter={this.getCenter}
               />
             </Grid.Column>

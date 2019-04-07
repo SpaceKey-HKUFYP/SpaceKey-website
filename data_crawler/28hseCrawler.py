@@ -9,10 +9,10 @@ table_floor = "Floor"
 table_address = "Address"
 table_post_date = "Ads or renew date"
 table_room_num = "Room"
-table_content = [table_price, table_net_area, table_gross_area, table_floor, table_address, table_post_date, table_room_num]
+table_content = [table_price,table_rent, table_net_area, table_gross_area, table_floor, table_address, table_post_date, table_room_num]
 # end of table entry headings
 # result dictionary, addtional to the table entries
-property_col = ['type','price','rent','roomNum','grossArea',
+property_col = ['type','price','rent','bedroom','grossArea',
 				'netFloorArea','floor','address','postDate',
 				'latitude','longitude','title','region',
 				'propertyName','description','contact','phoneNum',
@@ -59,6 +59,7 @@ def construct_tuple():
 	temp_list = []
 	for entry in property_col:
 		temp_list.append(get_value(entry,result_dic))
+	#print('list content before construct tuple ', temp_list)
 	return tuple(temp_list)
 
 def store_current_result_to_db():
@@ -68,10 +69,14 @@ def store_current_result_to_db():
 	init_store()
 
 def store_table_to_dic(table):
-	store_kv("price",get_value(table_price, table))#table[table_price]
+	if result_dic['type'] == 'sell':
+		store_kv("price",get_value(table_price, table))#table[table_price]
+	else:
+		store_kv("rent",get_value(table_rent,table))
 	store_kv("address",get_value(table_address, table))#table[table_address])
 	store_kv("floor",get_value(table_floor, table))#table[table_floor])
 	store_kv("bedroom",get_value(table_room_num, table))#table[table_room_num])
+	#print('result dic, bedroom num :',result_dic['bedroom'])
 	store_kv("postDate", get_value(table_post_date, table))#table[table_post_date])
 	store_kv("grossArea",get_value(table_gross_area, table))#table[table_gross_area])
 	store_kv("netFloorArea",get_value(table_net_area, table))#table[table_net_area])
@@ -95,9 +100,9 @@ def start(MainURL, driver):
 	max_result = driver.find_element_by_xpath("//div[@class='search_total_result']/em").text
 	print("max number of result",max_result)
 	total_page_num = int(max_result)/15.0
-	current_page = 500
+	current_page = 19
 	while current_page <= total_page_num:
-		combined_url = propertyURL_buy + "/" + list_prefix + str(current_page)
+		combined_url = MainURL + "/" + list_prefix + str(current_page)
 		get_result(MainDriver, combined_url,current_page)
 		#break
 		current_page += 1
@@ -153,7 +158,12 @@ def get_result(driver, url, current_page):
 # access the website from another socket/port
 def extract_info(driver ,link, temp_dic):
 	driver.get(link)
-	table = driver.find_element_by_xpath("//table[@class='de_box_table']")
+	try: 
+		table = driver.find_element_by_xpath("//table[@class='de_box_table']")
+	except:
+		print('locate table failure, with link:',link) # possible to be serviced apartment
+		return
+	
 	table_rows = table.find_elements_by_tag_name('tr')
 	extract_feature(driver)
 	extract_contact(driver)
@@ -184,8 +194,8 @@ def extract_feature(driver):
 		des_str += content +"\n"
 	if len(descriptions) == 0: # this is a English description / this description is not translated
 		des_str = driver.find_element_by_xpath("//div[contains(@class, 'description_separator')]").text
-		print("English description")
-	print("length of descriptions",len(des_str))
+		#print("English description")
+	#print("length of descriptions",len(des_str))
 	store_kv('description', des_str)
 
 
@@ -211,7 +221,7 @@ def extract_img(driver):
 	for d in div:
 		img = div.find_element_by_xpath(".//img")
 		img_src = img.get_attribute('src')
-		print("img src", img_src)
+		#print("img src", img_src)
 
 
 def handle_row(row, key,val, table):
@@ -219,15 +229,21 @@ def handle_row(row, key,val, table):
 		#print("key not in table, ",key)
 		return
 	if key == table_price or key == table_rent:
-		# HK$ 16.80M / $7,500
-		price = val.split('\n')[0].split(' ')[1]
-		if "M" in price:#rent
-			price_num = price[0:len(price)-2] # millions of HKD
+		# HK$ 16.80M / $7,500per month
+		print('val',val)
+		if key == table_price:#sell
+			price = val.split('\n')[0]
+			price_num = price.replace(',','').replace('HK$','').replace('M','').replace('HKD','')
 			p = float(price_num) * 1000000
 			table[table_price] = p
+			print('price', p)
 		else:#rent
-			p = price.replace(',','').replace('$','')
+			price_num = val.replace('per month','').replace(',','').replace('$','')
+			#print('price num', price_num)
+			p = float(price_num)
 			table[table_rent] = p
+			print('rent', p)
+		
 	elif key == table_address:
 		# https://www.28hse.com/utf8/detail2_map.php?y=22.2781050&x=114.1757340
 		try:
@@ -245,6 +261,7 @@ def handle_row(row, key,val, table):
 		table[key] = val.split(' ')[0]
 		table[key] = table[key].replace(',','')
 	elif key == table_room_num:
+		#print('Room num', val, val.isdigit(), "key",key)
 		if not val.isdigit():
 			if val == '5 +':
 				val = '6'
@@ -260,7 +277,7 @@ def handle_row(row, key,val, table):
 
 #extract_info(ResultFetchingDriver, "https://www.28hse.com/en/buy-property-747402.html")
 
-start(propertyURL_buy,MainDriver)
+start(propertyURL_rent,MainDriver)
 
 MainDriver.close()
 ResultFetchingDriver.close()
