@@ -17,8 +17,11 @@ import GoogleMapReact from "google-map-react";
 class CustomObject extends Component {
   constructor(props) {
     super(props);
-    this._onClick = ({ x, y, lat, lng, event }) => {
+    this.onClick = ({ x, y, lat, lng, event }) => {
       this.props.handler.updatePosition(lat, lng);
+    };
+    this.onChange = ({ center, zoom, bounds, marginBounds }) => {
+      this.props.handler.updateMap(center, zoom);
     };
   }
 
@@ -101,7 +104,8 @@ class CustomObject extends Component {
                 }}
                 center={status.center}
                 zoom={status.zoom}
-                onClick={this._onClick}
+                onClick={this.onClick}
+                onChange={this.onChange}
               >
                 {listOfMapCustomObject}
               </GoogleMapReact>

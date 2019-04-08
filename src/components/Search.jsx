@@ -53,6 +53,7 @@ class Search extends Component {
         return a.indexOf(i) < 0;
       });
     };
+    this.houseList = React.createRef();
 
     const regionOptions = global.projectConstant.regionName;
     const poiOptions = global.projectConstant.poiOptions;
@@ -184,7 +185,6 @@ class Search extends Component {
               newState.general.data.queries
             );
             my.setState(newState);
-
             my.state.sort.updateSorted();
           }
         }
@@ -212,6 +212,7 @@ class Search extends Component {
             this.state.search.handler.requestToAPI();
           },
           requestToAPI: () => {
+            this.houseList.current.reset();
             this.state.search.handler.handleRequestProperty();
           },
           handleRequestProperty: () => {
@@ -251,7 +252,6 @@ class Search extends Component {
                     lower = -1;
                     upper = -1;
                   }
-
                   const thisCustomObject = this.state.customObject.data.customObjects.filter(
                     customObject => {
                       return customObject.name === wantedObj.keyword;
@@ -512,7 +512,6 @@ class Search extends Component {
           handleChange: (e, { value }) => {
             const oldValue = my.state.spm.data.poiInput.value;
             let newState = { ...my.state };
-
             if (oldValue.length < value.length) {
               const diffValue = value.diff(oldValue)[0];
               newState.spm.data.wantedObjects.push({
@@ -521,32 +520,26 @@ class Search extends Component {
                 dist: "any",
                 isCustomObject: false
               });
-
               newState.spm.status.isFiltered = true;
               newState.spm.data.poiInput.value = value;
               console.log(newState.spm.data.wantedObjects);
               my.setState(newState);
             } else {
               const diffValue = oldValue.diff(value)[0];
-
               const removedCustomObject = newState.spm.data.wantedObjects.filter(
                 function(obj) {
                   return obj.keyword === diffValue;
                 }
               )[0];
-
               newState.spm.data.wantedObjects = newState.spm.data.wantedObjects.filter(
                 function(obj) {
                   return obj.keyword !== diffValue;
                 }
               );
-
               newState.spm.data.poiInput.value = value;
-
               if (value.length === 0) {
                 newState.spm.status.isFiltered = false;
               }
-
               my.setState(newState);
               if (removedCustomObject.isCustomObject) {
                 this.state.customObject.handler.removeCustomObjectHandler(
@@ -555,6 +548,7 @@ class Search extends Component {
               }
             }
           },
+
           wantedObjectChange: (keyword, distOrDir, value) => {
             let newState = { ...my.state };
             my.state.spm.data.wantedObjects.forEach(function(wantedObject) {
@@ -570,10 +564,12 @@ class Search extends Component {
             this.state.general.handler.openHandler("spm", false);
             this.state.search.handler.requestToAPI();
           },
+
           onApplyButtonClicked: () => {
             this.state.search.handler.requestToAPI();
             this.state.general.handler.openHandler("spm", false);
           },
+
           addCustomObject: value => {
             let newState = { ...my.state };
             newState.spm.data.poiInput.options.push({
@@ -581,45 +577,36 @@ class Search extends Component {
               value: value,
               text: value
             });
-
             newState.spm.data.poiInput.value.push(value);
-
             newState.spm.data.wantedObjects.push({
               keyword: value,
               dir: "any",
               dist: "any",
               isCustomObject: true
             });
-
             newState.spm.status.isFiltered = true;
-
             my.setState(newState);
           },
           removeCustomObject: value => {
             var newState = { ...my.state };
-
             newState.spm.data.poiInput.options = newState.spm.data.poiInput.options.filter(
               function(obj) {
                 return obj.key !== value;
               }
             );
-
             newState.spm.data.poiInput.value = newState.spm.data.poiInput.value.filter(
               function(obj) {
                 return obj !== value;
               }
             );
-
             newState.spm.data.wantedObjects = newState.spm.data.wantedObjects.filter(
               function(obj) {
                 return obj.keyword !== value;
               }
             );
-
             if (value.length === 0) {
               newState.spm.status.isFiltered = false;
             }
-
             my.setState(newState);
           }
         }
@@ -645,14 +632,22 @@ class Search extends Component {
                 return region.key === value;
               }
             )[0].position;
-
             my.setState(newState);
           },
+
+          updateMap: (center, zoom) => {
+            let newState = { ...my.state };
+            newState.customObject.status.center = center;
+            newState.customObject.status.zoom = zoom;
+            my.setState(newState);
+          },
+
           customObjectNameInputHandler: (e, { value }) => {
             let newState = my.state;
             newState.customObject.data.customObjectNameInput = value;
             my.setState(newState);
           },
+
           addCustomObjectHandler: pos => {
             if (!my.state.customObject.status.isAddingCustomObject) {
               const name = this.state.customObject.data.customObjectNameInput;
@@ -666,7 +661,6 @@ class Search extends Component {
                 alert("custom object with the same name already exists");
               } else {
                 var newState = { ...my.state };
-
                 var customObjectAdded = {
                   pos: pos
                 };
@@ -674,14 +668,11 @@ class Search extends Component {
                   customObjectAdded.name =
                     "c" + newState.customObject.data.customObjects.length;
                 else customObjectAdded.name = name;
-
                 newState.customObject.data.customObjects.push(
                   customObjectAdded
                 );
                 newState.customObject.data.customObjectNameInput = "";
-
                 my.setState(newState);
-
                 this.state.spm.handler.addCustomObject(customObjectAdded.name);
               }
             }
@@ -692,16 +683,14 @@ class Search extends Component {
             newState.customObject.data.customObjects = newState.customObject.data.customObjects.filter(
               customObjects => customObjects.name !== name
             );
-
             newState.customObject.selected = null;
             my.setState(newState);
-
             this.state.spm.handler.removeCustomObject(name);
           },
+
           updatePosition: (lat, lng) => {
             if (this.state.customObject.status.selected !== null) {
               var newState = { ...my.state };
-
               newState.customObject.data.customObjects = newState.customObject.data.customObjects.map(
                 customObject => {
                   if (
@@ -711,21 +700,19 @@ class Search extends Component {
                   return customObject;
                 }
               );
-
               newState.customObject.status.selected = null;
               my.setState(newState);
             }
           },
+
           updateSelected: name => {
             setTimeout(function() {
               var newState = { ...my.state };
-
               if (newState.customObject.status.selected === name) {
                 newState.customObject.status.selected = null;
               } else {
                 newState.customObject.status.selected = name;
               }
-
               my.setState(newState);
             }, 50);
           }
@@ -767,7 +754,6 @@ class Search extends Component {
           ).filteredHouse;
 
           let sorted = newState.general.data.sortedHouse;
-
           if (method === "default") {
           } else if (method === "recent") {
             sorted.sort((a, b) => (a.postDate > b.postDate ? 1 : -1));
@@ -780,7 +766,6 @@ class Search extends Component {
           } else {
             sorted.sort((a, b) => (a.saleableArea > b.saleableArea ? 1 : -1));
           }
-
           my.setState(newState);
         }
       }
@@ -936,6 +921,7 @@ class Search extends Component {
                 poi={spm.data.poiData}
                 customObjects={customObject.data.customObjects}
                 passCenter={this.getCenter}
+                ref={this.houseList}
               />
             </Grid.Column>
           </Grid>

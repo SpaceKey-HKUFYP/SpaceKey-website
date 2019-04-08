@@ -24,7 +24,7 @@ class HouseList extends Component {
       show: null,
       currPage: 1
     };
-
+    this.mapContainer = React.createRef();
     this.housesPerPage = 10;
   }
 
@@ -38,10 +38,17 @@ class HouseList extends Component {
 
   mouseClick(id) {
     this.setState({ show: id });
+    this.mapContainer.current.selectHouse(id);
+  }
+
+  reset() {
+    this.mapContainer.current.reset();
   }
 
   render() {
-    const numOfPages = Math.ceil(this.props.data.length / this.housesPerPage);
+    var data = this.props.data;
+
+    const numOfPages = Math.ceil(data.length / this.housesPerPage);
 
     if (numOfPages !== 0) {
       // Calculate the list of button strings
@@ -66,6 +73,7 @@ class HouseList extends Component {
       if (this.state.currPage === parseInt(param, 10)) color = "red";
       return (
         <Button
+          key={param}
           onClick={() => {
             if (param === "<") {
               if (this.state.currPage !== 1)
@@ -84,7 +92,7 @@ class HouseList extends Component {
         </Button>
       );
     });
-    const listOfHouse = this.props.data
+    const listOfHouse = data
       .slice(
         this.housesPerPage * (this.state.currPage - 1),
         this.housesPerPage * this.state.currPage
@@ -160,16 +168,16 @@ class HouseList extends Component {
         </Grid.Column>
         <Grid.Column width={10}>
           <Button.Group>{listOfPages}</Button.Group>
-
           <Segment style={{ height: "600px", padding: "0px" }}>
             <MapContainer
-              data={this.props.data.slice(
+              data={data.slice(
                 this.housesPerPage * (this.state.currPage - 1),
                 this.housesPerPage * this.state.currPage
               )}
               status={this.state}
               poi={this.props.poi}
               customObjects={this.props.customObjects}
+              ref={this.mapContainer}
             />
           </Segment>
         </Grid.Column>

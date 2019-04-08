@@ -13,9 +13,7 @@ import {
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import CustomObject from "./CustomObject";
-
 import { Range } from "rc-slider";
-
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import "../layout.css";
