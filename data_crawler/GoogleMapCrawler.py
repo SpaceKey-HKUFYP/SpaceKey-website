@@ -47,7 +47,20 @@ expand = False
 translation_driver = webdriver.Chrome(chrome_options=chromeOptions)
 translation_driver.get(pluscode_trans_url)
 #translation_driver.implicitly_wait(timeDelay)
+
+
+def driver_restart():
+	global main_driver,translation_driver,expand
+	main_driver.close()
+	main_driver = webdriver.Chrome(chrome_options=chromeOptions)
+	main_driver.get(TargetURL)
+
+	expand = False
+	translation_driver.close()
+	translation_driver = webdriver.Chrome(chrome_options=chromeOptions)
+	translation_driver.get(pluscode_trans_url)
 def pick_start_point():
+	global TargetURL
 	temp_str = ""
 	latitude = random.uniform(latitude_min,latitude_max)
 	longitude = random.uniform(longitude_min,longitude_max)
@@ -63,7 +76,15 @@ pick_start_point()
 #propertyURL_buy = "https://www.28hse.com/en/buy"
 #propertyURL_rent = "https://www.28hse.com/en/rent"
 
-set_keywords = ["pet shop","gym","school","hospital","bank","restaurant","bar","coffee","parking lot","post office", "supermarket", "park", "garden", "beach", "store","bus terminal","sport center","university","mcDonald","theater","mall","fire station","police office","ATM","gas station","temple"]
+set_keywords = ["subway station","pet shop","gym","school","hospital",
+				"bank","restaurant","bar","coffee",
+				"parking lot","post office", 
+				"supermarket", "park", "garden", 
+				"beach", "store","bus terminal",
+				"sport center","university",
+				"mcDonald","theater","mall",
+				"fire station","police office",
+				"ATM","gas station","temple"]
 start_index = 0
 current_k = {}
 
@@ -277,15 +298,17 @@ def find_element_by_xpath_until_found(driver, xpath, isText):
 def start(driver):
 	for k in range(start_index,len(set_keywords)):
 		set_current_key(set_keywords[k])
-		init_search(driver, set_keywords[k], "searchboxinput")
+		driver_restart()
+		init_search(main_driver, set_keywords[k], "searchboxinput")
 		while True:
 			time.sleep(timeDelay)
-			get_result_div(driver)
-			if turn_page(driver) == False:
+			get_result_div(main_driver)
+			if turn_page(main_driver) == False:
 				break
+		
 while True:
 	pick_start_point()
 	start(main_driver)
-	start_index = 0
+
 #turn_page(main_driver)
 #translate_plusCode("74PP+2V Hong Kong")

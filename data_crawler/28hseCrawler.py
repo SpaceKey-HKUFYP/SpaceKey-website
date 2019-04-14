@@ -100,7 +100,7 @@ def start(MainURL, driver):
 	max_result = driver.find_element_by_xpath("//div[@class='search_total_result']/em").text
 	print("max number of result",max_result)
 	total_page_num = int(max_result)/15.0
-	current_page = 19
+	current_page = 0
 	while current_page <= total_page_num:
 		combined_url = MainURL + "/" + list_prefix + str(current_page)
 		get_result(MainDriver, combined_url,current_page)
@@ -277,7 +277,7 @@ def handle_row(row, key,val, table):
 
 #extract_info(ResultFetchingDriver, "https://www.28hse.com/en/buy-property-747402.html")
 
-start(propertyURL_rent,MainDriver)
+start(propertyURL_buy,MainDriver)
 
 MainDriver.close()
 ResultFetchingDriver.close()

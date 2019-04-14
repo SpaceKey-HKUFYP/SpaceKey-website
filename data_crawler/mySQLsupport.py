@@ -1,4 +1,5 @@
 import mysql.connector
+import requests
 database_name = "spacekey"
 
 #port = 3306
@@ -118,5 +119,27 @@ def db_add_property(tuple):
 
     #   print('record inserted with tuple ', tuple)
 
+def delete_entry(col, value):
+    command = "DELETE FROM spacekey.property WHERE "+ col + "=" + value
+    print("SQL :", command)
+    DBcursor.execute(command)
+    database.commit()
+
+def check_image():
+    command = "SELECT imageURL FROM spacekey.property"
+    DBcursor.execute(command)
+    urlList = DBcursor.fetchall()
+
+    for link in urlList:
+        url = link[0]
+        print("image : ",url)
+        r = requests.get(url)
+        print("->result : ", r.status_code)
+        if r.status_code == 404:
+            delete_entry("imageURL", "'" + url +"'")
+
+
+#check_image()
 #create_table(place_table_define)
 #create_table(property_table_define)
+
