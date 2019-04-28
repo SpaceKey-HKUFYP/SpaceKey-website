@@ -258,15 +258,42 @@ class MapContainer extends Component {
     const listOfRoute = this.state.objsSelected
       .filter(obj => obj.display)
       .map(obj => {
-        return (
-          <Polyline
-            paths={obj.route}
-            strokeColor="#0000FF"
-            strokeOpacity={0.8}
-            strokeWeight={2}
-          />
-        );
+        return obj.route;
       });
+
+    console.log(listOfRoute);
+    var listOfPoint = [];
+
+    if (listOfRoute.length !== 0) {
+      var points = listOfRoute[0];
+      var size = points.length - 1;
+      for (var k = 0; k < size; k++) {
+        const pointA = points[k];
+        const pointB = points[k + 1];
+
+        var numOfPoints =
+          (Math.sqrt(
+            Math.pow(pointA.lat - pointB.lat, 2) +
+              Math.pow(pointA.lng - pointB.lng, 2)
+          ) *
+            80000) /
+          this.zoom;
+        var pointJump = {
+          lat: (pointB.lat - pointA.lat) / numOfPoints,
+          lng: (pointB.lng - pointA.lng) / numOfPoints
+        };
+
+        for (var j = 0; j <= numOfPoints; j++) {
+          listOfPoint.push(
+            <div
+              class="dot"
+              lat={pointA.lat + j * pointJump.lat}
+              lng={pointA.lng + j * pointJump.lng}
+            />
+          );
+        }
+      }
+    }
 
     this.setCenter();
     return (
@@ -281,6 +308,7 @@ class MapContainer extends Component {
           {listOfHouse}
           {listOfPoi}
           {listOfMapCustomObject}
+          {listOfPoint}
         </GoogleMapReact>
       </div>
     );

@@ -163,3 +163,11 @@
   text-align: center;
   transform: translate(-50%, -50%);
 }
+
+.dot {
+  height: 7px;
+  width: 7px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}

@@ -1,6 +1,6 @@
 global.projectConstant = {
   apiURL: "http://localhost:8080",
-  googleMapKey: "AIzaSyA2cdiYB3xgDumC7eu-1FTkMJkZPyHotlc",
+  googleMapKey: "AIzaSyB-RedzLLwYbvEZD680IeddGyMVdsF3rxY",
   googleMapDirectionURL: "https://maps.googleapis.com/maps/api/directions/json",
 
   colors: ["orange", "violet", "brown", "facebook", "purple"],
